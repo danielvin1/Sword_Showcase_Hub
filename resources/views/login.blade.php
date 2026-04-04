@@ -80,10 +80,11 @@
                 <div class="error">{{ session('error') }}</div>
             @endif
 
-            <form method="post" action="/login">
+            <form method="post" action="/login" enctype="multipart/form-data">
                 @csrf
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" placeholder="Password" required>
+                <input type="file" name="profile_photo" accept="image/*">
                 <button type="submit">Login</button>
             </form>
         </div>

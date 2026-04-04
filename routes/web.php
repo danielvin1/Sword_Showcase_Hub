@@ -3,11 +3,11 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect('/home');
+    return redirect('/welcome');
 });
 
-Route::get('/home', function () {
-    return view('home');
+Route::get('/welcome', function () {
+    return view('welcome');
 });
 
 Route::get('/login', function () {
@@ -24,6 +24,13 @@ Route::post('/login', function (\Illuminate\Http\Request $request) {
 
     if ($email === '' || $password === '') {
         return redirect('/login')->with('error', 'Please enter your email and password.');
+    }
+
+    if ($request->hasFile('profile_photo')) {
+        $photo = $request->file('profile_photo');
+        $filename = 'profile_' . time() . '.' . $photo->getClientOriginalExtension();
+        $photo->move(public_path('uploads'), $filename);
+        session(['profile_photo' => '/uploads/' . $filename]);
     }
 
     session([

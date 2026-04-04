@@ -37,14 +37,61 @@
                 box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
                 color: #6c6c6c;
             }
+            .avatar {
+                width: 72px;
+                height: 72px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 3px solid #1a1a1a;
+                margin-bottom: 16px;
+                background: #f2f2f2;
+            }
+            .nav {
+                position: fixed;
+                bottom: 18px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: min(520px, calc(100% - 40px));
+                background: #fff;
+                border-radius: 999px;
+                padding: 10px 16px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+                font-weight: 700;
+                z-index: 999;
+            }
+            .nav .pill {
+                background: #1a1a1a;
+                color: #fff;
+                padding: 10px 16px;
+                border-radius: 999px;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .nav a {
+                text-decoration: none;
+                color: inherit;
+            }
         </style>
     </head>
     <body>
         <div class="shell">
             <h1>Feed</h1>
             <div class="empty">
+                @if (session('profile_photo'))
+                    <img class="avatar" src="{{ session('profile_photo') }}" alt="Profile photo">
+                @endif
                 This feed is empty for now.
             </div>
         </div>
+
+        <nav class="nav" aria-label="Primary">
+            <a href="/welcome">⌂</a>
+            <span class="pill" aria-current="page">Feed</span>
+            <a href="/profile">Profile</a>
+        </nav>
     </body>
 </html>
