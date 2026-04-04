@@ -10,15 +10,15 @@
             }
             body {
                 margin: 0;
-                font-family: "Nunito", "Trebuchet MS", system-ui, sans-serif;
+                font-family: "Poppins", "Trebuchet MS", sans-serif;
                 color: #111111;
-                background-color: #f7f7f5;
+                background-color: #f2f2f0;
                 background-image:
-                    radial-gradient(circle at 20% 20%, rgba(225, 75, 47, 0.12), transparent 45%),
-                    radial-gradient(circle at 80% 10%, rgba(17, 17, 17, 0.08), transparent 50%),
-                    repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0 2px, transparent 2px 10px),
-                    radial-gradient(#d7d7d7 1.2px, transparent 1.2px);
-                background-size: auto, auto, auto, 18px 18px;
+                    radial-gradient(circle at 15% 12%, rgba(120, 120, 120, 0.08), transparent 38%),
+                    radial-gradient(circle at 85% 18%, rgba(0, 0, 0, 0.06), transparent 34%),
+                    repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0 1px, transparent 1px 16px),
+                    linear-gradient(180deg, #f6f6f4 0%, #efefec 45%, #f2f2f0 100%);
+                background-size: auto, auto, 24px 24px, auto;
                 min-height: 100vh;
                 display: grid;
                 place-items: center;
@@ -31,6 +31,35 @@
                 border-radius: 18px;
                 box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
                 text-align: center;
+            }
+            .topbar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+                margin: 0 auto 22px;
+                padding: 14px 18px;
+                border: 1px solid #e2e2df;
+                border-radius: 14px;
+                background: rgba(255, 255, 255, 0.75);
+                backdrop-filter: blur(6px);
+                width: min(520px, 100%);
+            }
+            .brand {
+                font-weight: 700;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                font-size: 12px;
+            }
+            .menu {
+                display: flex;
+                gap: 18px;
+                font-size: 14px;
+            }
+            .menu a {
+                color: inherit;
+                text-decoration: none;
+                opacity: 0.8;
             }
             h1 {
                 margin: 0 0 8px;
@@ -72,6 +101,15 @@
         </style>
     </head>
     <body>
+        <div class="topbar">
+            <div class="brand">Sword Showcase Hub</div>
+            <nav class="menu" aria-label="Top navigation">
+                <a href="/welcome">Explore</a>
+                <a href="/feed">Collections</a>
+                <a href="/profile">Profile</a>
+            </nav>
+        </div>
+
         <div class="panel">
             <h1>Login</h1>
             <p>Enter your details to reach the feed.</p>

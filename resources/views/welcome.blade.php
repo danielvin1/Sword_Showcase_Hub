@@ -11,201 +11,203 @@
             }
             body {
                 margin: 0;
-                font-family: "Nunito", "Trebuchet MS", system-ui, sans-serif;
+                font-family: "Poppins", "Trebuchet MS", sans-serif;
                 color: #111111;
-                background-color: #f7f7f5;
+                background-color: #f2f2f0;
                 background-image:
-                    radial-gradient(circle at 20% 20%, rgba(225, 75, 47, 0.12), transparent 45%),
-                    radial-gradient(circle at 80% 10%, rgba(17, 17, 17, 0.08), transparent 50%),
-                    repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0 2px, transparent 2px 10px),
-                    radial-gradient(#d7d7d7 1.2px, transparent 1.2px);
-                background-size: auto, auto, auto, 18px 18px;
+                    radial-gradient(circle at 15% 12%, rgba(120, 120, 120, 0.08), transparent 38%),
+                    radial-gradient(circle at 85% 18%, rgba(0, 0, 0, 0.06), transparent 34%),
+                    repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0 1px, transparent 1px 16px),
+                    linear-gradient(180deg, #f6f6f4 0%, #efefec 45%, #f2f2f0 100%);
+                background-size: auto, auto, 24px 24px, auto;
                 min-height: 100vh;
             }
             .page {
-                max-width: 560px;
+                max-width: 1100px;
                 margin: 0 auto;
-                padding: 40px 22px 90px;
-                text-align: center;
+                padding: 32px 22px 90px;
             }
-            h1 {
-                margin: 8px 0 12px;
-                font-size: 34px;
-                font-weight: 800;
+            .topbar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+                margin-bottom: 28px;
+                padding: 14px 18px;
+                border: 1px solid #e2e2df;
+                border-radius: 14px;
+                background: rgba(255, 255, 255, 0.75);
+                backdrop-filter: blur(6px);
             }
-            h1 em {
-                font-style: normal;
-                border-bottom: 4px solid #e14b2f;
+            .brand {
+                font-weight: 700;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                font-size: 12px;
             }
-            .lead {
-                margin: 0 auto 20px;
-                color: #6c6c6c;
-                font-size: 18px;
-                max-width: 360px;
+            .menu {
+                display: flex;
+                gap: 18px;
+                font-size: 14px;
             }
-            .actions {
+            .menu a {
+                color: inherit;
+                text-decoration: none;
+                opacity: 0.8;
+            }
+            .hero {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 28px;
+                align-items: center;
+                background: #1b1b1b;
+                color: #f5f2ea;
+                padding: 28px;
+                border-radius: 24px;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+            }
+            .hero h1 {
+                font-size: clamp(28px, 4vw, 46px);
+                margin: 0 0 12px;
+            }
+            .hero p {
+                margin: 0 0 18px;
+                color: #d4cec2;
+            }
+            .hero-actions {
                 display: flex;
                 gap: 12px;
-                justify-content: center;
-                margin: 18px 0 28px;
+                flex-wrap: wrap;
             }
             .btn {
-                padding: 12px 20px;
+                padding: 12px 18px;
                 border-radius: 999px;
-                border: 1.5px solid #111111;
-                background: #fff;
+                border: 1px solid #d9c7a8;
+                background: transparent;
                 text-decoration: none;
-                color: #111111;
-                font-weight: 700;
-                min-width: 130px;
+                color: #f5f2ea;
+                font-weight: 600;
             }
             .btn.primary {
-                background: #1a1a1a;
-                color: #fff;
-                border-color: #1a1a1a;
+                background: #d9a867;
+                color: #1b1b1b;
+                border-color: #d9a867;
             }
-            .hero-blade {
-                width: 240px;
-                margin: 0 auto 10px;
-                filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.25));
+            .hero-media {
                 position: relative;
-                z-index: 1;
+                height: 260px;
+                border-radius: 18px;
+                overflow: hidden;
+                background: radial-gradient(circle at 30% 20%, #ffb45a, transparent 45%),
+                            linear-gradient(180deg, #2a1b12 0%, #120f0e 100%);
             }
-            .hero-blade img {
-                width: 100%;
-                height: auto;
-                display: block;
+            .hero-media img {
+                position: absolute;
+                right: -10px;
+                bottom: -20px;
+                height: 320px;
+                width: auto;
+                filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.45));
+            }
+            .section-title {
+                margin: 28px 0 12px;
+                font-size: 18px;
+                font-weight: 700;
+            }
+            .cards {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 16px;
             }
             .card {
-                background: #4b4b4b;
-                color: #fff;
-                padding: 18px;
-                border-radius: 26px;
-                margin: -50px auto 0;
-                max-width: 320px;
-                text-align: left;
-                box-shadow: 0 0 0 4px rgba(110, 231, 255, 0.55);
-                position: relative;
-                z-index: 2;
-                padding-top: 18px;
-            }
-            .card .image {
-                background: #fff;
+                background: #ffffff;
                 border-radius: 16px;
-                padding: 16px;
-                margin-bottom: 14px;
-                text-align: center;
+                border: 1px solid #e0e0e0;
+                overflow: hidden;
             }
             .card img {
                 width: 100%;
-                height: auto;
-                display: block;
-                border-radius: 12px;
+                height: 140px;
+                object-fit: cover;
             }
-            .card-title {
-                font-size: 18px;
-                margin: 0 0 8px;
+            .card-body {
+                padding: 12px;
             }
-            .card-meta {
-                display: flex;
-                gap: 10px;
+            .card-body h3 {
+                margin: 0 0 6px;
+                font-size: 15px;
+            }
+            .card-body p {
+                margin: 0;
+                font-size: 13px;
+                color: #5f5f5f;
+            }
+            .tag {
+                display: inline-flex;
                 align-items: center;
-                font-size: 14px;
-                color: #d9d9d9;
-            }
-            .chip {
-                background: #fff;
-                color: #111;
-                border-radius: 999px;
-                padding: 6px 10px;
-                font-weight: 700;
+                gap: 6px;
+                margin-top: 10px;
                 font-size: 12px;
-            }
-            .cta-bottom {
-                margin: 42px 0 18px;
-                font-size: 26px;
-                font-weight: 700;
-            }
-            .cta-bottom em {
-                font-style: normal;
-                border-bottom: 4px solid #e14b2f;
-            }
-            .footer-btn {
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                background: #1a1a1a;
-                color: #fff;
-                padding: 12px 28px;
+                font-weight: 600;
+                color: #7a5a2b;
+                background: #f3e6d5;
                 border-radius: 999px;
-                text-decoration: none;
-                font-weight: 700;
-                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
-            }
-            .nav {
-                position: fixed;
-                bottom: 18px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: min(520px, calc(100% - 40px));
-                background: #fff;
-                border-radius: 999px;
-                padding: 10px 16px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-                font-weight: 700;
-                z-index: 999;
-            }
-            .nav .pill {
-                background: #1a1a1a;
-                color: #fff;
-                padding: 10px 16px;
-                border-radius: 999px;
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-            }
-            .nav a {
-                text-decoration: none;
-                color: inherit;
+                padding: 4px 8px;
             }
         </style>
     </head>
     <body>
         <main class="page">
-            <h1>Fan of <em>blades</em>?</h1>
-            <p class="lead">We made this platform for swordsmiths, collectors, and lore hunters.</p>
-
-            <div class="actions">
-                <a class="btn" href="/welcome">Discover</a>
-                <a class="btn primary" href="/login">Login</a>
+            <div class="topbar">
+                <div class="brand">Sword Showcase Hub</div>
+                <nav class="menu" aria-label="Top navigation">
+                    <a href="/welcome">Explore</a>
+                    <a href="/feed">Collections</a>
+                    <a href="/profile">Profile</a>
+                </nav>
             </div>
 
-            <div class="hero-blade" aria-hidden="true">
-                <img src="/images/sword-hero.webp" alt="Ornate sword hero">
-            </div>
-
-            <section class="card">
-                <div class="image">
-                    <img src="/images/sword-card.jpg" alt="Featured sword">
+            <section class="hero">
+                <div>
+                    <h1>Forge Your Legacy</h1>
+                    <p>Discover legendary blades, real craftsmanship, and the stories behind steel.</p>
+                    <div class="hero-actions">
+                        <a class="btn primary" href="/feed">Explore Blades</a>
+                        <a class="btn" href="/login">Login</a>
+                    </div>
                 </div>
-                <h2 class="card-title">Anduril</h2>
-                <div class="card-meta">
-                    <span class="chip">Longsword</span>
-                    <span>by A. Steel</span>
+                <div class="hero-media" aria-hidden="true">
+                    <img src="/images/sword-hero.webp" alt="">
                 </div>
             </section>
 
-            <div class="cta-bottom">Got your <em>own sword</em>?</div>
-            <a class="footer-btn" href="/login">Showcase it</a>
+            <div class="section-title">Featured Blades</div>
+            <section class="cards">
+                <article class="card">
+                    <img src="/images/katana.jpg" alt="Katana">
+                    <div class="card-body">
+                        <h3>Water Dragon</h3>
+                        <p>Elegant curvature and refined balance.</p>
+                        <div class="tag">Katana</div>
+                    </div>
+                </article>
+                <article class="card">
+                    <img src="/images/claymore.webp" alt="Claymore">
+                    <div class="card-body">
+                        <h3>Highland Oath</h3>
+                        <p>Broad steel built for powerful strikes.</p>
+                        <div class="tag">Claymore</div>
+                    </div>
+                </article>
+                <article class="card">
+                    <img src="/images/bastard-longsword.jpg" alt="Bastard longsword">
+                    <div class="card-body">
+                        <h3>Guild Bastard</h3>
+                        <p>Versatile blade for one or two hands.</p>
+                        <div class="tag">Bastard Longsword</div>
+                    </div>
+                </article>
+            </section>
         </main>
-
-        <nav class="nav" aria-label="Primary">
-            <span class="pill" aria-current="page">⌂</span>
-            <a href="/feed">Feed</a>
-            <a href="/profile">Profile</a>
-        </nav>
     </body>
 </html>
