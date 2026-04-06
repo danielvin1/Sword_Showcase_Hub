@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Sword Showcase Hub</title>
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+
         <style>
             * {
                 box-sizing: border-box;

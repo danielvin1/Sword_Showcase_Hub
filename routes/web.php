@@ -17,6 +17,11 @@ Route::get('/login', function () {
 Route::get('/profile', function () {
     return view('profile');
 });
+Route::get('/register', function () {
+    return view('register');
+});
+
+Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
 
 Route::post('/login', function (\Illuminate\Http\Request $request) {
     $email = trim((string) $request->input('email'));

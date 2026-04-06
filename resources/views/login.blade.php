@@ -124,6 +124,21 @@
                 <input type="password" name="password" placeholder="Password" required>
                 <input type="file" name="profile_photo" accept="image/*">
                 <button type="submit">Login</button>
+                <p style="margin-top: 14px; text-align:center;">
+
+               <a href="/register" style="
+    display: block;
+    margin-top: 10px;
+    padding: 10px;
+    background: lightgray;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 20px;
+">
+    Create Account
+</a>
+   
             </form>
         </div>
     </body>
