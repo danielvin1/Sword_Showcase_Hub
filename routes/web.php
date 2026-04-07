@@ -20,6 +20,9 @@ Route::get('/profile', function () {
 Route::get('/register', function () {
     return view('register');
 });
+Route::get('/upload', function () {
+    return view('upload');
+});
 
 Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
 

@@ -4,7 +4,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Sword Showcase Hub</title>
-
         <style>
             * {
                 box-sizing: border-box;
@@ -164,6 +163,7 @@
                     <a href="/welcome">Explore</a>
                     <a href="/feed">Collections</a>
                     <a href="/profile">Profile</a>
+                    <a href="/upload">Upload Sword</a>
                 </nav>
             </div>
 
