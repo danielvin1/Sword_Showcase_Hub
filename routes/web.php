@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\SwordController;
+use App\Models\Sword;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 Route::get('/', function () {
     return redirect('/welcome');
@@ -14,17 +19,52 @@ Route::get('/login', function () {
     return view('login');
 });
 
-Route::get('/profile', function () {
-    return view('profile');
-});
 Route::get('/register', function () {
     return view('register');
 });
+
+Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
+
 Route::get('/upload', function () {
     return view('upload');
 });
 
-Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
+Route::get('/profile', function () {
+    $profileUser = session('user_id') ? User::find(session('user_id')) : null;
+
+    if (! $profileUser && session('user_email')) {
+        $profileUser = User::where('email', session('user_email'))->first();
+    }
+
+    $swords = $profileUser
+        ? Sword::where('user_id', $profileUser->id)->latest()->get()
+        : collect();
+
+    $swordCount = $swords->count();
+
+    return view('profile', compact('profileUser', 'swords', 'swordCount'));
+});
+
+Route::post('/profile/photo', function (\Illuminate\Http\Request $request) {
+    $profileUser = session('user_id') ? User::find(session('user_id')) : null;
+
+    if (! $profileUser) {
+        return redirect('/login')->with('error', 'Please log in first.');
+    }
+
+    $request->validate(['profile_photo' => 'required|image|max:2048']);
+
+    if ($profileUser->profile_photo) {
+        Storage::disk('public')->delete($profileUser->profile_photo);
+    }
+
+    $path = $request->file('profile_photo')->store('profile-photos', 'public');
+    $profileUser->profile_photo = $path;
+    $profileUser->save();
+    session(['profile_photo' => $path]);
+
+    return redirect('/profile')->with('success', 'Profile picture updated.');
+});
 
 Route::post('/login', function (\Illuminate\Http\Request $request) {
     $email = trim((string) $request->input('email'));
@@ -34,21 +74,26 @@ Route::post('/login', function (\Illuminate\Http\Request $request) {
         return redirect('/login')->with('error', 'Please enter your email and password.');
     }
 
-    if ($request->hasFile('profile_photo')) {
-        $photo = $request->file('profile_photo');
-        $filename = 'profile_' . time() . '.' . $photo->getClientOriginalExtension();
-        $photo->move(public_path('uploads'), $filename);
-        session(['profile_photo' => '/uploads/' . $filename]);
+    $user = User::where('email', $email)->first();
+
+    if (! $user || ! Hash::check($password, $user->password)) {
+        return redirect('/login')->with('error', 'Your login details are incorrect.');
     }
 
     session([
-        'logged_in' => true,
-        'user_email' => $email,
+        'logged_in'     => true,
+        'user_id'       => $user->id,
+        'user_name'     => $user->name,
+        'user_email'    => $email,
+        'profile_photo' => $user->profile_photo,
     ]);
 
     return redirect('/feed');
 });
 
 Route::get('/feed', function () {
-    return view('feed');
+    $swords = Sword::latest()->get();
+    return view('feed', compact('swords'));
 });
+
+Route::post('/swords', [SwordController::class, 'store']);
