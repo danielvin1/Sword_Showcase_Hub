@@ -105,7 +105,7 @@
             <div class="brand">Sword Showcase Hub</div>
             <nav class="menu" aria-label="Top navigation">
                 <a href="/welcome">Explore</a>
-                <a href="/feed">Collections</a>
+                <a href="/feed">Feed</a>
                 <a href="/profile">Profile</a>
             </nav>
         </div>

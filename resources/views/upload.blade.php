@@ -99,7 +99,7 @@
     <h1>Sword Showcase Hub</h1>
     <nav>
         <a href="/welcome">Explore</a>
-        <a href="/feed">Collections</a>
+        <a href="/feed">Feed</a>
         <a href="/profile">Profile</a>
     </nav>
 </header>

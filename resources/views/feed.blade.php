@@ -65,7 +65,7 @@
         <div class="brand">Sword Showcase Hub</div>
         <nav class="menu">
             <a href="/welcome">Explore</a>
-            <a href="/feed">Collections</a>
+            <a href="/feed">Feed</a>
             <a href="/profile">Profile</a>
             <a href="/upload">Upload Sword</a>
         </nav>
