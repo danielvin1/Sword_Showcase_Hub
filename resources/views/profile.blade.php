@@ -68,6 +68,7 @@
                 padding: 10px 18px; border-radius: 999px; border: 1px solid #d9c7a8;
                 color: #111111; background: transparent; text-decoration: none; font-weight: 600;
             }
+            .action-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
             .meta { display: flex; gap: 16px; flex-wrap: wrap; color: #7b7166; margin-top: 10px; font-size: 14px; justify-content: flex-start; }
             .meta span { display: inline-flex; align-items: center; gap: 6px; }
@@ -86,12 +87,15 @@
             }
             .tabs input { display: none; }
             .tab-label { padding: 10px 2px 12px; cursor: pointer; position: relative; white-space: nowrap; }
-            #tab-feed:checked ~ .tab-labels label[for="tab-feed"],
-            #tab-settings:checked ~ .tab-labels label[for="tab-settings"] {
+            .tab-label-static { color: #111111; }
+            .tab-label-static::after {
+                content: ""; position: absolute; left: 0; right: 0; bottom: -1px;
+                height: 3px; background: #d9a867; border-radius: 999px;
+            }
+            #tab-feed:checked ~ .tab-labels label[for="tab-feed"] {
                 color: #111111;
             }
-            #tab-feed:checked ~ .tab-labels label[for="tab-feed"]::after,
-            #tab-settings:checked ~ .tab-labels label[for="tab-settings"]::after {
+            #tab-feed:checked ~ .tab-labels label[for="tab-feed"]::after {
                 content: ""; position: absolute; left: 0; right: 0; bottom: -1px;
                 height: 3px; background: #d9a867; border-radius: 999px;
             }
@@ -99,7 +103,6 @@
             .tab-panels { padding: 22px 26px 26px; text-align: left; }
             .tab-panel { display: none; text-align: left; }
             #tab-feed:checked ~ .tab-panels .feed-panel { display: block; }
-            #tab-settings:checked ~ .tab-panels .settings-panel { display: block; }
             .feed-panel { text-align: left; width: 100%; max-width: 640px; margin-left: 0; margin-right: auto; }
             .feed-panel .section-title { text-align: left !important; margin-left: 0; }
 
@@ -139,17 +142,12 @@
                 border: 1px solid #e6dfd3; color: #6c6c6c;
             }
 
-            .settings-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-            .settings-card { border: 1px solid #e6dfd3; border-radius: 16px; padding: 16px; background: #fbf8f2; text-align: left; }
-            .settings-card h3 { margin: 0 0 10px; font-size: 16px; }
             .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
             .field label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #7e756a; }
             .field input {
                 border: 1px solid #e2d4bf; border-radius: 10px; padding: 10px 12px;
                 font-size: 14px; background: #fffdf9; color: #3c2b1c;
             }
-            .photo-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-            .photo-form input[type="file"] { max-width: 240px; font-size: 13px; }
             .btn {
                 display: inline-flex; align-items: center; justify-content: center;
                 padding: 10px 16px; border-radius: 999px; border: 1px solid #d9c7a8;
@@ -160,6 +158,19 @@
                 margin-top: 12px; padding: 10px 12px; border-radius: 10px;
                 background: #edf7ed; border: 1px solid #cfe6cf; color: #25603a;
             }
+            .modal-backdrop {
+                position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+                display: none; align-items: center; justify-content: center;
+                padding: 20px; z-index: 1000;
+            }
+            .modal {
+                width: 100%; max-width: 420px; background: #ffffff; border-radius: 16px;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.2); border: 1px solid #e6dfd3;
+                padding: 18px;
+            }
+            .modal h3 { margin: 0 0 12px; font-size: 18px; }
+            .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 12px; }
+            .modal-backdrop.show { display: flex; }
 
             @media (max-width: 900px) {
                 .profile-header { flex-direction: column; align-items: center; }
@@ -200,15 +211,18 @@
 
                     <div class="profile-content">
                         <div class="profile-header">
-                            <div class="name-block">
-                                <h1>{{ $displayName }}</h1>
-                                <div class="handle-row">
-                                    <div class="handle">{{ '@' . strtolower(str_replace(' ', '', $displayName)) }}</div>
-                                    <div class="email">{{ $profileUser?->email ?? session('user_email', 'No email available') }}</div>
-                                </div>
+                        <div class="name-block">
+                            <h1>{{ $displayName }}</h1>
+                            <div class="handle-row">
+                                <div class="handle">{{ '@' . strtolower(str_replace(' ', '', $displayName)) }}</div>
+                                <div class="email">{{ $profileUser?->email ?? session('user_email', 'No email available') }}</div>
                             </div>
-                            <a class="edit-btn" href="#settings">Edit profile</a>
                         </div>
+                        <div class="action-bar">
+                            <a class="btn primary" href="/upload">Upload Sword</a>
+                            <button class="edit-btn" type="button" id="open-profile-modal">Edit profile</button>
+                        </div>
+                    </div>
 
                         <div class="meta">
                             <span><span class="dot"></span> Location not set</span>
@@ -224,72 +238,72 @@
                     </div>
                 </div>
 
-                <div class="tabs" id="settings">
-                    <input type="radio" name="tab" id="tab-feed" checked>
-                    <input type="radio" name="tab" id="tab-settings">
-
+                <div class="tabs">
                     <div class="tab-labels">
-                        <label class="tab-label" for="tab-feed">Posts</label>
-                        <label class="tab-label" for="tab-settings">Settings</label>
+                        <span class="tab-label tab-label-static">Posts</span>
                     </div>
+                </div>
 
-                    <div class="tab-panels">
-                        <div class="tab-panel feed-panel">
-                            <div class="section-title">My Swords</div>
+                <div class="tab-panels">
+                    <div class="tab-panel feed-panel" style="display:block;">
+                        <div class="section-title">My Swords</div>
 
-                            @if ($swords->isEmpty())
-                                <div class="empty">You have not uploaded any swords yet.</div>
-                            @else
-                                <section class="cards">
-                                    @foreach ($swords as $sword)
-                                        <article class="sword-card">
-                                            @if ($sword->image)
-                                                <img src="{{ asset('storage/' . $sword->image) }}" alt="{{ $sword->name }}">
-                                            @else
-                                                <img src="/images/katana.jpg" alt="{{ $sword->name }}">
-                                            @endif
-                                            <div class="sword-body">
-                                                <h3>{{ $sword->name }}</h3>
-                                                <p>{{ $sword->description ?: 'No description added yet.' }}</p>
-                                                <div class="tag">{{ $sword->type }}</div>
-                                            </div>
-                                        </article>
-                                    @endforeach
-                                </section>
-                            @endif
-                        </div>
-
-                        <div class="tab-panel settings-panel">
-                            <div class="settings-grid">
-                                <div class="settings-card">
-                                    <h3>Profile Photo</h3>
-                                    <form class="photo-form" method="POST" action="/profile/photo" enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="file" name="profile_photo" accept="image/*" required>
-                                        <button class="btn primary" type="submit">Change Picture</button>
-                                    </form>
-                                </div>
-                                <div class="settings-card">
-                                    <h3>Profile Details</h3>
-                                    <div class="field">
-                                        <label>Name</label>
-                                        <input type="text" value="{{ $displayName }}" readonly>
-                                    </div>
-                                    <div class="field">
-                                        <label>Email</label>
-                                        <input type="text" value="{{ $profileUser?->email ?? session('user_email', 'No email available') }}" readonly>
-                                    </div>
-                                    <p class="handle">Add profile edits here when you are ready.</p>
-                                </div>
-                            </div>
-
-                            @if (session('success'))
-                                <div class="message">{{ session('success') }}</div>
-                            @endif
-                        </div>
+                        @if ($swords->isEmpty())
+                            <div class="empty">You have not uploaded any swords yet.</div>
+                        @else
+                            <section class="cards">
+                                @foreach ($swords as $sword)
+                                    <article class="sword-card">
+                                        @if ($sword->image)
+                                            <img src="{{ asset('storage/' . $sword->image) }}" alt="{{ $sword->name }}">
+                                        @else
+                                            <img src="/images/katana.jpg" alt="{{ $sword->name }}">
+                                        @endif
+                                        <div class="sword-body">
+                                            <h3>{{ $sword->name }}</h3>
+                                            <p>{{ $sword->description ?: 'No description added yet.' }}</p>
+                                            <div class="tag">{{ $sword->type }}</div>
+                                        </div>
+                                    </article>
+                                @endforeach
+                            </section>
+                        @endif
                     </div>
                 </div>
             </section>
         </div>
+        <div class="modal-backdrop" id="profile-modal">
+            <div class="modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+                <h3 id="profile-modal-title">Edit profile</h3>
+                <form method="POST" action="/profile/update" enctype="multipart/form-data">
+                    @csrf
+                    <div class="field">
+                        <label for="profile-name">Username</label>
+                        <input id="profile-name" type="text" name="name" value="{{ $displayName }}" required>
+                    </div>
+                    <div class="field">
+                        <label for="profile-photo">Profile picture</label>
+                        <input id="profile-photo" type="file" name="profile_photo" accept="image/*">
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn" type="button" id="close-profile-modal">Cancel</button>
+                        <button class="btn primary" type="submit">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+            const profileModal = document.getElementById('profile-modal');
+            const openModalBtn = document.getElementById('open-profile-modal');
+            const closeModalBtn = document.getElementById('close-profile-modal');
+
+            openModalBtn?.addEventListener('click', () => profileModal.classList.add('show'));
+            closeModalBtn?.addEventListener('click', () => profileModal.classList.remove('show'));
+            profileModal?.addEventListener('click', (event) => {
+                if (event.target === profileModal) {
+                    profileModal.classList.remove('show');
+                }
+            });
+        </script>
     </body>
 </html>
