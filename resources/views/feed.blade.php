@@ -60,8 +60,19 @@
 
         .feed-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+        }
+        .fyp-grid {
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        }
+        .feed-list { display: grid; gap: 12px; }
+        .post-row {
+            display: grid;
+            grid-template-columns: 96px 1fr;
+            gap: 12px;
+            align-items: flex-start;
+            max-width: 520px;
         }
         .post-card {
             background: #ffffff; border-radius: 16px;
@@ -70,10 +81,11 @@
         .post-media {
             width: 100%; aspect-ratio: 1 / 1; background: #f3eee5; display: flex; align-items: center; justify-content: center;
         }
+        .post-media.small { aspect-ratio: 1 / 1; }
         .post-media img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
-        .post-body { padding: 12px 14px 14px; }
+        .post-body { padding: 8px 10px 10px; text-align: left; }
         .post-user {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
         }
         .avatar {
             width: 36px; height: 36px; border-radius: 50%;
@@ -82,8 +94,8 @@
         }
         .user-meta { font-size: 13px; color: #6c6c6c; }
         .user-meta strong { display: block; font-size: 14px; color: #111111; }
-        .post-title { margin: 0 0 6px; font-size: 15px; }
-        .post-caption { margin: 0; font-size: 13px; color: #5f5f5f; }
+        .post-title { margin: 0 0 6px; font-size: 13px; }
+        .post-caption { margin: 0; font-size: 12px; color: #5f5f5f; }
         .tag {
             display: inline-flex; align-items: center; gap: 6px;
             margin-top: 10px; font-size: 12px; font-weight: 600;
@@ -96,7 +108,9 @@
         }
 
         @media (max-width: 900px) {
-            .feed-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+            .feed-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+            .fyp-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+            .post-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -112,79 +126,76 @@
         </nav>
     </div>
 
-    @php
-        $feedPath = public_path('swords/feed.json');
-        $fakeFeed = [];
-        if (file_exists($feedPath)) {
-            $fakeFeed = json_decode(file_get_contents($feedPath), true) ?? [];
-        }
-    @endphp
-
     <div class="feed-header">
         <div class="feed-title">
             <h1>Feed</h1>
-            <p>Latest uploads from the community and your collection.</p>
+            <p>Latest uploads from the community.</p>
         </div>
         <div class="feed-actions">
             <a class="btn primary" href="/upload">Upload Sword</a>
         </div>
     </div>
 
-    <section class="section">
-        <h2>Community Picks</h2>
-        <div class="feed-grid">
-            @foreach ($fakeFeed as $post)
-                <article class="post-card">
-                    <div class="post-media">
-                        <img src="{{ $post['image'] }}" alt="{{ $post['title'] }}">
-                    </div>
-                    <div class="post-body">
-                        <div class="post-user">
-                            <div class="avatar">{{ strtoupper(substr($post['user'], 0, 1)) }}</div>
-                            <div class="user-meta">
-                                <strong>{{ $post['user'] }}</strong>
-                                {{ $post['handle'] }} · {{ $post['time'] }}
-                            </div>
-                        </div>
-                        <h3 class="post-title">{{ $post['title'] }}</h3>
-                        <p class="post-caption">{{ $post['caption'] }}</p>
-                        <div class="tag">{{ $post['type'] }}</div>
-                        <div class="post-footer">
-                            <span>Featured</span>
-                            <span>Preview</span>
-                        </div>
-                    </div>
-                </article>
-            @endforeach
-        </div>
-    </section>
+    @php
+        $dir = public_path('swords');
+        $files = [];
+        if (is_dir($dir)) {
+            $files = array_values(array_filter(scandir($dir), function ($file) {
+                return preg_match('/\.(jpg|jpeg|png|webp|gif)$/i', $file);
+            }));
+        }
+        $names = ['Avery Cole','Mila Hart','Ronan Vale','Zara Quinn','Theo Marsh','Lena Park','Omar Finch'];
+        $handles = ['@averycole','@milahart','@ronanvale','@zaraquinn','@theomarsh','@lenapark','@omarfinch'];
+        $types = ['Longsword','Rapier','Katana','Saber','Greatsword','Shortsword','Falchion'];
+        $folderPosts = [];
+        foreach ($files as $i => $file) {
+            $folderPosts[] = [
+                'user' => $names[$i % count($names)],
+                'handle' => $handles[$i % count($handles)],
+                'title' => str_replace(['-', '_'], ' ', pathinfo($file, PATHINFO_FILENAME)),
+                'type' => $types[$i % count($types)],
+                'caption' => 'Community showcase from the workshop wall.',
+                'image' => '/swords/' . $file,
+                'time' => ($i + 1) . 'd',
+            ];
+        }
+        $fypItems = [];
+        foreach ($swords as $sword) {
+            $fypItems[] = [
+                'user' => $sword->name,
+                'handle' => '@upload',
+                'title' => $sword->name,
+                'type' => $sword->type,
+                'caption' => $sword->description ?: 'No description added yet.',
+                'image' => $sword->image ? asset('storage/' . $sword->image) : '/images/katana.jpg',
+                'time' => $sword->created_at?->diffForHumans() ?? 'Just now',
+            ];
+        }
+        $fypItems = array_merge($fypItems, $folderPosts);
+    @endphp
 
     <section class="section">
-        <h2>Latest Uploads</h2>
-        @if ($swords->isEmpty())
+        <h2>For You</h2>
+        @if (empty($fypItems))
             <div class="empty">This feed is empty for now.</div>
         @else
-            <div class="feed-grid">
-                @foreach ($swords as $sword)
+            <div class="feed-grid fyp-grid">
+                @foreach ($fypItems as $item)
                     <article class="post-card">
                         <div class="post-media">
-                            @if ($sword->image)
-                                <img src="{{ asset('storage/' . $sword->image) }}" alt="{{ $sword->name }}">
-                            @else
-                                <img src="/images/katana.jpg" alt="{{ $sword->name }}">
-                            @endif
+                            <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}">
                         </div>
                         <div class="post-body">
                             <div class="post-user">
-                                <div class="avatar">{{ strtoupper(substr($sword->name, 0, 1)) }}</div>
+                                <div class="avatar">{{ strtoupper(substr($item['user'], 0, 1)) }}</div>
                                 <div class="user-meta">
-                                    <strong>{{ $sword->name }}</strong>
-                                    Upload · {{ $sword->created_at?->diffForHumans() ?? 'Just now' }}
+                                    <strong>{{ $item['user'] }}</strong>
+                                    {{ $item['handle'] }} · {{ $item['time'] }}
                                 </div>
                             </div>
-                            <h3 class="post-title">{{ $sword->name }}</h3>
-                            <p class="post-caption">{{ $sword->description ?: 'No description added yet.' }}</p>
-                            <div class="tag">{{ $sword->type }}</div>
+                            <h3 class="post-title">{{ $item['title'] }}</h3>
+                            <p class="post-caption">{{ $item['caption'] }}</p>
+                            <div class="tag">{{ $item['type'] }}</div>
                             <div class="post-footer">
                                 <span>Community</span>
                                 <span>Details</span>
