@@ -42,25 +42,26 @@
                 height: 190px;
                 background: linear-gradient(120deg, #dfc198 0%, #d4a86c 40%, #c09a69 100%);
             }
-            .profile-main { padding: 0 26px 20px; position: relative; text-align: center; max-width: 760px; margin: 0 auto; }
+            .profile-main { padding: 0 26px 20px; position: relative; text-align: left; }
+            .profile-content { max-width: 760px; margin: 0; }
             .avatar {
                 width: 110px; height: 110px; border-radius: 50%;
                 border: 4px solid #ffffff; overflow: hidden;
-                position: absolute; top: -55px; left: 50%; transform: translateX(-50%);
+                position: absolute; top: -55px; left: 26px;
                 background: linear-gradient(180deg, #d9a867 0%, #b98142 100%);
                 display: grid; place-items: center; font-size: 34px; font-weight: 700; color: #1b130b;
             }
             .avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
 
             .profile-header {
-                display: flex; align-items: center; justify-content: center;
+                display: flex; align-items: center; justify-content: space-between;
                 padding-top: 70px; gap: 20px; flex-wrap: wrap;
             }
             .name-block h1 {
                 margin: 0 0 6px; font-size: 30px; letter-spacing: -0.01em;
                 font-family: "Playfair Display", "Times New Roman", serif;
             }
-            .handle-row { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+            .handle-row { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
             .handle { color: #6c6c6c; font-size: 14px; }
             .email { color: #8a8074; font-size: 13px; }
             .edit-btn {
@@ -68,17 +69,20 @@
                 color: #111111; background: transparent; text-decoration: none; font-weight: 600;
             }
 
-            .meta { display: flex; gap: 16px; flex-wrap: wrap; color: #7b7166; margin-top: 10px; font-size: 14px; justify-content: center; }
+            .meta { display: flex; gap: 16px; flex-wrap: wrap; color: #7b7166; margin-top: 10px; font-size: 14px; justify-content: flex-start; }
             .meta span { display: inline-flex; align-items: center; gap: 6px; }
             .dot { width: 6px; height: 6px; border-radius: 50%; background: #c7b9a6; display: inline-block; }
 
-            .stats { display: flex; gap: 18px; margin-top: 14px; flex-wrap: wrap; justify-content: center; }
+            .stats { display: flex; gap: 18px; margin-top: 14px; flex-wrap: wrap; justify-content: flex-start; }
             .stat { font-size: 14px; color: #6c6c6c; }
             .stat b { color: #111111; font-size: 15px; margin-right: 6px; }
 
             .tabs {
-                display: flex; gap: 20px; padding: 14px 26px 0; border-bottom: 1px solid #eee7dc;
-                font-weight: 600; color: #8a7f72; overflow-x: auto; justify-content: center;
+                display: block;
+                padding: 14px 26px 0;
+                border-bottom: 1px solid #eee7dc;
+                font-weight: 600;
+                color: #8a7f72;
             }
             .tabs input { display: none; }
             .tab-label { padding: 10px 2px 12px; cursor: pointer; position: relative; white-space: nowrap; }
@@ -91,19 +95,34 @@
                 content: ""; position: absolute; left: 0; right: 0; bottom: -1px;
                 height: 3px; background: #d9a867; border-radius: 999px;
             }
-            .tab-labels { display: flex; gap: 26px; justify-content: center; width: 100%; }
-            .tab-panels { padding: 22px 26px 26px; }
-            .tab-panel { display: none; }
+            .tab-labels { display: flex; gap: 26px; justify-content: flex-start; width: 100%; }
+            .tab-panels { padding: 22px 26px 26px; text-align: left; }
+            .tab-panel { display: none; text-align: left; }
             #tab-feed:checked ~ .tab-panels .feed-panel { display: block; }
             #tab-settings:checked ~ .tab-panels .settings-panel { display: block; }
+            .feed-panel { text-align: left; width: 100%; max-width: 640px; margin-left: 0; margin-right: auto; }
+            .feed-panel .section-title { text-align: left !important; margin-left: 0; }
 
-            .section-title { margin: 0 0 14px; font-size: 18px; font-weight: 700; text-align: center; }
+            .section-title { margin: 0 0 14px; font-size: 18px; font-weight: 700; text-align: left; width: 100%; }
             .cards {
-                display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 220px));
-                gap: 16px; justify-content: center;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 12px;
+                justify-content: flex-start;
+                max-width: 440px;
+                margin-left: 0 !important;
+                margin-right: auto;
             }
-            .sword-card { background: #ffffff; border-radius: 16px; border: 1px solid #e0e0e0; overflow: hidden; }
-            .sword-card img { width: 100%; height: 140px; object-fit: cover; }
+            .sword-card { background: #ffffff; border-radius: 16px; border: 1px solid #e0e0e0; overflow: hidden; width: 100%; }
+            .sword-card img {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 1 / 1;
+                object-fit: cover;
+                object-position: center;
+                display: block;
+                background: #f2f2f0;
+            }
             .sword-body { padding: 12px; text-align: left; }
             .sword-body h3 { margin: 0 0 6px; font-size: 15px; color: #111111; }
             .sword-body p {
@@ -179,27 +198,29 @@
                         @endif
                     </div>
 
-                    <div class="profile-header">
-                        <div class="name-block">
-                            <h1>{{ $displayName }}</h1>
-                            <div class="handle-row">
-                                <div class="handle">{{ '@' . strtolower(str_replace(' ', '', $displayName)) }}</div>
-                                <div class="email">{{ $profileUser?->email ?? session('user_email', 'No email available') }}</div>
+                    <div class="profile-content">
+                        <div class="profile-header">
+                            <div class="name-block">
+                                <h1>{{ $displayName }}</h1>
+                                <div class="handle-row">
+                                    <div class="handle">{{ '@' . strtolower(str_replace(' ', '', $displayName)) }}</div>
+                                    <div class="email">{{ $profileUser?->email ?? session('user_email', 'No email available') }}</div>
+                                </div>
                             </div>
+                            <a class="edit-btn" href="#settings">Edit profile</a>
                         </div>
-                        <a class="edit-btn" href="#settings">Edit profile</a>
-                    </div>
 
-                    <div class="meta">
-                        <span><span class="dot"></span> Location not set</span>
-                        <span><span class="dot"></span> Birthday not set</span>
-                        <span><span class="dot"></span> Joined {{ $profileUser?->created_at?->format('M Y') ?? 'Recently' }}</span>
-                    </div>
+                        <div class="meta">
+                            <span><span class="dot"></span> Location not set</span>
+                            <span><span class="dot"></span> Birthday not set</span>
+                            <span><span class="dot"></span> Joined {{ $profileUser?->created_at?->format('M Y') ?? 'Recently' }}</span>
+                        </div>
 
-                    <div class="stats">
-                        <div class="stat"><b>{{ $swordCount }}</b>Uploads</div>
-                        <div class="stat"><b>{{ $swords->count() }}</b>Posts</div>
-                        <div class="stat"><b>{{ $swords->first()?->created_at?->format('d M Y') ?? '—' }}</b>Latest</div>
+                        <div class="stats">
+                            <div class="stat"><b>{{ $swordCount }}</b>Uploads</div>
+                            <div class="stat"><b>{{ $swords->count() }}</b>Posts</div>
+                            <div class="stat"><b>{{ $swords->first()?->created_at?->format('d M Y') ?? '—' }}</b>Latest</div>
+                        </div>
                     </div>
                 </div>
 
