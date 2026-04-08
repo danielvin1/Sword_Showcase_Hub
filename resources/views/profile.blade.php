@@ -41,6 +41,8 @@
             .banner {
                 height: 190px;
                 background: linear-gradient(120deg, #dfc198 0%, #d4a86c 40%, #c09a69 100%);
+                background-size: cover;
+                background-position: center;
             }
             .profile-main { padding: 0 26px 20px; position: relative; text-align: left; }
             .profile-content { max-width: 760px; margin: 0; }
@@ -168,6 +170,58 @@
                 box-shadow: 0 20px 50px rgba(0,0,0,0.2); border: 1px solid #e6dfd3;
                 padding: 18px;
             }
+            .modal-photo {
+                border: 1px dashed #d9c7a8;
+                border-radius: 16px;
+                background: #fff8ee;
+                padding: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+                cursor: pointer;
+            }
+            .modal-photo img {
+                width: 72px;
+                height: 72px;
+                border-radius: 16px;
+                object-fit: cover;
+                object-position: center;
+                display: block;
+                border: 2px solid #ffffff;
+                background: #f3e6d5;
+            }
+            .modal-photo span { font-size: 13px; color: #7b7166; font-weight: 600; }
+            .modal-photo small { font-size: 11px; color: #9a8e80; }
+            .modal-photo input { display: none; }
+            .cropper {
+                margin-top: 12px;
+                width: 240px;
+                height: 240px;
+                border-radius: 18px;
+                border: 1px solid #e6dfd3;
+                overflow: hidden;
+                position: relative;
+                background: #f6f2ea;
+                display: none;
+            }
+            .cropper.active { display: block; }
+            .cropper img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                cursor: grab;
+                user-select: none;
+            }
+            .cropper img:active { cursor: grabbing; }
+            .cropper-hint { font-size: 12px; color: #9a8e80; margin-top: 6px; display: none; }
+            .cropper.banner {
+                width: 320px;
+                height: 120px;
+                border-radius: 12px;
+            }
             .modal h3 { margin: 0 0 12px; font-size: 18px; }
             .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 12px; }
             .modal-backdrop.show { display: flex; }
@@ -195,15 +249,17 @@
             </div>
 
             <section class="profile-wrap">
-                <div class="banner"></div>
+                @php
+                    $photo = $profileUser?->profile_photo ?? session('profile_photo');
+                    $banner = $profileUser?->banner_photo ?? session('profile_banner');
+                    $displayName = $profileUser?->name ?? session('user_name', 'Guest Collector');
+                    $photoVersion = $profileUser?->updated_at?->timestamp ?? time();
+                @endphp
+                <div class="banner" id="profile-banner" @if ($banner) style="background-image: url('{{ asset('storage/' . $banner) }}?v={{ $photoVersion }}');" @endif></div>
                 <div class="profile-main">
-                    @php
-                        $photo = $profileUser?->profile_photo ?? session('profile_photo');
-                        $displayName = $profileUser?->name ?? session('user_name', 'Guest Collector');
-                    @endphp
-                    <div class="avatar">
+                    <div class="avatar" id="profile-avatar">
                         @if ($photo)
-                            <img src="{{ asset('storage/' . $photo) }}" alt="{{ $displayName }}">
+                            <img src="{{ asset('storage/' . $photo) }}?v={{ $photoVersion }}" alt="{{ $displayName }}">
                         @else
                             {{ strtoupper(substr($displayName, 0, 1)) }}
                         @endif
@@ -282,8 +338,38 @@
                         <input id="profile-name" type="text" name="name" value="{{ $displayName }}" required>
                     </div>
                     <div class="field">
-                        <label for="profile-photo">Profile picture</label>
-                        <input id="profile-photo" type="file" name="profile_photo" accept="image/*">
+                        <label>Profile picture</label>
+                        <label class="modal-photo" for="profile-photo">
+                            @if ($photo)
+                                <img id="profile-photo-preview" src="{{ asset('storage/' . $photo) }}?v={{ $photoVersion }}" alt="Profile preview">
+                            @else
+                                <img id="profile-photo-preview" src="" alt="Profile preview" style="display:none;">
+                            @endif
+                            <span id="profile-photo-label">{{ $photo ? 'Change photo' : 'Add photo' }}</span>
+                            <small>Drag to crop</small>
+                            <input id="profile-photo" type="file" name="profile_photo" accept="image/*">
+                        </label>
+                        <div class="cropper" id="profile-cropper">
+                            <img id="cropper-image" src="" alt="Crop preview">
+                        </div>
+                        <div class="cropper-hint" id="cropper-hint">Drag the photo to position it.</div>
+                    </div>
+                    <div class="field">
+                        <label>Banner image</label>
+                        <label class="modal-photo" for="banner-photo">
+                            @if ($banner)
+                                <img id="banner-photo-preview" src="{{ asset('storage/' . $banner) }}?v={{ $photoVersion }}" alt="Banner preview">
+                            @else
+                                <img id="banner-photo-preview" src="" alt="Banner preview" style="display:none;">
+                            @endif
+                            <span id="banner-photo-label">{{ $banner ? 'Change banner' : 'Add banner' }}</span>
+                            <small>Drag to crop</small>
+                            <input id="banner-photo" type="file" name="banner_photo" accept="image/*">
+                        </label>
+                        <div class="cropper banner" id="banner-cropper">
+                            <img id="banner-cropper-image" src="" alt="Banner crop preview">
+                        </div>
+                        <div class="cropper-hint" id="banner-cropper-hint">Drag the banner to position it.</div>
                     </div>
                     <div class="modal-actions">
                         <button class="btn" type="button" id="close-profile-modal">Cancel</button>
@@ -293,16 +379,298 @@
             </div>
         </div>
         <script>
-            const profileModal = document.getElementById('profile-modal');
-            const openModalBtn = document.getElementById('open-profile-modal');
-            const closeModalBtn = document.getElementById('close-profile-modal');
+            window.addEventListener('DOMContentLoaded', () => {
+                const profileModal = document.getElementById('profile-modal');
+                const openModalBtn = document.getElementById('open-profile-modal');
+                const closeModalBtn = document.getElementById('close-profile-modal');
+                const photoInput = document.getElementById('profile-photo');
+                const photoPreview = document.getElementById('profile-photo-preview');
+                const photoLabel = document.getElementById('profile-photo-label');
+                const avatar = document.getElementById('profile-avatar');
+                const cropper = document.getElementById('profile-cropper');
+                const cropperImage = document.getElementById('cropper-image');
+                const cropperHint = document.getElementById('cropper-hint');
+                const bannerInput = document.getElementById('banner-photo');
+                const bannerPreview = document.getElementById('banner-photo-preview');
+                const bannerLabel = document.getElementById('banner-photo-label');
+                const bannerCropper = document.getElementById('banner-cropper');
+                const bannerCropperImage = document.getElementById('banner-cropper-image');
+                const bannerCropperHint = document.getElementById('banner-cropper-hint');
+                const bannerEl = document.getElementById('profile-banner');
+                const form = profileModal?.querySelector('form');
+                const cropSize = 240;
+                const bannerCrop = { width: 320, height: 120 };
+                const cropState = {
+                    naturalWidth: 0,
+                    naturalHeight: 0,
+                    scale: 1,
+                    offsetX: 0,
+                    offsetY: 0,
+                    displayWidth: 0,
+                    displayHeight: 0,
+                };
+                const bannerState = {
+                    naturalWidth: 0,
+                    naturalHeight: 0,
+                    scale: 1,
+                    offsetX: 0,
+                    offsetY: 0,
+                    displayWidth: 0,
+                    displayHeight: 0,
+                };
 
-            openModalBtn?.addEventListener('click', () => profileModal.classList.add('show'));
-            closeModalBtn?.addEventListener('click', () => profileModal.classList.remove('show'));
-            profileModal?.addEventListener('click', (event) => {
-                if (event.target === profileModal) {
-                    profileModal.classList.remove('show');
-                }
+                openModalBtn?.addEventListener('click', () => profileModal?.classList.add('show'));
+                closeModalBtn?.addEventListener('click', () => profileModal?.classList.remove('show'));
+                profileModal?.addEventListener('click', (event) => {
+                    if (event.target === profileModal) {
+                        profileModal.classList.remove('show');
+                    }
+                });
+
+                const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+                const updateCropper = (file) => {
+                    if (!file || !cropper || !cropperImage) {
+                        return;
+                    }
+                    const objectUrl = URL.createObjectURL(file);
+                    const img = new Image();
+                    img.onload = () => {
+                        cropState.naturalWidth = img.naturalWidth;
+                        cropState.naturalHeight = img.naturalHeight;
+                        cropState.scale = Math.max(cropSize / img.naturalWidth, cropSize / img.naturalHeight);
+                        cropState.displayWidth = img.naturalWidth * cropState.scale;
+                        cropState.displayHeight = img.naturalHeight * cropState.scale;
+                        cropState.offsetX = (cropSize - cropState.displayWidth) / 2;
+                        cropState.offsetY = (cropSize - cropState.displayHeight) / 2;
+
+                        cropperImage.src = objectUrl;
+                        cropperImage.style.width = `${cropState.displayWidth}px`;
+                        cropperImage.style.height = `${cropState.displayHeight}px`;
+                        cropperImage.style.left = `${cropState.offsetX}px`;
+                        cropperImage.style.top = `${cropState.offsetY}px`;
+                        cropper.classList.add('active');
+                        if (cropperHint) {
+                            cropperHint.style.display = 'block';
+                        }
+                        if (photoPreview) {
+                            photoPreview.src = objectUrl;
+                            photoPreview.style.display = 'block';
+                        }
+                        if (photoLabel) {
+                            photoLabel.textContent = 'Change photo';
+                        }
+                    };
+                    img.src = objectUrl;
+                };
+
+                let dragging = false;
+                let startX = 0;
+                let startY = 0;
+                let startOffsetX = 0;
+                let startOffsetY = 0;
+
+                cropperImage?.addEventListener('pointerdown', (event) => {
+                    dragging = true;
+                    startX = event.clientX;
+                    startY = event.clientY;
+                    startOffsetX = cropState.offsetX;
+                    startOffsetY = cropState.offsetY;
+                    cropperImage.setPointerCapture(event.pointerId);
+                });
+
+                cropperImage?.addEventListener('pointermove', (event) => {
+                    if (!dragging) {
+                        return;
+                    }
+                    const dx = event.clientX - startX;
+                    const dy = event.clientY - startY;
+                    const minX = cropSize - cropState.displayWidth;
+                    const minY = cropSize - cropState.displayHeight;
+                    cropState.offsetX = clamp(startOffsetX + dx, minX, 0);
+                    cropState.offsetY = clamp(startOffsetY + dy, minY, 0);
+                    cropperImage.style.left = `${cropState.offsetX}px`;
+                    cropperImage.style.top = `${cropState.offsetY}px`;
+                });
+
+                const endDrag = () => { dragging = false; };
+                cropperImage?.addEventListener('pointerup', endDrag);
+                cropperImage?.addEventListener('pointercancel', endDrag);
+
+                const buildCroppedBlob = (file) => new Promise((resolve) => {
+                    const img = new Image();
+                    const objectUrl = URL.createObjectURL(file);
+                    img.onload = () => {
+                        const scale = cropState.scale || 1;
+                        const sx = Math.max(0, Math.round((0 - cropState.offsetX) / scale));
+                        const sy = Math.max(0, Math.round((0 - cropState.offsetY) / scale));
+                        const sSize = Math.min(img.naturalWidth - sx, img.naturalHeight - sy, Math.round(cropSize / scale));
+                        const canvas = document.createElement('canvas');
+                        const targetSize = 400;
+                        canvas.width = targetSize;
+                        canvas.height = targetSize;
+                        const ctx = canvas.getContext('2d');
+                        if (!ctx) {
+                            resolve(null);
+                            return;
+                        }
+                        ctx.drawImage(img, sx, sy, sSize, sSize, 0, 0, targetSize, targetSize);
+                        canvas.toBlob((blob) => {
+                            URL.revokeObjectURL(objectUrl);
+                            resolve(blob);
+                        }, 'image/jpeg', 0.92);
+                    };
+                    img.src = objectUrl;
+                });
+
+                const updateBannerCropper = (file) => {
+                    if (!file || !bannerCropper || !bannerCropperImage) {
+                        return;
+                    }
+                    const objectUrl = URL.createObjectURL(file);
+                    const img = new Image();
+                    img.onload = () => {
+                        bannerState.naturalWidth = img.naturalWidth;
+                        bannerState.naturalHeight = img.naturalHeight;
+                        bannerState.scale = Math.max(bannerCrop.width / img.naturalWidth, bannerCrop.height / img.naturalHeight);
+                        bannerState.displayWidth = img.naturalWidth * bannerState.scale;
+                        bannerState.displayHeight = img.naturalHeight * bannerState.scale;
+                        bannerState.offsetX = (bannerCrop.width - bannerState.displayWidth) / 2;
+                        bannerState.offsetY = (bannerCrop.height - bannerState.displayHeight) / 2;
+
+                        bannerCropperImage.src = objectUrl;
+                        bannerCropperImage.style.width = `${bannerState.displayWidth}px`;
+                        bannerCropperImage.style.height = `${bannerState.displayHeight}px`;
+                        bannerCropperImage.style.left = `${bannerState.offsetX}px`;
+                        bannerCropperImage.style.top = `${bannerState.offsetY}px`;
+                        bannerCropper.classList.add('active');
+                        if (bannerCropperHint) {
+                            bannerCropperHint.style.display = 'block';
+                        }
+                        if (bannerPreview) {
+                            bannerPreview.src = objectUrl;
+                            bannerPreview.style.display = 'block';
+                        }
+                        if (bannerLabel) {
+                            bannerLabel.textContent = 'Change banner';
+                        }
+                    };
+                    img.src = objectUrl;
+                };
+
+                let bannerDragging = false;
+                let bannerStartX = 0;
+                let bannerStartY = 0;
+                let bannerStartOffsetX = 0;
+                let bannerStartOffsetY = 0;
+
+                bannerCropperImage?.addEventListener('pointerdown', (event) => {
+                    bannerDragging = true;
+                    bannerStartX = event.clientX;
+                    bannerStartY = event.clientY;
+                    bannerStartOffsetX = bannerState.offsetX;
+                    bannerStartOffsetY = bannerState.offsetY;
+                    bannerCropperImage.setPointerCapture(event.pointerId);
+                });
+
+                bannerCropperImage?.addEventListener('pointermove', (event) => {
+                    if (!bannerDragging) {
+                        return;
+                    }
+                    const dx = event.clientX - bannerStartX;
+                    const dy = event.clientY - bannerStartY;
+                    const minX = bannerCrop.width - bannerState.displayWidth;
+                    const minY = bannerCrop.height - bannerState.displayHeight;
+                    bannerState.offsetX = clamp(bannerStartOffsetX + dx, minX, 0);
+                    bannerState.offsetY = clamp(bannerStartOffsetY + dy, minY, 0);
+                    bannerCropperImage.style.left = `${bannerState.offsetX}px`;
+                    bannerCropperImage.style.top = `${bannerState.offsetY}px`;
+                });
+
+                const endBannerDrag = () => { bannerDragging = false; };
+                bannerCropperImage?.addEventListener('pointerup', endBannerDrag);
+                bannerCropperImage?.addEventListener('pointercancel', endBannerDrag);
+
+                const buildBannerBlob = (file) => new Promise((resolve) => {
+                    const img = new Image();
+                    const objectUrl = URL.createObjectURL(file);
+                    img.onload = () => {
+                        const scale = bannerState.scale || 1;
+                        const sx = Math.max(0, Math.round((0 - bannerState.offsetX) / scale));
+                        const sy = Math.max(0, Math.round((0 - bannerState.offsetY) / scale));
+                        const sWidth = Math.min(img.naturalWidth - sx, Math.round(bannerCrop.width / scale));
+                        const sHeight = Math.min(img.naturalHeight - sy, Math.round(bannerCrop.height / scale));
+                        const canvas = document.createElement('canvas');
+                        const targetWidth = 1200;
+                        const targetHeight = 450;
+                        canvas.width = targetWidth;
+                        canvas.height = targetHeight;
+                        const ctx = canvas.getContext('2d');
+                        if (!ctx) {
+                            resolve(null);
+                            return;
+                        }
+                        ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, targetWidth, targetHeight);
+                        canvas.toBlob((blob) => {
+                            URL.revokeObjectURL(objectUrl);
+                            resolve(blob);
+                        }, 'image/jpeg', 0.92);
+                    };
+                    img.src = objectUrl;
+                });
+
+                photoInput?.addEventListener('change', (event) => {
+                    const file = event.target.files?.[0];
+                    updateCropper(file);
+                });
+
+                bannerInput?.addEventListener('change', (event) => {
+                    const file = event.target.files?.[0];
+                    updateBannerCropper(file);
+                });
+
+                form?.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    const file = photoInput?.files?.[0];
+                    const bannerFile = bannerInput?.files?.[0];
+
+                    if (file && photoInput) {
+                        const blob = await buildCroppedBlob(file);
+                        if (blob) {
+                            const croppedFile = new File([blob], file.name.replace(/\.[^.]+$/, '') + '-crop.jpg', { type: 'image/jpeg' });
+                            const dt = new DataTransfer();
+                            dt.items.add(croppedFile);
+                            photoInput.files = dt.files;
+
+                            const avatarImg = avatar?.querySelector('img');
+                            const previewUrl = URL.createObjectURL(croppedFile);
+                            if (avatarImg) {
+                                avatarImg.src = previewUrl;
+                            } else if (avatar) {
+                                avatar.textContent = '';
+                                const newImg = document.createElement('img');
+                                newImg.src = previewUrl;
+                                newImg.alt = 'Profile preview';
+                                avatar.appendChild(newImg);
+                            }
+                        }
+                    }
+
+                    if (bannerFile && bannerInput) {
+                        const bannerBlob = await buildBannerBlob(bannerFile);
+                        if (bannerBlob) {
+                            const croppedBanner = new File([bannerBlob], bannerFile.name.replace(/\.[^.]+$/, '') + '-banner.jpg', { type: 'image/jpeg' });
+                            const dtBanner = new DataTransfer();
+                            dtBanner.items.add(croppedBanner);
+                            bannerInput.files = dtBanner.files;
+                            if (bannerEl) {
+                                bannerEl.style.backgroundImage = `url(${URL.createObjectURL(croppedBanner)})`;
+                            }
+                        }
+                    }
+
+                    form.submit();
+                });
             });
         </script>
     </body>

@@ -48,6 +48,10 @@ Route::get('/profile', function () {
 Route::post('/profile/photo', function (\Illuminate\Http\Request $request) {
     $profileUser = session('user_id') ? User::find(session('user_id')) : null;
 
+    if (! $profileUser && session('user_email')) {
+        $profileUser = User::where('email', session('user_email'))->first();
+    }
+
     if (! $profileUser) {
         return redirect('/login')->with('error', 'Please log in first.');
     }
@@ -69,6 +73,10 @@ Route::post('/profile/photo', function (\Illuminate\Http\Request $request) {
 Route::post('/profile/update', function (\Illuminate\Http\Request $request) {
     $profileUser = session('user_id') ? User::find(session('user_id')) : null;
 
+    if (! $profileUser && session('user_email')) {
+        $profileUser = User::where('email', session('user_email'))->first();
+    }
+
     if (! $profileUser) {
         return redirect('/login')->with('error', 'Please log in first.');
     }
@@ -76,6 +84,7 @@ Route::post('/profile/update', function (\Illuminate\Http\Request $request) {
     $request->validate([
         'name' => 'required|string|max:60',
         'profile_photo' => 'nullable|image|max:2048',
+        'banner_photo' => 'nullable|image|max:4096',
     ]);
 
     $profileUser->name = $request->input('name');
@@ -88,6 +97,16 @@ Route::post('/profile/update', function (\Illuminate\Http\Request $request) {
         $path = $request->file('profile_photo')->store('profile-photos', 'public');
         $profileUser->profile_photo = $path;
         session(['profile_photo' => $path]);
+    }
+
+    if ($request->hasFile('banner_photo')) {
+        if ($profileUser->banner_photo) {
+            Storage::disk('public')->delete($profileUser->banner_photo);
+        }
+
+        $bannerPath = $request->file('banner_photo')->store('profile-banners', 'public');
+        $profileUser->banner_photo = $bannerPath;
+        session(['profile_banner' => $bannerPath]);
     }
 
     $profileUser->save();
