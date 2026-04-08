@@ -12,20 +12,18 @@
             margin: 0;
             font-family: "Plus Jakarta Sans", "Poppins", "Trebuchet MS", sans-serif;
             color: #111111;
-            background-color: #f2f2f0;
+            background-color: #f4f3f0;
             background-image:
-                radial-gradient(circle at 15% 12%, rgba(120, 120, 120, 0.08), transparent 38%),
-                radial-gradient(circle at 85% 18%, rgba(0, 0, 0, 0.06), transparent 34%),
-                repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0 1px, transparent 1px 16px),
-                linear-gradient(180deg, #f6f6f4 0%, #efefec 45%, #f2f2f0 100%);
-            background-size: auto, auto, 24px 24px, auto;
+                radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px),
+                linear-gradient(180deg, #f8f7f4 0%, #efefec 45%, #f2f2f0 100%);
+            background-size: 22px 22px, auto;
             min-height: 100vh;
-            padding: 40px 22px 80px;
+            padding: 36px 22px 80px;
         }
-        .shell { max-width: 1180px; margin: 0 auto; }
+        .shell { max-width: 980px; margin: 0 auto; }
         .topbar {
             display: flex; align-items: center; justify-content: space-between;
-            gap: 20px; margin-bottom: 24px; padding: 14px 18px;
+            gap: 20px; margin-bottom: 22px; padding: 14px 18px;
             border: 1px solid #e2e2df; border-radius: 14px;
             background: rgba(255,255,255,0.75); backdrop-filter: blur(6px);
         }
@@ -34,12 +32,18 @@
         .menu a { color: inherit; text-decoration: none; opacity: 0.8; font-weight: 600; }
 
         .feed-header {
-            display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap;
-            margin-bottom: 18px;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 20px; flex-wrap: wrap; margin-bottom: 18px;
         }
-        .feed-title h1 { margin: 0; font-size: 34px; font-family: "Playfair Display", "Times New Roman", serif; }
+        .feed-title h1 { margin: 0; font-size: 28px; font-family: "Playfair Display", "Times New Roman", serif; }
         .feed-title p { margin: 6px 0 0; color: #6c6c6c; }
-        .feed-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .feed-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .search {
+            display: flex; align-items: center; gap: 10px;
+            border: 1px solid #e1d9ce; border-radius: 999px; padding: 8px 14px;
+            background: #ffffff; min-width: 220px;
+        }
+        .search input { border: none; outline: none; width: 100%; font-size: 14px; background: transparent; }
         .btn {
             display: inline-flex; align-items: center; justify-content: center;
             padding: 10px 16px; border-radius: 999px; border: 1px solid #d9c7a8;
@@ -47,70 +51,53 @@
         }
         .btn.primary { background: #d9a867; border-color: #d9a867; }
 
-        .section {
-            background: #ffffff; border-radius: 18px; padding: 18px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08); margin-bottom: 18px;
-            border: 1px solid #e7e1d7;
-        }
+        .section { background: transparent; }
         .section h2 { margin: 0 0 12px; font-size: 18px; }
         .empty {
             background: #ffffff; border-radius: 18px; padding: 24px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.08); color: #6c6c6c;
         }
 
-        .feed-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 14px;
-        }
-        .fyp-grid {
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        }
-        .feed-list { display: grid; gap: 12px; }
-        .post-row {
-            display: grid;
-            grid-template-columns: 96px 1fr;
-            gap: 12px;
-            align-items: flex-start;
-            max-width: 520px;
-        }
+        .fyp-list { display: grid; gap: 18px; justify-items: center; }
         .post-card {
-            background: #ffffff; border-radius: 16px;
-            border: 1px solid #e0e0e0; overflow: hidden; display: flex; flex-direction: column;
+            background: #ffffff; border-radius: 24px;
+            border: 1px solid #e7e1d7; overflow: hidden;
+            width: 380px; box-shadow: 0 18px 35px rgba(0,0,0,0.08);
         }
         .post-media {
-            width: 100%; aspect-ratio: 1 / 1; background: #f3eee5; display: flex; align-items: center; justify-content: center;
+            width: 100%; aspect-ratio: 1 / 1; background: #f3eee5;
+            position: relative; display: flex; align-items: center; justify-content: center;
         }
-        .post-media.small { aspect-ratio: 1 / 1; }
         .post-media img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
-        .post-body { padding: 8px 10px 10px; text-align: left; }
-        .post-user {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+        .media-header {
+            position: absolute; top: 12px; left: 12px; right: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: #ffffff; border-radius: 999px; padding: 6px 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
         }
+        .media-user { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+        .media-actions { display: flex; gap: 10px; font-weight: 700; }
+        .post-body { padding: 12px 14px 16px; text-align: left; }
+        .post-user { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
         .avatar {
-            width: 36px; height: 36px; border-radius: 50%;
+            width: 32px; height: 32px; border-radius: 50%;
             background: linear-gradient(180deg, #d9a867 0%, #b98142 100%);
             color: #1b130b; font-weight: 700; display: grid; place-items: center;
         }
-        .user-meta { font-size: 13px; color: #6c6c6c; }
-        .user-meta strong { display: block; font-size: 14px; color: #111111; }
-        .post-title { margin: 0 0 6px; font-size: 13px; }
+        .user-meta { font-size: 12px; color: #6c6c6c; }
+        .user-meta strong { display: block; font-size: 13px; color: #111111; }
+        .post-title { margin: 0 0 6px; font-size: 14px; }
         .post-caption { margin: 0; font-size: 12px; color: #5f5f5f; }
+        .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
         .tag {
             display: inline-flex; align-items: center; gap: 6px;
-            margin-top: 10px; font-size: 12px; font-weight: 600;
+            font-size: 11px; font-weight: 600;
             color: #7a5a2b; background: #f3e6d5;
             border-radius: 999px; padding: 4px 8px;
         }
-        .post-footer {
-            margin-top: 12px; display: flex; align-items: center; justify-content: space-between;
-            font-size: 12px; color: #8a8074;
-        }
 
-        @media (max-width: 900px) {
-            .feed-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
-            .fyp-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
-            .post-row { grid-template-columns: 1fr; }
+        @media (max-width: 600px) {
+            .post-card { width: 100%; max-width: 360px; }
         }
     </style>
 </head>
@@ -132,6 +119,10 @@
             <p>Latest uploads from the community.</p>
         </div>
         <div class="feed-actions">
+            <div class="search">
+                <span>🔍</span>
+                <input type="text" placeholder="Search..." aria-label="Search feed">
+            </div>
             <a class="btn primary" href="/upload">Upload Sword</a>
         </div>
     </div>
@@ -179,11 +170,21 @@
         @if (empty($fypItems))
             <div class="empty">This feed is empty for now.</div>
         @else
-            <div class="feed-grid fyp-grid">
+            <div class="fyp-list">
                 @foreach ($fypItems as $item)
                     <article class="post-card">
                         <div class="post-media">
                             <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}">
+                            <div class="media-header">
+                                <div class="media-user">
+                                    <div class="avatar">{{ strtoupper(substr($item['user'], 0, 1)) }}</div>
+                                    <span>{{ $item['user'] }}</span>
+                                </div>
+                                <div class="media-actions">
+                                    <span>♡</span>
+                                    <span>+</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="post-body">
                             <div class="post-user">
@@ -195,10 +196,8 @@
                             </div>
                             <h3 class="post-title">{{ $item['title'] }}</h3>
                             <p class="post-caption">{{ $item['caption'] }}</p>
-                            <div class="tag">{{ $item['type'] }}</div>
-                            <div class="post-footer">
-                                <span>Community</span>
-                                <span>Details</span>
+                            <div class="tag-row">
+                                <span class="tag">{{ $item['type'] }}</span>
                             </div>
                         </div>
                     </article>
