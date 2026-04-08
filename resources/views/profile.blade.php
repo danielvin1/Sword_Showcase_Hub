@@ -139,6 +139,30 @@
                 font-size: 12px; font-weight: 600; color: #7a5a2b; background: #f3e6d5;
                 border-radius: 999px; padding: 4px 8px;
             }
+            .sword-actions {
+                display: flex;
+                gap: 8px;
+                margin-top: 10px;
+            }
+            .sword-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 7px 10px;
+                border-radius: 999px;
+                border: 1px solid #d9c7a8;
+                background: #fff;
+                color: #111111;
+                text-decoration: none;
+                font-size: 12px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+            .sword-btn.delete {
+                border-color: #e5b8b8;
+                color: #7d2323;
+                background: #fff6f6;
+            }
             .empty {
                 background: #ffffff; border-radius: 16px; padding: 18px;
                 border: 1px solid #e6dfd3; color: #6c6c6c;
@@ -319,6 +343,14 @@
                                             <h3>{{ $sword->name }}</h3>
                                             <p>{{ $sword->description ?: 'No description added yet.' }}</p>
                                             <div class="tag">{{ $sword->type }}</div>
+                                            <div class="sword-actions">
+                                                <a class="sword-btn" href="/swords/{{ $sword->id }}/edit">Edit</a>
+                                                <form method="POST" action="/swords/{{ $sword->id }}" onsubmit="return confirm('Delete this sword?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="sword-btn delete" type="submit">Delete</button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </article>
                                 @endforeach

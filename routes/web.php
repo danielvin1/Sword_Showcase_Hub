@@ -141,8 +141,11 @@ Route::post('/login', function (\Illuminate\Http\Request $request) {
 });
 
 Route::get('/feed', function () {
-    $swords = Sword::latest()->get();
+    $swords = Sword::with('user')->latest()->get();
     return view('feed', compact('swords'));
 });
 
 Route::post('/swords', [SwordController::class, 'store']);
+Route::get('/swords/{sword}/edit', [SwordController::class, 'edit']);
+Route::put('/swords/{sword}', [SwordController::class, 'update']);
+Route::delete('/swords/{sword}', [SwordController::class, 'destroy']);

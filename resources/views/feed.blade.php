@@ -137,24 +137,62 @@
         }
         $names = ['Avery Cole','Mila Hart','Ronan Vale','Zara Quinn','Theo Marsh','Lena Park','Omar Finch'];
         $handles = ['@averycole','@milahart','@ronanvale','@zaraquinn','@theomarsh','@lenapark','@omarfinch'];
-        $types = ['Longsword','Rapier','Katana','Saber','Greatsword','Shortsword','Falchion'];
+        $showcaseMeta = [
+            'bastard-longsword.jpg' => [
+                'title' => 'Warden Bastard Sword',
+                'type' => 'Bastard Sword',
+                'caption' => 'A balanced hand-and-a-half blade built for tight guard work, with enough reach and weight to shift into two-handed cuts when the fight opens up.',
+            ],
+            'claymore.webp' => [
+                'title' => 'Highland Claymore',
+                'type' => 'Claymore',
+                'caption' => 'A broad Scottish greatsword with a long grip and sweeping profile, made for committed two-handed strikes and battlefield presence.',
+            ],
+            'katana.jpg' => [
+                'title' => 'Moonlit Katana',
+                'type' => 'Katana',
+                'caption' => 'A curved single-edged blade with a fast draw and clean follow-through, prized for precision cuts and disciplined handling.',
+            ],
+            'sword-card.jpg' => [
+                'title' => 'Kingsguard Arming Sword',
+                'type' => 'Arming Sword',
+                'caption' => 'A straight, lively sidearm designed for one-handed use with a shield, reliable in close engagements and quick to recover.',
+            ],
+            'sword-card.webp' => [
+                'title' => 'Blackreef Saber',
+                'type' => 'Saber',
+                'caption' => 'A light cavalry saber with a pronounced curve and agile point control, built for speed, slashing angles, and mounted momentum.',
+            ],
+            'sword-hero.webp' => [
+                'title' => 'Lionheart Longsword',
+                'type' => 'Longsword',
+                'caption' => 'A versatile cruciform longsword with a stiff thrusting tip and enough blade presence to transition smoothly between cut and thrust.',
+            ],
+        ];
         $folderPosts = [];
         foreach ($files as $i => $file) {
+            $meta = $showcaseMeta[$file] ?? [
+                'title' => ucwords(str_replace(['-', '_'], ' ', pathinfo($file, PATHINFO_FILENAME))),
+                'type' => 'Sword',
+                'caption' => 'A featured blade from the community showcase.',
+            ];
             $folderPosts[] = [
                 'user' => $names[$i % count($names)],
                 'handle' => $handles[$i % count($handles)],
-                'title' => str_replace(['-', '_'], ' ', pathinfo($file, PATHINFO_FILENAME)),
-                'type' => $types[$i % count($types)],
-                'caption' => 'Community showcase from the workshop wall.',
+                'title' => $meta['title'],
+                'type' => $meta['type'],
+                'caption' => $meta['caption'],
                 'image' => '/swords/' . $file,
                 'time' => ($i + 1) . 'd',
             ];
         }
         $fypItems = [];
         foreach ($swords as $sword) {
+            $creatorName = $sword->user?->name ?? 'Community Collector';
+            $creatorHandle = '@' . strtolower(str_replace(' ', '', $creatorName));
             $fypItems[] = [
-                'user' => $sword->name,
-                'handle' => '@upload',
+                'user' => $creatorName,
+                'handle' => $creatorHandle,
                 'title' => $sword->name,
                 'type' => $sword->type,
                 'caption' => $sword->description ?: 'No description added yet.',
