@@ -148,6 +148,21 @@
                 'type' => 'Claymore',
                 'caption' => 'A broad Scottish greatsword with a long grip and sweeping profile, made for committed two-handed strikes and battlefield presence.',
             ],
+            '1338_1st-600x1271.jpg' => [
+                'title' => 'Ridgecrest Broadsword',
+                'type' => 'Broadsword',
+                'caption' => 'A stout, single-handed blade with a wide profile and sturdy guard, built for reliable cuts and confident parries.',
+            ],
+            'dark-sister-sword-of-daemon-targaryen-1_a5a69c40-8d3b-4963-a919-01518bfb4540.webp' => [
+                'title' => 'Nightborne Longsword',
+                'type' => 'Longsword',
+                'caption' => 'A lean, dark-forged blade with a long grip and agile balance, favoring swift thrusts and tight, precise footwork.',
+            ],
+            'il_570xN.3117585570_8lbi.webp' => [
+                'title' => 'Crestwind Arming Sword',
+                'type' => 'Arming Sword',
+                'caption' => 'A compact knightly sidearm with a lively point and clean recovery, dependable in close duels and shield work.',
+            ],
             'katana.jpg' => [
                 'title' => 'Moonlit Katana',
                 'type' => 'Katana',
