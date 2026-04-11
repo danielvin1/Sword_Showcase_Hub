@@ -1,22 +1,27 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <link rel=""icon"" type=""image/png"" sizes=""16x16"" href=""/images/bladeshare-favicon-16.png"">
+    <link rel=""icon"" type=""image/png"" sizes=""32x32"" href=""/images/bladeshare-favicon-32.png"">
+    <link rel=""icon"" type=""image/png"" sizes=""48x48"" href=""/images/bladeshare-favicon-48.png"">
+    <link rel=""icon"" type=""image/png"" sizes=""64x64"" href=""/images/bladeshare-favicon-64.png"">
+    <link rel=""icon"" type=""image/png"" sizes=""128x128"" href=""/images/bladeshare-favicon-128.png"">
+    <link rel=""apple-touch-icon"" sizes=""128x128"" href=""/images/bladeshare-favicon-128.png""><meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Feed | Sword Showcase Hub</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
-
         * { box-sizing: border-box; }
         body {
             margin: 0;
-            font-family: "Plus Jakarta Sans", "Poppins", "Trebuchet MS", sans-serif;
+            font-family: "Poppins", "Trebuchet MS", sans-serif;
             color: #111111;
-            background-color: #f4f3f0;
+            background-color: #f2f2f0;
             background-image:
-                radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px),
-                linear-gradient(180deg, #f8f7f4 0%, #efefec 45%, #f2f2f0 100%);
-            background-size: 22px 22px, auto;
+                radial-gradient(circle at 15% 12%, rgba(120, 120, 120, 0.08), transparent 38%),
+                radial-gradient(circle at 85% 18%, rgba(0, 0, 0, 0.06), transparent 34%),
+                repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0 1px, transparent 1px 16px),
+                linear-gradient(180deg, #f6f6f4 0%, #efefec 45%, #f2f2f0 100%);
+            background-size: auto, auto, 24px 24px, auto;
             min-height: 100vh;
             padding: 36px 22px 80px;
         }
@@ -27,30 +32,18 @@
             border: 1px solid #e2e2df; border-radius: 14px;
             background: rgba(255,255,255,0.75); backdrop-filter: blur(6px);
         }
-        .brand { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px; color: #2c2218; }
+        .brand { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px; }
         .menu { display: flex; gap: 18px; font-size: 14px; }
-        .menu a { color: inherit; text-decoration: none; opacity: 0.8; font-weight: 600; }
+        .menu a { color: inherit; text-decoration: none; opacity: 0.8; }
 
         .feed-header {
             display: flex; align-items: center; justify-content: space-between;
             gap: 20px; flex-wrap: wrap; margin-bottom: 18px;
         }
-        .feed-title h1 { margin: 0; font-size: 28px; font-family: "Playfair Display", "Times New Roman", serif; }
+        .feed-title h1 { margin: 0; font-size: 28px; }
         .feed-title p { margin: 6px 0 0; color: #6c6c6c; }
         .feed-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .filter-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 16px;
-            border-radius: 999px;
-            border: 1px solid #d9c7a8;
-            background: #ffffff;
-            color: #111111;
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
+        .filter-btn { cursor: pointer; }
         .btn {
             display: inline-flex; align-items: center; justify-content: center;
             padding: 10px 16px; border-radius: 999px; border: 1px solid #d9c7a8;
@@ -159,28 +152,24 @@
             color: #8a7b64;
             text-align: center;
         }
-        .type-options {
-            display: grid;
-            gap: 8px;
-        }
-        .type-option {
+        .type-select {
+            display: block;
+            width: 100%;
             border: 1px solid #e6ded2;
             border-radius: 14px;
+            padding: 10px 12px;
+            font-size: 12.5px;
+            color: #111111;
             background: #ffffff;
-            padding: 9px 10px;
-            display: grid;
-            gap: 4px;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
-        }
-        .type-option strong { font-size: 12.5px; }
-        .type-option span { font-size: 11px; color: #6c6c6c; }
-        .type-option em { font-style: normal; font-size: 10px; color: #8a7b64; }
-        .type-option.active {
-            border-color: #d9a867;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-            transform: translateY(-1px);
+            text-align: left;
+            appearance: none;
+            background-image: linear-gradient(45deg, transparent 50%, #9a8c78 50%),
+                              linear-gradient(135deg, #9a8c78 50%, transparent 50%);
+            background-position: calc(100% - 18px) calc(50% - 2px),
+                                 calc(100% - 12px) calc(50% - 2px);
+            background-size: 6px 6px, 6px 6px;
+            background-repeat: no-repeat;
+            padding-right: 34px;
         }
         .modal-actions {
             display: grid;
@@ -224,7 +213,7 @@
             <p>Latest uploads from the community.</p>
         </div>
         <div class="feed-actions">
-            <button class="filter-btn" type="button" id="openFilters">Filter Blades</button>
+            <button class="btn filter-btn" type="button" id="openFilters">Filter Blades</button>
             <a class="btn primary" href="/upload">Upload Sword</a>
         </div>
     </div>
@@ -336,7 +325,7 @@
                                     <span>{{ $item['user'] }}</span>
                                 </div>
                                 <div class="media-actions">
-                                    <span>♡</span>
+                                    <span>?</span>
                                     <span>+</span>
                                 </div>
                             </div>
@@ -346,7 +335,7 @@
                                 <div class="avatar">{{ strtoupper(substr($item['user'], 0, 1)) }}</div>
                                 <div class="user-meta">
                                     <strong>{{ $item['user'] }}</strong>
-                                    {{ $item['handle'] }} · {{ $item['time'] }}
+                                    {{ $item['handle'] }} � {{ $item['time'] }}
                                 </div>
                             </div>
                             <h3 class="post-title">{{ $item['title'] }}</h3>
@@ -369,33 +358,14 @@
         </div>
         <div class="modal-section">
             <div class="modal-label">Type</div>
-            <div class="type-options" role="group" aria-label="Filter blades by type">
-                <button class="type-option active" type="button" data-filter="Katana">
-                    <strong>Katana</strong>
-                    <span>Curved precision</span>
-                    <em>Swift draw</em>
-                </button>
-                <button class="type-option" type="button" data-filter="Broadsword">
-                    <strong>Broadsword</strong>
-                    <span>Broad profile</span>
-                    <em>Heavy cuts</em>
-                </button>
-                <button class="type-option" type="button" data-filter="Longsword">
-                    <strong>Longsword</strong>
-                    <span>Versatile reach</span>
-                    <em>Cut & thrust</em>
-                </button>
-                <button class="type-option" type="button" data-filter="Claymore">
-                    <strong>Claymore</strong>
-                    <span>Two-handed</span>
-                    <em>Battlefield power</em>
-                </button>
-                <button class="type-option" type="button" data-filter="Arming Sword">
-                    <strong>Arming Sword</strong>
-                    <span>Knightly sidearm</span>
-                    <em>Shield-ready</em>
-                </button>
-            </div>
+            <select class="type-select" id="typeSelect" aria-label="Filter blades by type">
+                <option value="All">All</option>
+                <option value="Katana">Katana</option>
+                <option value="Broadsword">Broadsword</option>
+                <option value="Longsword">Longsword</option>
+                <option value="Claymore">Claymore</option>
+                <option value="Arming Sword">Arming Sword</option>
+            </select>
         </div>
         <div class="modal-actions">
             <button class="modal-apply" type="button" id="applyFilters">Apply Filters</button>
@@ -409,7 +379,7 @@
     const dismissBtn = document.getElementById('dismissFilters');
     const applyBtn = document.getElementById('applyFilters');
     const resetBtn = document.getElementById('resetFilters');
-    const typeOptions = Array.from(document.querySelectorAll('.type-option'));
+    const typeSelect = document.getElementById('typeSelect');
     const cards = Array.from(document.querySelectorAll('.post-card'));
 
     const showModal = () => {
@@ -421,14 +391,9 @@
         modal.setAttribute('aria-hidden', 'true');
     };
 
-    const setActiveOption = (option) => {
-        typeOptions.forEach(btn => btn.classList.toggle('active', btn === option));
-    };
-
     const applyFilter = () => {
-        const active = typeOptions.find(btn => btn.classList.contains('active'));
-        const filterType = active ? active.getAttribute('data-filter') : '';
-        if (!filterType) {
+        const filterType = typeSelect ? typeSelect.value : '';
+        if (!filterType || filterType.toLowerCase() === 'all') {
             cards.forEach(card => { card.style.display = ''; });
             return;
         }
@@ -440,7 +405,7 @@
     };
 
     const resetFilters = () => {
-        typeOptions.forEach(btn => btn.classList.remove('active'));
+        if (typeSelect) typeSelect.value = 'All';
         cards.forEach(card => { card.style.display = ''; });
     };
 
@@ -448,9 +413,6 @@
     dismissBtn.addEventListener('click', hideModal);
     modal.addEventListener('click', (event) => {
         if (event.target === modal) hideModal();
-    });
-    typeOptions.forEach(option => {
-        option.addEventListener('click', () => setActiveOption(option));
     });
     applyBtn.addEventListener('click', () => {
         applyFilter();
@@ -460,3 +422,5 @@
 </script>
 </body>
 </html>
+
+

@@ -1,7 +1,12 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
+    <link rel=""icon"" type=""image/png"" sizes=""16x16"" href=""/images/bladeshare-favicon-16.png"">
+    <link rel=""icon"" type=""image/png"" sizes=""32x32"" href=""/images/bladeshare-favicon-32.png"">
+    <link rel=""icon"" type=""image/png"" sizes=""48x48"" href=""/images/bladeshare-favicon-48.png"">
+    <link rel=""icon"" type=""image/png"" sizes=""64x64"" href=""/images/bladeshare-favicon-64.png"">
+    <link rel=""icon"" type=""image/png"" sizes=""128x128"" href=""/images/bladeshare-favicon-128.png"">
+    <link rel=""apple-touch-icon"" sizes=""128x128"" href=""/images/bladeshare-favicon-128.png""><meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Profile | Sword Showcase Hub</title>
         <style>
@@ -313,7 +318,7 @@
                         <div class="stats">
                             <div class="stat"><b>{{ $swordCount }}</b>Uploads</div>
                             <div class="stat"><b>{{ $swords->count() }}</b>Posts</div>
-                            <div class="stat"><b>{{ $swords->first()?->created_at?->format('d M Y') ?? '—' }}</b>Latest</div>
+                            <div class="stat"><b>{{ $swords->first()?->created_at?->format('d M Y') ?? '�' }}</b>Latest</div>
                         </div>
                     </div>
                 </div>
@@ -707,3 +712,5 @@
         </script>
     </body>
 </html>
+
+
