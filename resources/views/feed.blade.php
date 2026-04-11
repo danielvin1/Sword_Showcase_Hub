@@ -110,25 +110,28 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(15, 12, 8, 0.4);
+            background: transparent;
             display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 18px;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding: 0;
             z-index: 1000;
         }
         .modal-overlay.show { display: flex; }
         .modal {
             width: 100%;
-            max-width: 420px;
+            max-width: 300px;
             background: #ffffff;
-            border-radius: 26px;
-            border: 1px solid #e7e1d7;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
-            padding: 22px;
+            border-radius: 24px;
+            border: 1px solid #e9e2d7;
+            box-shadow: 0 18px 36px rgba(0,0,0,0.12);
+            padding: 16px;
             display: grid;
-            gap: 18px;
-            text-align: center;
+            gap: 12px;
+            text-align: left;
+            position: fixed;
+            right: 160px;
+            top: 140px;
         }
         .modal-head {
             display: flex;
@@ -136,7 +139,7 @@
             justify-content: space-between;
             gap: 10px;
         }
-        .modal-head h3 { margin: 0; font-size: 18px; }
+        .modal-head h3 { margin: 0; font-size: 16px; }
         .modal-reset {
             border: none;
             background: transparent;
@@ -146,11 +149,11 @@
         }
         .modal-section {
             display: grid;
-            gap: 10px;
+            gap: 8px;
             text-align: left;
         }
         .modal-label {
-            font-size: 12px;
+            font-size: 10px;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             color: #8a7b64;
@@ -158,22 +161,22 @@
         }
         .type-options {
             display: grid;
-            gap: 10px;
+            gap: 8px;
         }
         .type-option {
-            border: 1px solid #e1d9ce;
-            border-radius: 16px;
+            border: 1px solid #e6ded2;
+            border-radius: 14px;
             background: #ffffff;
-            padding: 12px;
+            padding: 9px 10px;
             display: grid;
             gap: 4px;
             text-align: center;
             cursor: pointer;
             transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
         }
-        .type-option strong { font-size: 14px; }
-        .type-option span { font-size: 12px; color: #6c6c6c; }
-        .type-option em { font-style: normal; font-size: 11px; color: #8a7b64; }
+        .type-option strong { font-size: 12.5px; }
+        .type-option span { font-size: 11px; color: #6c6c6c; }
+        .type-option em { font-style: normal; font-size: 10px; color: #8a7b64; }
         .type-option.active {
             border-color: #d9a867;
             box-shadow: 0 10px 20px rgba(0,0,0,0.08);
@@ -181,15 +184,16 @@
         }
         .modal-actions {
             display: grid;
-            gap: 10px;
+            gap: 8px;
         }
         .modal-apply {
-            padding: 12px 18px;
+            padding: 10px 16px;
             border-radius: 999px;
             border: 1px solid #1b1b1b;
             background: #1b1b1b;
             color: #ffffff;
             font-weight: 700;
+            font-size: 13px;
             cursor: pointer;
         }
         .modal-dismiss {
@@ -197,6 +201,7 @@
             background: transparent;
             color: #8a7b64;
             font-weight: 600;
+            font-size: 12px;
             cursor: pointer;
         }
     </style>
