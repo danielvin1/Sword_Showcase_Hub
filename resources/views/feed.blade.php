@@ -38,12 +38,19 @@
         .feed-title h1 { margin: 0; font-size: 28px; font-family: "Playfair Display", "Times New Roman", serif; }
         .feed-title p { margin: 6px 0 0; color: #6c6c6c; }
         .feed-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .search {
-            display: flex; align-items: center; gap: 10px;
-            border: 1px solid #e1d9ce; border-radius: 999px; padding: 8px 14px;
-            background: #ffffff; min-width: 220px;
+        .filter-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: 1px solid #d9c7a8;
+            background: #ffffff;
+            color: #111111;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
         }
-        .search input { border: none; outline: none; width: 100%; font-size: 14px; background: transparent; }
         .btn {
             display: inline-flex; align-items: center; justify-content: center;
             padding: 10px 16px; border-radius: 999px; border: 1px solid #d9c7a8;
@@ -99,6 +106,99 @@
         @media (max-width: 600px) {
             .post-card { width: 100%; max-width: 360px; }
         }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 12, 8, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            z-index: 1000;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            width: 100%;
+            max-width: 420px;
+            background: #ffffff;
+            border-radius: 26px;
+            border: 1px solid #e7e1d7;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            padding: 22px;
+            display: grid;
+            gap: 18px;
+            text-align: center;
+        }
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .modal-head h3 { margin: 0; font-size: 18px; }
+        .modal-reset {
+            border: none;
+            background: transparent;
+            color: #7a5a2b;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .modal-section {
+            display: grid;
+            gap: 10px;
+            text-align: left;
+        }
+        .modal-label {
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #8a7b64;
+            text-align: center;
+        }
+        .type-options {
+            display: grid;
+            gap: 10px;
+        }
+        .type-option {
+            border: 1px solid #e1d9ce;
+            border-radius: 16px;
+            background: #ffffff;
+            padding: 12px;
+            display: grid;
+            gap: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+        }
+        .type-option strong { font-size: 14px; }
+        .type-option span { font-size: 12px; color: #6c6c6c; }
+        .type-option em { font-style: normal; font-size: 11px; color: #8a7b64; }
+        .type-option.active {
+            border-color: #d9a867;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            transform: translateY(-1px);
+        }
+        .modal-actions {
+            display: grid;
+            gap: 10px;
+        }
+        .modal-apply {
+            padding: 12px 18px;
+            border-radius: 999px;
+            border: 1px solid #1b1b1b;
+            background: #1b1b1b;
+            color: #ffffff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .modal-dismiss {
+            border: none;
+            background: transparent;
+            color: #8a7b64;
+            font-weight: 600;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -119,10 +219,7 @@
             <p>Latest uploads from the community.</p>
         </div>
         <div class="feed-actions">
-            <div class="search">
-                <span>🔍</span>
-                <input type="text" placeholder="Search..." aria-label="Search feed">
-            </div>
+            <button class="filter-btn" type="button" id="openFilters">Filter Blades</button>
             <a class="btn primary" href="/upload">Upload Sword</a>
         </div>
     </div>
@@ -225,7 +322,7 @@
         @else
             <div class="fyp-list">
                 @foreach ($fypItems as $item)
-                    <article class="post-card">
+                    <article class="post-card" data-type="{{ $item['type'] }}">
                         <div class="post-media">
                             <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}">
                             <div class="media-header">
@@ -259,5 +356,102 @@
         @endif
     </section>
 </div>
+<div class="modal-overlay" id="filterModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="filterTitle">
+        <div class="modal-head">
+            <h3 id="filterTitle">Filters</h3>
+            <button class="modal-reset" type="button" id="resetFilters">Reset</button>
+        </div>
+        <div class="modal-section">
+            <div class="modal-label">Type</div>
+            <div class="type-options" role="group" aria-label="Filter blades by type">
+                <button class="type-option active" type="button" data-filter="Katana">
+                    <strong>Katana</strong>
+                    <span>Curved precision</span>
+                    <em>Swift draw</em>
+                </button>
+                <button class="type-option" type="button" data-filter="Broadsword">
+                    <strong>Broadsword</strong>
+                    <span>Broad profile</span>
+                    <em>Heavy cuts</em>
+                </button>
+                <button class="type-option" type="button" data-filter="Longsword">
+                    <strong>Longsword</strong>
+                    <span>Versatile reach</span>
+                    <em>Cut & thrust</em>
+                </button>
+                <button class="type-option" type="button" data-filter="Claymore">
+                    <strong>Claymore</strong>
+                    <span>Two-handed</span>
+                    <em>Battlefield power</em>
+                </button>
+                <button class="type-option" type="button" data-filter="Arming Sword">
+                    <strong>Arming Sword</strong>
+                    <span>Knightly sidearm</span>
+                    <em>Shield-ready</em>
+                </button>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="modal-apply" type="button" id="applyFilters">Apply Filters</button>
+            <button class="modal-dismiss" type="button" id="dismissFilters">Dismiss</button>
+        </div>
+    </div>
+</div>
+<script>
+    const modal = document.getElementById('filterModal');
+    const openBtn = document.getElementById('openFilters');
+    const dismissBtn = document.getElementById('dismissFilters');
+    const applyBtn = document.getElementById('applyFilters');
+    const resetBtn = document.getElementById('resetFilters');
+    const typeOptions = Array.from(document.querySelectorAll('.type-option'));
+    const cards = Array.from(document.querySelectorAll('.post-card'));
+
+    const showModal = () => {
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden', 'false');
+    };
+    const hideModal = () => {
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+    };
+
+    const setActiveOption = (option) => {
+        typeOptions.forEach(btn => btn.classList.toggle('active', btn === option));
+    };
+
+    const applyFilter = () => {
+        const active = typeOptions.find(btn => btn.classList.contains('active'));
+        const filterType = active ? active.getAttribute('data-filter') : '';
+        if (!filterType) {
+            cards.forEach(card => { card.style.display = ''; });
+            return;
+        }
+        cards.forEach(card => {
+            const cardType = (card.getAttribute('data-type') || '').toLowerCase();
+            const matches = cardType === filterType.toLowerCase();
+            card.style.display = matches ? '' : 'none';
+        });
+    };
+
+    const resetFilters = () => {
+        typeOptions.forEach(btn => btn.classList.remove('active'));
+        cards.forEach(card => { card.style.display = ''; });
+    };
+
+    openBtn.addEventListener('click', showModal);
+    dismissBtn.addEventListener('click', hideModal);
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) hideModal();
+    });
+    typeOptions.forEach(option => {
+        option.addEventListener('click', () => setActiveOption(option));
+    });
+    applyBtn.addEventListener('click', () => {
+        applyFilter();
+        hideModal();
+    });
+    resetBtn.addEventListener('click', resetFilters);
+</script>
 </body>
 </html>
