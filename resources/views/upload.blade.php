@@ -99,6 +99,19 @@
             font-size: 15px;
             line-height: 1.7;
         }
+        .alert {
+            margin-top: 22px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .alert.error {
+            background: #fff4f4;
+            border-color: #e5b8b8;
+            color: #7d2323;
+        }
         .form-grid {
             display: grid;
             gap: 16px;
@@ -242,27 +255,46 @@
                 Add the blade name, type, a short description, and an image so it feels right at home in the community feed.
             </p>
 
+            @if ($errors->any())
+                <div class="alert error">
+                    Please fix the highlighted upload details and try again.
+                </div>
+            @endif
+
             <form class="form-grid" method="POST" action="/swords" enctype="multipart/form-data">
                 @csrf
                 <div class="field">
                     <label for="sword-name">Sword name</label>
-                    <input id="sword-name" type="text" name="name" placeholder="Moonlit Katana" required>
+                    <input id="sword-name" type="text" name="name" value="{{ old('name') }}" placeholder="Moonlit Katana" required>
+                    @error('name')
+                        <div class="field-note">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="field">
                     <label for="sword-type">Type</label>
-                    <input id="sword-type" type="text" name="type" placeholder="Katana, Claymore, Longsword..." required>
+                    <input id="sword-type" type="text" name="type" value="{{ old('type') }}" placeholder="Katana, Claymore, Longsword..." required>
+                    @error('type')
+                        <div class="field-note">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="field">
                     <label for="sword-description">Description</label>
-                    <textarea id="sword-description" name="description" placeholder="What makes this blade special?"></textarea>
+                    <textarea id="sword-description" name="description" placeholder="What makes this blade special?">{{ old('description') }}</textarea>
+                    @error('description')
+                        <div class="field-note">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="field">
                     <label for="sword-image">Sword image</label>
                     <input id="sword-image" type="file" name="image" accept="image/*">
-                    <div class="field-note">Use a clean, well-lit photo for the best result in the feed.</div>
+                    @if ($errors->has('image'))
+                        <div class="field-note">{{ $errors->first('image') }}</div>
+                    @else
+                        <div class="field-note">Use a clean, well-lit photo for the best result in the feed.</div>
+                    @endif
                 </div>
 
                 <div class="form-actions">
