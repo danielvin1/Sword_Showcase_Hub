@@ -87,24 +87,38 @@
             border: none;
             cursor: pointer;
             font-size: 18px;
-            padding: 4px 8px;
-            transition: transform 0.2s ease;
+            padding: 6px 10px;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 4px;
-            color: #111;
-            font-weight: 600;
-            font-size: 13px;
+            color: #d9a867;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 6px;
+            background: rgba(217, 167, 103, 0.1);
         }
         .media-btn:hover {
-            transform: scale(1.2);
+            transform: scale(1.15);
+            background: rgba(217, 167, 103, 0.2);
+            color: #c49851;
         }
         .media-btn.liked {
-            filter: drop-shadow(0 0 3px rgba(217, 167, 103, 0.6));
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.15);
+            filter: drop-shadow(0 0 3px rgba(231, 76, 60, 0.4));
+        }
+        .media-btn.liked:hover {
+            background: rgba(231, 76, 60, 0.25);
+            color: #d63031;
         }
         .media-btn.followed {
-            color: #d9a867;
-            font-weight: bold;
+            color: #27ae60;
+            background: rgba(39, 174, 96, 0.15);
+        }
+        .media-btn.followed:hover {
+            background: rgba(39, 174, 96, 0.25);
+            color: #229954;
         }
         .post-body { padding: 12px 14px 16px; text-align: left; }
         .post-user { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
@@ -285,92 +299,9 @@
     </div>
 
     @php
-        $dir = public_path('swords');
-        $files = [];
-        if (is_dir($dir)) {
-            $files = array_values(array_filter(scandir($dir), function ($file) {
-                return preg_match('/\.(jpg|jpeg|png|webp|gif)$/i', $file);
-            }));
-        }
-        $names = ['Avery Cole','Mila Hart','Ronan Vale','Zara Quinn','Theo Marsh','Lena Park','Omar Finch'];
-        $handles = ['@averycole','@milahart','@ronanvale','@zaraquinn','@theomarsh','@lenapark','@omarfinch'];
+        // Get showcase swords from database (user_ids 1-7)
+        $showcaseSwords = \App\Models\Sword::whereIn('user_id', [1,2,3,4,5,6,7])->with('user')->get();
         
-        // Query real users from database
-        $realUsers = \App\Models\User::whereIn('name', $names)->get()->keyBy('name');
-        
-        $showcaseMeta = [
-            'bastard-longsword.jpg' => [
-                'title' => 'Warden Bastard Sword',
-                'type' => 'Bastard Sword',
-                'caption' => 'A balanced hand-and-a-half blade built for tight guard work, with enough reach and weight to shift into two-handed cuts when the fight opens up.',
-            ],
-            'claymore.webp' => [
-                'title' => 'Highland Claymore',
-                'type' => 'Claymore',
-                'caption' => 'A broad Scottish greatsword with a long grip and sweeping profile, made for committed two-handed strikes and battlefield presence.',
-            ],
-            '1338_1st-600x1271.jpg' => [
-                'title' => 'Ridgecrest Broadsword',
-                'type' => 'Broadsword',
-                'caption' => 'A stout, single-handed blade with a wide profile and sturdy guard, built for reliable cuts and confident parries.',
-            ],
-            'dark-sister-sword-of-daemon-targaryen-1_a5a69c40-8d3b-4963-a919-01518bfb4540.webp' => [
-                'title' => 'Nightborne Longsword',
-                'type' => 'Longsword',
-                'caption' => 'A lean, dark-forged blade with a long grip and agile balance, favoring swift thrusts and tight, precise footwork.',
-            ],
-            'il_570xN.3117585570_8lbi.webp' => [
-                'title' => 'Crestwind Arming Sword',
-                'type' => 'Arming Sword',
-                'caption' => 'A compact knightly sidearm with a lively point and clean recovery, dependable in close duels and shield work.',
-            ],
-            'katana.jpg' => [
-                'title' => 'Moonlit Katana',
-                'type' => 'Katana',
-                'caption' => 'A curved single-edged blade with a fast draw and clean follow-through, prized for precision cuts and disciplined handling.',
-            ],
-            'sword-card.jpg' => [
-                'title' => 'Kingsguard Arming Sword',
-                'type' => 'Arming Sword',
-                'caption' => 'A straight, lively sidearm designed for one-handed use with a shield, reliable in close engagements and quick to recover.',
-            ],
-            'sword-card.webp' => [
-                'title' => 'Blackreef Saber',
-                'type' => 'Saber',
-                'caption' => 'A light cavalry saber with a pronounced curve and agile point control, built for speed, slashing angles, and mounted momentum.',
-            ],
-            'sword-hero.webp' => [
-                'title' => 'Lionheart Longsword',
-                'type' => 'Longsword',
-                'caption' => 'A versatile cruciform longsword with a stiff thrusting tip and enough blade presence to transition smoothly between cut and thrust.',
-            ],
-        ];
-        $folderPosts = [];
-        foreach ($files as $i => $file) {
-            $meta = $showcaseMeta[$file] ?? [
-                'title' => ucwords(str_replace(['-', '_'], ' ', pathinfo($file, PATHINFO_FILENAME))),
-                'type' => 'Sword',
-                'caption' => 'A featured blade from the community showcase.',
-            ];
-            $userName = $names[$i % count($names)];
-            $user = $realUsers[$userName] ?? null;
-            $isUserFollowed = session('user_id') && $user ? \App\Models\User::find(session('user_id'))->isFollowing($user->id) : false;
-            
-            $folderPosts[] = [
-                'user' => $userName,
-                'handle' => $handles[$i % count($names)],
-                'title' => $meta['title'],
-                'type' => $meta['type'],
-                'caption' => $meta['caption'],
-                'image' => '/swords/' . $file,
-                'time' => ($i + 1) . 'd',
-                'user_id' => $user?->id ?? null,
-                'is_followed' => $isUserFollowed,
-                'sword_id' => null,
-                'likes_count' => rand(8, 127),
-                'is_liked' => false,
-            ];
-        }
         $fypItems = [];
         foreach ($swords as $sword) {
             $creatorName = $sword->user?->name ?? 'Community Collector';
@@ -392,7 +323,28 @@
                 'is_liked' => $isLiked,
             ];
         }
-        $fypItems = array_merge($fypItems, $folderPosts);
+        
+        // Add showcase swords from database
+        foreach ($showcaseSwords as $sword) {
+            $creatorName = $sword->user->name ?? 'Showcase';
+            $creatorHandle = '@' . strtolower(str_replace(' ', '', $creatorName));
+            $isLiked = session('user_id') ? $sword->isLikedBy(session('user_id')) : false;
+            $isFollowed = session('user_id') && $sword->user ? \App\Models\User::find(session('user_id'))->isFollowing($sword->user->id) : false;
+            $fypItems[] = [
+                'user' => $creatorName,
+                'handle' => $creatorHandle,
+                'title' => $sword->name,
+                'type' => $sword->type,
+                'caption' => $sword->description ?: 'No description added yet.',
+                'image' => $sword->image ? asset('storage/' . $sword->image) : '/swords/' . basename($sword->image),
+                'time' => '7d',
+                'user_id' => $sword->user->id,
+                'is_followed' => $isFollowed,
+                'sword_id' => $sword->id,
+                'likes_count' => $sword->likes()->count(),
+                'is_liked' => $isLiked,
+            ];
+        }
     @endphp
 
     <section class="section">
