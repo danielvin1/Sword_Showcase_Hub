@@ -72,30 +72,33 @@ class User extends Authenticatable
             'images',
         ]);
     }
-
     public function swords()
     {
         return $this->hasMany(Sword::class);
     }
 
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
     public function followers()
     {
-        return $this->belongsToMany(self::class, 'user_follows', 'followed_id', 'follower_id')
-            ->withTimestamps();
+        return $this->hasMany(Follow::class, 'following_id');
     }
 
     public function following()
     {
-        return $this->belongsToMany(self::class, 'user_follows', 'follower_id', 'followed_id')
-            ->withTimestamps();
+        return $this->hasMany(Follow::class, 'follower_id');
     }
 
-    public function isFollowing(?self $user): bool
+    public function isFollowing($userId)
     {
-        if (! $user || ! $this->exists || ! $user->exists) {
-            return false;
-        }
+        return $this->following()->where('following_id', $userId)->exists();
+    }
 
-        return $this->following()->where('followed_id', $user->id)->exists();
+    public function isFollowedBy($userId)
+    {
+        return $this->followers()->where('follower_id', $userId)->exists();
     }
 }

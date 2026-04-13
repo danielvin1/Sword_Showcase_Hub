@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\SwordController;
+use App\Models\Like;
 use App\Models\Sword;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -37,21 +39,33 @@ Route::get('/register', function () {
     return view('register');
 });
 
-Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('/upload', function () {
+    if (! session('user_id')) {
+        return redirect('/register')->with('error', 'Please create an account to upload swords.');
+    }
+
     return view('upload');
 });
 
 Route::get('/profile', function () use ($resolveSessionUser) {
+    if (! session('user_id')) {
+        return redirect('/register')->with('error', 'Please create an account to view your profile.');
+    }
+
     $currentUser = $resolveSessionUser();
     $profileUser = $currentUser;
     $swords = $profileUser ? $profileUser->swords()->latest()->get() : collect();
+    $likedSwords = $currentUser
+        ? Sword::whereIn('id', Like::where('user_id', $currentUser->id)->pluck('sword_id'))->get()
+        : collect();
 
     return view('profile', [
         'currentUser' => $currentUser,
         'profileUser' => $profileUser,
         'swords' => $swords,
+        'likedSwords' => $likedSwords,
         'swordCount' => $swords->count(),
         'isOwnProfile' => true,
         'isFollowing' => false,
@@ -63,25 +77,29 @@ Route::get('/profile', function () use ($resolveSessionUser) {
 Route::get('/user/{user}', function (User $user) use ($resolveSessionUser) {
     $currentUser = $resolveSessionUser();
     $swords = $user->swords()->latest()->get();
+    $likedSwords = $currentUser
+        ? Sword::whereIn('id', Like::where('user_id', $currentUser->id)->pluck('sword_id'))->get()
+        : collect();
 
     return view('profile', [
         'currentUser' => $currentUser,
         'profileUser' => $user,
         'swords' => $swords,
+        'likedSwords' => $likedSwords,
         'swordCount' => $swords->count(),
         'isOwnProfile' => $currentUser ? (int) $currentUser->id === (int) $user->id : false,
-        'isFollowing' => $currentUser ? $currentUser->isFollowing($user) : false,
+        'isFollowing' => $currentUser ? $currentUser->isFollowing($user->id) : false,
         'followerCount' => $user->followers()->count(),
         'followingCount' => $user->following()->count(),
     ]);
 });
 
 Route::post('/profile/photo', function (\Illuminate\Http\Request $request) {
-    $profileUser = session('user_id') ? User::find(session('user_id')) : null;
-
-    if (! $profileUser && session('user_email')) {
-        $profileUser = User::where('email', session('user_email'))->first();
+    if (! session('user_id')) {
+        return redirect('/register')->with('error', 'Please log in first.');
     }
+
+    $profileUser = User::find(session('user_id'));
 
     if (! $profileUser) {
         return redirect('/login')->with('error', 'Please log in first.');
@@ -102,11 +120,11 @@ Route::post('/profile/photo', function (\Illuminate\Http\Request $request) {
 });
 
 Route::post('/profile/update', function (\Illuminate\Http\Request $request) {
-    $profileUser = session('user_id') ? User::find(session('user_id')) : null;
-
-    if (! $profileUser && session('user_email')) {
-        $profileUser = User::where('email', session('user_email'))->first();
+    if (! session('user_id')) {
+        return redirect('/register')->with('error', 'Please log in first.');
     }
+
+    $profileUser = User::find(session('user_id'));
 
     if (! $profileUser) {
         return redirect('/login')->with('error', 'Please log in first.');
@@ -147,12 +165,13 @@ Route::post('/profile/update', function (\Illuminate\Http\Request $request) {
 });
 
 Route::post('/login', function (\Illuminate\Http\Request $request) {
-    $email = trim((string) $request->input('email'));
-    $password = trim((string) $request->input('password'));
+    $validated = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|string',
+    ]);
 
-    if ($email === '' || $password === '') {
-        return redirect('/login')->with('error', 'Please enter your email and password.');
-    }
+    $email = trim((string) $validated['email']);
+    $password = trim((string) $validated['password']);
 
     $user = User::where('email', $email)->first();
 
@@ -175,7 +194,7 @@ Route::get('/feed', function () use ($resolveSessionUser) {
     $currentUser = $resolveSessionUser();
     $swords = Sword::with('user')->latest()->get();
     $followingIds = $currentUser
-        ? $currentUser->following()->pluck('users.id')->map(fn ($id) => (int) $id)->all()
+        ? $currentUser->following()->pluck('following_id')->map(fn ($id) => (int) $id)->all()
         : [];
 
     return view('feed', compact('swords', 'currentUser', 'followingIds'));
@@ -186,3 +205,24 @@ Route::post('/swords', [SwordController::class, 'store']);
 Route::get('/swords/{sword}/edit', [SwordController::class, 'edit']);
 Route::put('/swords/{sword}', [SwordController::class, 'update']);
 Route::delete('/swords/{sword}', [SwordController::class, 'destroy']);
+
+Route::post('/swords/{sword}/like', function (\Illuminate\Http\Request $request, Sword $sword) {
+    if (! session('user_id')) {
+        return back()->with('error', 'You must be logged in to like swords.');
+    }
+
+    $userId = session('user_id');
+    $like = Like::where('user_id', $userId)->where('sword_id', $sword->id)->first();
+
+    if ($like) {
+        $like->delete();
+        return back();
+    }
+
+    Like::create([
+        'user_id' => $userId,
+        'sword_id' => $sword->id,
+    ]);
+
+    return back();
+});

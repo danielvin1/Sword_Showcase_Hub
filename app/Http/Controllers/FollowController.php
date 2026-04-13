@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Follow;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -18,22 +19,29 @@ class FollowController extends Controller
         }
 
         if ((int) $currentUser->id === (int) $user->id) {
-            return response()->json([
+            return $this->respond($request, [
                 'message' => 'You cannot follow yourself.',
             ], 422);
         }
 
-        $isFollowing = $currentUser->following()->where('followed_id', $user->id)->exists();
+        $follow = Follow::where('follower_id', $currentUser->id)
+            ->where('following_id', $user->id)
+            ->first();
 
-        if ($isFollowing) {
-            $currentUser->following()->detach($user->id);
+        if ($follow) {
+            $follow->delete();
+            $following = false;
         } else {
-            $currentUser->following()->attach($user->id);
+            Follow::create([
+                'follower_id' => $currentUser->id,
+                'following_id' => $user->id,
+            ]);
+            $following = true;
         }
 
-        return response()->json([
-            'following' => ! $isFollowing,
-            'button_label' => $isFollowing ? 'Follow' : 'Following',
+        return $this->respond($request, [
+            'following' => $following,
+            'button_label' => $following ? 'Following' : 'Follow',
             'follower_count' => $user->followers()->count(),
         ]);
     }
@@ -49,5 +57,18 @@ class FollowController extends Controller
         $email = $request->session()->get('user_email');
 
         return $email ? User::where('email', $email)->first() : null;
+    }
+
+    private function respond(Request $request, array $payload, int $status = 200)
+    {
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json($payload, $status);
+        }
+
+        if ($status >= 400) {
+            return back()->with('error', $payload['message'] ?? 'Unable to update follow status.');
+        }
+
+        return back();
     }
 }

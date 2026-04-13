@@ -11,10 +11,10 @@ class SwordController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:120',
-            'type' => 'required|string|max:80',
-            'description' => 'nullable|string|max:1200',
-            'image' => 'nullable|image|max:4096',
+            'name' => 'required|string|max:100',
+            'type' => 'required|string|max:100',
+            'description' => 'required|string|max:1000',
+            'image' => 'nullable|image|max:2048',
         ]);
 
         $path = null;
@@ -26,12 +26,12 @@ class SwordController extends Controller
         Sword::create([
             'name'        => $validated['name'],
             'type'        => $validated['type'],
-            'description' => $validated['description'] ?? null,
+            'description' => $validated['description'],
             'image'       => $path,
             'user_id'     => session('user_id'),
         ]);
 
-        return redirect('/feed')->with('success', 'Sword uploaded successfully.');
+        return redirect('/feed');
     }
 
     public function edit(Sword $sword)
@@ -50,10 +50,10 @@ class SwordController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => 'required|string|max:120',
-            'type' => 'required|string|max:80',
-            'description' => 'nullable|string|max:1200',
-            'image' => 'nullable|image|max:4096',
+            'name' => 'required|string|max:100',
+            'type' => 'required|string|max:100',
+            'description' => 'required|string|max:1000',
+            'image' => 'nullable|image|max:2048',
         ]);
 
         $path = $sword->image;
@@ -69,7 +69,7 @@ class SwordController extends Controller
         $sword->update([
             'name' => $validated['name'],
             'type' => $validated['type'],
-            'description' => $validated['description'] ?? null,
+            'description' => $validated['description'],
             'image' => $path,
         ]);
 

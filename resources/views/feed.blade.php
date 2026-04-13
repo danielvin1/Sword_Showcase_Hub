@@ -36,7 +36,6 @@
         .brand { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px; }
         .menu { display: flex; gap: 18px; font-size: 14px; }
         .menu a { color: inherit; text-decoration: none; opacity: 0.8; }
-
         .feed-header {
             display: flex; align-items: center; justify-content: space-between;
             gap: 20px; flex-wrap: wrap; margin-bottom: 18px;
@@ -51,19 +50,16 @@
             background: transparent; color: #111111; text-decoration: none; font-weight: 600;
         }
         .btn.primary { background: #d9a867; border-color: #d9a867; }
-
-        .section { background: transparent; }
         .section h2 { margin: 0 0 12px; font-size: 18px; }
         .empty {
             background: #ffffff; border-radius: 18px; padding: 24px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.08); color: #6c6c6c;
         }
-
         .fyp-list { display: grid; gap: 18px; justify-items: center; }
         .post-card {
             background: #ffffff; border-radius: 24px;
             border: 1px solid #e7e1d7; overflow: hidden;
-            width: 380px; box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+            width: min(100%, 600px); box-shadow: 0 18px 35px rgba(0,0,0,0.08);
         }
         .post-media {
             width: 100%; aspect-ratio: 1 / 1; background: #f3eee5;
@@ -77,7 +73,7 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.12);
         }
         .media-user { display: flex; align-items: center; gap: 8px; font-weight: 600; }
-        .media-actions { display: flex; gap: 10px; font-weight: 700; }
+        .media-actions { display: flex; gap: 10px; align-items: center; }
         .post-body { padding: 12px 14px 16px; text-align: left; }
         .post-user { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
         .avatar {
@@ -96,103 +92,50 @@
             color: #7a5a2b; background: #f3e6d5;
             border-radius: 999px; padding: 4px 8px;
         }
-
-        @media (max-width: 600px) {
-            .post-card { width: 100%; max-width: 360px; }
-        }
-
+        .user-link { color: inherit; text-decoration: none; }
+        .user-link:hover { text-decoration: underline; }
+        .like-form { margin: 0; }
         .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: transparent;
-            display: none;
-            align-items: flex-start;
-            justify-content: flex-start;
-            padding: 0;
-            z-index: 1000;
+            position: fixed; inset: 0; background: transparent; display: none;
+            align-items: flex-start; justify-content: flex-start; padding: 0; z-index: 1000;
         }
         .modal-overlay.show { display: flex; }
         .modal {
-            width: 100%;
-            max-width: 300px;
-            background: #ffffff;
-            border-radius: 24px;
-            border: 1px solid #e9e2d7;
-            box-shadow: 0 18px 36px rgba(0,0,0,0.12);
-            padding: 16px;
-            display: grid;
-            gap: 12px;
-            text-align: left;
-            position: fixed;
-            right: 160px;
-            top: 140px;
+            width: 100%; max-width: 300px; background: #ffffff; border-radius: 24px;
+            border: 1px solid #e9e2d7; box-shadow: 0 18px 36px rgba(0,0,0,0.12);
+            padding: 16px; display: grid; gap: 12px; text-align: left;
+            position: fixed; right: 160px; top: 140px;
         }
         .modal-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
+            display: flex; align-items: center; justify-content: space-between; gap: 10px;
         }
         .modal-head h3 { margin: 0; font-size: 16px; }
         .modal-reset {
-            border: none;
-            background: transparent;
-            color: #7a5a2b;
-            font-weight: 600;
-            cursor: pointer;
+            border: none; background: transparent; color: #7a5a2b; font-weight: 600; cursor: pointer;
         }
-        .modal-section {
-            display: grid;
-            gap: 8px;
-            text-align: left;
-        }
+        .modal-section { display: grid; gap: 8px; text-align: left; }
         .modal-label {
-            font-size: 10px;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: #8a7b64;
-            text-align: center;
+            font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #8a7b64; text-align: center;
         }
         .type-select {
-            display: block;
-            width: 100%;
-            border: 1px solid #e6ded2;
-            border-radius: 14px;
-            padding: 10px 12px;
-            font-size: 12.5px;
-            color: #111111;
-            background: #ffffff;
-            text-align: left;
-            appearance: none;
+            display: block; width: 100%; border: 1px solid #e6ded2; border-radius: 14px;
+            padding: 10px 34px 10px 12px; font-size: 12.5px; color: #111111; background: #ffffff;
+            text-align: left; appearance: none;
             background-image: linear-gradient(45deg, transparent 50%, #9a8c78 50%),
                               linear-gradient(135deg, #9a8c78 50%, transparent 50%);
-            background-position: calc(100% - 18px) calc(50% - 2px),
-                                 calc(100% - 12px) calc(50% - 2px);
-            background-size: 6px 6px, 6px 6px;
-            background-repeat: no-repeat;
-            padding-right: 34px;
+            background-position: calc(100% - 18px) calc(50% - 2px), calc(100% - 12px) calc(50% - 2px);
+            background-size: 6px 6px, 6px 6px; background-repeat: no-repeat;
         }
-        .modal-actions {
-            display: grid;
-            gap: 8px;
-        }
+        .modal-actions { display: grid; gap: 8px; }
         .modal-apply {
-            padding: 10px 16px;
-            border-radius: 999px;
-            border: 1px solid #1b1b1b;
-            background: #1b1b1b;
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
+            padding: 10px 16px; border-radius: 999px; border: 1px solid #1b1b1b;
+            background: #1b1b1b; color: #ffffff; font-weight: 700; font-size: 13px; cursor: pointer;
         }
         .modal-dismiss {
-            border: none;
-            background: transparent;
-            color: #8a7b64;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
+            border: none; background: transparent; color: #8a7b64; font-weight: 600; font-size: 12px; cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            .post-card { width: 100%; }
         }
     </style>
     <link rel='stylesheet' href='/css/theme.css'>
@@ -221,84 +164,15 @@
     </div>
 
     @php
-        $dir = public_path('swords');
-        $files = [];
-        if (is_dir($dir)) {
-            $files = array_values(array_filter(scandir($dir), function ($file) {
-                return preg_match('/\.(jpg|jpeg|png|webp|gif)$/i', $file);
-            }));
-        }
-        $names = ['Avery Cole','Mila Hart','Ronan Vale','Zara Quinn','Theo Marsh','Lena Park','Omar Finch'];
-        $handles = ['@averycole','@milahart','@ronanvale','@zaraquinn','@theomarsh','@lenapark','@omarfinch'];
-        $showcaseMeta = [
-            'bastard-longsword.jpg' => [
-                'title' => 'Warden Bastard Sword',
-                'type' => 'Bastard Sword',
-                'caption' => 'A balanced hand-and-a-half blade built for tight guard work, with enough reach and weight to shift into two-handed cuts when the fight opens up.',
-            ],
-            'claymore.webp' => [
-                'title' => 'Highland Claymore',
-                'type' => 'Claymore',
-                'caption' => 'A broad Scottish greatsword with a long grip and sweeping profile, made for committed two-handed strikes and battlefield presence.',
-            ],
-            '1338_1st-600x1271.jpg' => [
-                'title' => 'Ridgecrest Broadsword',
-                'type' => 'Broadsword',
-                'caption' => 'A stout, single-handed blade with a wide profile and sturdy guard, built for reliable cuts and confident parries.',
-            ],
-            'dark-sister-sword-of-daemon-targaryen-1_a5a69c40-8d3b-4963-a919-01518bfb4540.webp' => [
-                'title' => 'Nightborne Longsword',
-                'type' => 'Longsword',
-                'caption' => 'A lean, dark-forged blade with a long grip and agile balance, favoring swift thrusts and tight, precise footwork.',
-            ],
-            'il_570xN.3117585570_8lbi.webp' => [
-                'title' => 'Crestwind Arming Sword',
-                'type' => 'Arming Sword',
-                'caption' => 'A compact knightly sidearm with a lively point and clean recovery, dependable in close duels and shield work.',
-            ],
-            'katana.jpg' => [
-                'title' => 'Moonlit Katana',
-                'type' => 'Katana',
-                'caption' => 'A curved single-edged blade with a fast draw and clean follow-through, prized for precision cuts and disciplined handling.',
-            ],
-            'sword-card.jpg' => [
-                'title' => 'Kingsguard Arming Sword',
-                'type' => 'Arming Sword',
-                'caption' => 'A straight, lively sidearm designed for one-handed use with a shield, reliable in close engagements and quick to recover.',
-            ],
-            'sword-card.webp' => [
-                'title' => 'Blackreef Saber',
-                'type' => 'Saber',
-                'caption' => 'A light cavalry saber with a pronounced curve and agile point control, built for speed, slashing angles, and mounted momentum.',
-            ],
-            'sword-hero.webp' => [
-                'title' => 'Lionheart Longsword',
-                'type' => 'Longsword',
-                'caption' => 'A versatile cruciform longsword with a stiff thrusting tip and enough blade presence to transition smoothly between cut and thrust.',
-            ],
-        ];
-        $folderPosts = [];
-        foreach ($files as $i => $file) {
-            $meta = $showcaseMeta[$file] ?? [
-                'title' => ucwords(str_replace(['-', '_'], ' ', pathinfo($file, PATHINFO_FILENAME))),
-                'type' => 'Sword',
-                'caption' => 'A featured blade from the community showcase.',
-            ];
-            $folderPosts[] = [
-                'user' => $names[$i % count($names)],
-                'user_id' => null,
-                'handle' => $handles[$i % count($handles)],
-                'title' => $meta['title'],
-                'type' => $meta['type'],
-                'caption' => $meta['caption'],
-                'image' => '/swords/' . $file,
-                'time' => ($i + 1) . 'd',
-            ];
-        }
         $fypItems = [];
+        $sessionUser = session('user_id') ? \App\Models\User::find(session('user_id')) : null;
+
         foreach ($swords as $sword) {
             $creatorName = $sword->user?->name ?? 'Community Collector';
             $creatorHandle = '@' . strtolower(str_replace(' ', '', $creatorName));
+            $isLiked = $sessionUser ? $sword->isLikedBy($sessionUser->id) : false;
+            $isFollowed = $sessionUser && $sword->user ? $sessionUser->isFollowing($sword->user->id) : false;
+
             $fypItems[] = [
                 'user' => $creatorName,
                 'user_id' => $sword->user?->id,
@@ -308,9 +182,12 @@
                 'caption' => $sword->description ?: 'No description added yet.',
                 'image' => $sword->image_url,
                 'time' => $sword->created_at?->diffForHumans() ?? 'Just now',
+                'sword_id' => $sword->id,
+                'likes_count' => $sword->likes()->count(),
+                'is_liked' => $isLiked,
+                'is_followed' => $isFollowed,
             ];
         }
-        $fypItems = array_merge($fypItems, $folderPosts);
     @endphp
 
     <section class="section">
@@ -324,24 +201,22 @@
                         <div class="post-media">
                             <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}">
                             <div class="media-header">
-                                <div class="media-user">
+                                <a href="{{ $item['user_id'] ? '/user/' . $item['user_id'] : '#' }}" class="media-user user-link">
                                     <div class="avatar">{{ strtoupper(substr($item['user'], 0, 1)) }}</div>
-                                    @if (! empty($item['user_id']))
-                                        <a href="/user/{{ $item['user_id'] }}" class="user-link">{{ $item['user'] }}</a>
-                                    @else
-                                        <span>{{ $item['user'] }}</span>
-                                    @endif
-                                </div>
+                                    <span>{{ $item['user'] }}</span>
+                                </a>
                                 <div class="media-actions">
-                                    <button class="feed-action like" type="button">Like</button>
-                                    @if (! empty($item['user_id']) && (! isset($currentUser) || (int) $currentUser->id !== (int) $item['user_id']))
-                                        @php $isFollowingUser = in_array((int) $item['user_id'], $followingIds ?? [], true); @endphp
+                                    <form class="like-form" action="/swords/{{ $item['sword_id'] }}/like" method="POST">
+                                        @csrf
+                                        <button type="submit" class="feed-action like{{ $item['is_liked'] ? ' is-liked' : '' }}">Like {{ $item['likes_count'] }}</button>
+                                    </form>
+                                    @if ($item['user_id'] && (! $sessionUser || $sessionUser->id !== $item['user_id']))
                                         <button
-                                            class="feed-action follow js-follow-btn{{ $isFollowingUser ? ' is-following' : '' }}"
+                                            class="feed-action follow js-follow-btn{{ $item['is_followed'] ? ' is-following' : '' }}"
                                             type="button"
                                             data-user-id="{{ $item['user_id'] }}"
-                                            data-following="{{ $isFollowingUser ? 'true' : 'false' }}"
-                                        >{{ $isFollowingUser ? 'Following' : 'Follow' }}</button>
+                                            data-following="{{ $item['is_followed'] ? 'true' : 'false' }}"
+                                        >{{ $item['is_followed'] ? 'Following' : 'Follow' }}</button>
                                     @endif
                                 </div>
                             </div>
@@ -350,11 +225,9 @@
                             <div class="post-user">
                                 <div class="avatar">{{ strtoupper(substr($item['user'], 0, 1)) }}</div>
                                 <div class="user-meta">
-                                    @if (! empty($item['user_id']))
-                                        <strong><a href="/user/{{ $item['user_id'] }}" class="user-link">{{ $item['user'] }}</a></strong>
-                                    @else
-                                        <strong>{{ $item['user'] }}</strong>
-                                    @endif
+                                    <strong>
+                                        <a href="{{ $item['user_id'] ? '/user/' . $item['user_id'] : '#' }}" class="user-link">{{ $item['user'] }}</a>
+                                    </strong>
                                     {{ $item['handle'] }} | {{ $item['time'] }}
                                 </div>
                             </div>
@@ -370,6 +243,7 @@
         @endif
     </section>
 </div>
+
 <div class="modal-overlay" id="filterModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="filterTitle">
         <div class="modal-head">
@@ -393,6 +267,7 @@
         </div>
     </div>
 </div>
+
 <script>
     const modal = document.getElementById('filterModal');
     const openBtn = document.getElementById('openFilters');
@@ -409,6 +284,7 @@
         modal.classList.add('show');
         modal.setAttribute('aria-hidden', 'false');
     };
+
     const hideModal = () => {
         modal.classList.remove('show');
         modal.setAttribute('aria-hidden', 'true');
@@ -417,25 +293,30 @@
     const applyFilter = () => {
         const filterType = typeSelect ? typeSelect.value : '';
         if (!filterType || filterType.toLowerCase() === 'all') {
-            cards.forEach(card => { card.style.display = ''; });
+            cards.forEach((card) => { card.style.display = ''; });
             return;
         }
-        cards.forEach(card => {
+
+        cards.forEach((card) => {
             const cardType = (card.getAttribute('data-type') || '').toLowerCase();
-            const matches = cardType === filterType.toLowerCase();
-            card.style.display = matches ? '' : 'none';
+            card.style.display = cardType === filterType.toLowerCase() ? '' : 'none';
         });
     };
 
     const resetFilters = () => {
-        if (typeSelect) typeSelect.value = 'All';
-        cards.forEach(card => { card.style.display = ''; });
+        if (typeSelect) {
+            typeSelect.value = 'All';
+        }
+
+        cards.forEach((card) => { card.style.display = ''; });
     };
 
     openBtn.addEventListener('click', showModal);
     dismissBtn.addEventListener('click', hideModal);
     modal.addEventListener('click', (event) => {
-        if (event.target === modal) hideModal();
+        if (event.target === modal) {
+            hideModal();
+        }
     });
     applyBtn.addEventListener('click', () => {
         applyFilter();
@@ -492,11 +373,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
