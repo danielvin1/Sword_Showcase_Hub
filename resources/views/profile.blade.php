@@ -14,16 +14,71 @@
             @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
 
             :root {
-                --text: #111111;
-                --gold-soft: #2c2218;
-                --muted: #6c6c6c;
+                --text: #f3ece2;
+                --gold-soft: #f1d8a8;
+                --muted: #c7b9a6;
             }
             body.theme-dark {
                 --text: #f3ece2;
                 --gold-soft: #f1d8a8;
                 --muted: #c7b9a6;
             }
-            body { min-height: 100vh; }
+            body.light-mode {
+                --text: #111111;
+                --gold-soft: #2c2218;
+                --muted: #6c6c6c;
+            }
+            body {
+                min-height: 100vh;
+                margin: 0;
+                font-family: "Poppins", "Trebuchet MS", sans-serif;
+                color: var(--text);
+                background-color: #0d0c0b;
+                background-image:
+                    radial-gradient(circle at 20% 15%, rgba(255, 197, 122, 0.12), transparent 40%),
+                    radial-gradient(circle at 80% 20%, rgba(0, 0, 0, 0.5), transparent 45%),
+                    radial-gradient(circle at 50% 100%, rgba(255,255,255,0.05) 0 40%, transparent 41%),
+                    radial-gradient(circle at 0 0, rgba(255,255,255,0.04) 0 40%, transparent 41%),
+                    linear-gradient(180deg, #0b0a09 0%, #171513 100%);
+                background-size: auto, auto, 72px 60px, 72px 60px, auto;
+                background-position: 0 0, 0 0, 0 0, 36px 30px, 0 0;
+            }
+            .shell {
+                max-width: 1180px;
+                margin: 0 auto;
+                padding: 30px 22px 90px;
+            }
+            .topbar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+                margin-bottom: 26px;
+                padding: 12px 20px;
+                border-radius: 12px;
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                background: linear-gradient(180deg, rgba(42, 41, 39, 0.95), rgba(20, 19, 18, 0.95));
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            }
+            .brand {
+                font-family: 'Cinzel', serif;
+                font-weight: 600;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                font-size: 12px;
+                color: var(--text);
+            }
+            .menu {
+                display: flex;
+                gap: 18px;
+                font-size: 14px;
+            }
+            .menu a {
+                text-decoration: none;
+                color: var(--text);
+                opacity: 0.85;
+            }
+            .menu a:hover { opacity: 1; }
             .profile-wrap {
                 background: rgba(15, 13, 11, 0.94);
                 border-radius: 22px;
@@ -89,12 +144,33 @@
             .settings-panel .option { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: var(--text); font-weight: 600; cursor: pointer; }
             .settings-panel .option:hover { background: rgba(255,255,255,0.08); }
             .settings-panel small { display: block; margin-top: 10px; color: var(--muted); font-size: 12px; }
+            .modal-backdrop { display: none; position: fixed; inset: 0; z-index: 60; background: rgba(3, 2, 1, 0.72); align-items: center; justify-content: center; padding: 24px; }
+            .modal-backdrop.show { display: flex; }
+            .modal { width: min(100%, 560px); max-width: 100%; border-radius: 24px; background: rgba(15, 13, 11, 0.98); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 32px 90px rgba(0,0,0,0.55); padding: 30px; color: var(--text); }
+            .modal h3 { margin: 0 0 20px; font-size: 22px; color: var(--gold-soft); }
+            .field { margin-bottom: 20px; }
+            .field label { display: block; margin-bottom: 10px; color: var(--muted); font-size: 14px; font-weight: 600; }
+            .field input[type='text'], .field input[type='file'] { width: 100%; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: var(--text); padding: 12px 14px; font-size: 14px; }
+            .modal-photo { display: block; position: relative; width: 100%; border-radius: 18px; padding: 16px; background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.12); cursor: pointer; overflow: hidden; }
+            .modal-photo img { width: 100%; height: auto; max-height: 180px; object-fit: cover; border-radius: 14px; display: block; }
+            .modal-photo span { display: block; margin-top: 14px; color: var(--text); font-weight: 700; }
+            .modal-photo small { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; }
+            .modal-photo input[type='file'] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+            .cropper { position: relative; width: 100%; min-height: 180px; margin-top: 14px; border-radius: 18px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); overflow: hidden; }
+            .cropper img { position: absolute; top: 0; left: 0; }
+            .cropper-hint { margin-top: 10px; color: var(--muted); font-size: 12px; }
+            .modal-actions { display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
             body.light-mode .profile-wrap { background: #ffffff; border-color: #e7e1d7; }
             body.light-mode .sword-card { background: #ffffff; border-color: #e0e0e0; }
             body.light-mode .sword-body h3, body.light-mode .name-block h1 { color: #111; }
             body.light-mode .handle, body.light-mode .email, body.light-mode .meta, body.light-mode .stat, body.light-mode .sword-body p { color: #6c6c6c; }
             body.light-mode .settings-panel { background: #ffffff; color: #111; border-color: #e7e1d7; }
             body.light-mode .settings-panel .option { background: #f7f3ea; color: #111; }
+            body.light-mode .btn,
+            body.light-mode .edit-btn,
+            body.light-mode .sword-btn { background: #fff8ef; color: #5c4226; border-color: #d9b98f; }
+            body.light-mode .btn.primary { background: #d9a867; color: #1b130b; border-color: #d9a867; }
+            body.light-mode .btn.danger { background: #b02a37; color: #fff; border-color: #8f1f27; }
             @media (max-width: 900px) {
                 .profile-header { flex-direction: column; align-items: center; }
                 .profile-main { padding: 0 20px 20px; }
@@ -122,12 +198,14 @@
                     $banner = $profileUser?->banner_photo ?? session('profile_banner');
                     $displayName = $profileUser?->name ?? session('user_name', 'Guest Collector');
                     $photoVersion = $profileUser?->updated_at?->timestamp ?? time();
+                    $profilePhotoUrl = $profileUser?->profile_photo_url ?: '';
+                    $bannerPhotoUrl = $profileUser?->banner_photo_url ?: '';
                 @endphp
-                <div class="banner" id="profile-banner" @if ($banner) style="background-image: url('{{ asset('storage/' . $banner) }}?v={{ $photoVersion }}');" @endif></div>
+                <div class="banner" id="profile-banner" @if ($bannerPhotoUrl) style="background-image: url('{{ $bannerPhotoUrl }}?v={{ $photoVersion }}');" @endif></div>
                 <div class="profile-main">
                     <div class="avatar" id="profile-avatar">
-                        @if ($photo)
-                            <img src="{{ asset('storage/' . $photo) }}?v={{ $photoVersion }}" alt="{{ $displayName }}">
+                        @if ($profilePhotoUrl)
+                            <img src="{{ $profilePhotoUrl }}?v={{ $photoVersion }}" alt="{{ $displayName }}">
                         @else
                             {{ strtoupper(substr($displayName, 0, 1)) }}
                         @endif
@@ -143,19 +221,23 @@
                             </div>
                         </div>
                         <div class="action-bar settings-container">
-                            <a class="btn primary" href="/upload">Upload Sword</a>
-                            <button class="btn" type="button" id="open-settings" aria-haspopup="true" aria-expanded="false">⚙️ Settings</button>
-                            <button class="edit-btn" type="button" id="open-profile-modal">Edit profile</button>
+                            @if ($isOwnProfile)
+                                <a class="btn primary" href="/upload">Upload Sword</a>
+                                <button class="btn" type="button" id="open-settings" aria-haspopup="true" aria-expanded="false">Settings</button>
+                                <button class="edit-btn" type="button" id="open-profile-modal">Edit profile</button>
 
-                            <div class="settings-panel" id="settingsPanel" aria-hidden="true">
-                                <h3>Profile settings</h3>
-                                <button type="button" class="option" id="toggleTheme">🌗 Switch light/dark</button>
-                                <form method="POST" action="/logout">
-                                    @csrf
-                                    <button type="submit" class="btn danger logout-btn">🚪 Log out</button>
-                                </form>
-                                <small>Use light/dark mode for better accessibility.</small>
-                            </div>
+                                <div class="settings-panel" id="settingsPanel" aria-hidden="true">
+                                    <h3>Profile settings</h3>
+                                    <button type="button" class="option" id="toggleTheme">Theme mode</button>
+                                    <form method="POST" action="/logout">
+                                        @csrf
+                                        <button type="submit" class="btn danger logout-btn">[x] Log out</button>
+                                    </form>
+                                    <small>Use light or dark mode for accessibility.</small>
+                                </div>
+                            @elseif ($profileUser)
+                                <button class="btn primary js-profile-follow-btn{{ $isFollowing ? ' is-following' : '' }}" type="button" data-user-id="{{ $profileUser->id }}">{{ $isFollowing ? 'Following' : 'Follow' }}</button>
+                            @endif
                         </div>
                     </div>
 
@@ -168,7 +250,11 @@
                         <div class="stats">
                             <div class="stat"><b>{{ $swordCount }}</b>Uploads</div>
                             <div class="stat"><b>{{ $swords->count() }}</b>Posts</div>
-                            <div class="stat"><b>{{ $swords->first()?->created_at?->format('d M Y') ?? '�' }}</b>Latest</div>
+                            @if (! $isOwnProfile)
+                                <div class="stat"><b class="js-follower-count">{{ $followerCount ?? 0 }}</b>Followers</div>
+                                <div class="stat"><b>{{ $followingCount ?? 0 }}</b>Following</div>
+                            @endif
+                            <div class="stat"><b>{{ $swords->first()?->created_at?->format('d M Y') ?? '-' }}</b>Latest</div>
                         </div>
                     </div>
                 </div>
@@ -181,16 +267,16 @@
 
                 <div class="tab-panels">
                     <div class="tab-panel feed-panel" style="display:block;">
-                        <div class="section-title">My Swords</div>
+                        <div class="section-title">{{ $isOwnProfile ? 'My Swords' : $displayName . '\'s Swords' }}</div>
 
                         @if ($swords->isEmpty())
-                            <div class="empty">You have not uploaded any swords yet.</div>
+                            <div class="empty">{{ $isOwnProfile ? 'You have not uploaded any swords yet.' : 'No swords uploaded yet.' }}</div>
                         @else
                             <section class="cards">
                                 @foreach ($swords as $sword)
                                     <article class="sword-card">
-                                        @if ($sword->image)
-                                            <img src="{{ asset('storage/' . $sword->image) }}" alt="{{ $sword->name }}">
+                                        @if ($sword->image_url)
+                                            <img src="{{ $sword->image_url }}" alt="{{ $sword->name }}">
                                         @else
                                             <img src="/images/katana.jpg" alt="{{ $sword->name }}">
                                         @endif
@@ -198,14 +284,16 @@
                                             <h3>{{ $sword->name }}</h3>
                                             <p>{{ $sword->description ?: 'No description added yet.' }}</p>
                                             <div class="tag">{{ $sword->type }}</div>
-                                            <div class="sword-actions">
-                                                <a class="sword-btn" href="/swords/{{ $sword->id }}/edit">Edit</a>
-                                                <form method="POST" action="/swords/{{ $sword->id }}" onsubmit="return confirm('Delete this sword?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="sword-btn delete" type="submit">Delete</button>
-                                                </form>
-                                            </div>
+                                            @if ($isOwnProfile)
+                                                <div class="sword-actions">
+                                                    <a class="sword-btn" href="/swords/{{ $sword->id }}/edit">Edit</a>
+                                                    <form method="POST" action="/swords/{{ $sword->id }}" onsubmit="return confirm('Delete this sword?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="sword-btn delete" type="submit">Delete</button>
+                                                    </form>
+                                                </div>
+                                            @endif
                                         </div>
                                     </article>
                                 @endforeach
