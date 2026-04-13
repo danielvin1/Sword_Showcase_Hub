@@ -190,6 +190,13 @@ Route::post('/login', function (\Illuminate\Http\Request $request) {
     return redirect('/feed');
 });
 
+Route::post('/logout', function (\Illuminate\Http\Request $request) {
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect('/welcome');
+});
+
 Route::get('/feed', function () use ($resolveSessionUser) {
     $currentUser = $resolveSessionUser();
     $swords = Sword::with('user')->latest()->get();

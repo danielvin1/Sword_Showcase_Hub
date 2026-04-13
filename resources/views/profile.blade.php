@@ -1,280 +1,94 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
     <head>
-    <link rel=""icon"" type=""image/png"" sizes=""16x16"" href=""/images/bladeshare-favicon-16.png"">
-    <link rel=""icon"" type=""image/png"" sizes=""32x32"" href=""/images/bladeshare-favicon-32.png"">
-    <link rel=""icon"" type=""image/png"" sizes=""48x48"" href=""/images/bladeshare-favicon-48.png"">
-    <link rel=""icon"" type=""image/png"" sizes=""64x64"" href=""/images/bladeshare-favicon-64.png"">
-    <link rel=""icon"" type=""image/png"" sizes=""128x128"" href=""/images/bladeshare-favicon-128.png"">
-    <link rel=""apple-touch-icon"" sizes=""128x128"" href=""/images/bladeshare-favicon-128.png""><meta charset="utf-8">
+    <link rel='icon' type='image/png' sizes='16x16' href='/images/bladeshare-favicon-16.png'>
+    <link rel='icon' type='image/png' sizes='32x32' href='/images/bladeshare-favicon-32.png'>
+    <link rel='icon' type='image/png' sizes='48x48' href='/images/bladeshare-favicon-48.png'>
+    <link rel='icon' type='image/png' sizes='64x64' href='/images/bladeshare-favicon-64.png'>
+    <link rel='icon' type='image/png' sizes='128x128' href='/images/bladeshare-favicon-128.png'>
+    <link rel='apple-touch-icon' sizes='128x128' href='/images/bladeshare-favicon-128.png'>
+    <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Profile | Sword Showcase Hub</title>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
 
-            * { box-sizing: border-box; }
-            body {
-                margin: 0;
-                font-family: "Plus Jakarta Sans", "Poppins", "Trebuchet MS", sans-serif;
-                color: #111111;
-                background-color: #f2f2f0;
-                background-image:
-                    radial-gradient(circle at 15% 12%, rgba(120, 120, 120, 0.08), transparent 38%),
-                    radial-gradient(circle at 85% 18%, rgba(0, 0, 0, 0.06), transparent 34%),
-                    repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0 1px, transparent 1px 16px),
-                    linear-gradient(180deg, #f6f6f4 0%, #efefec 45%, #f2f2f0 100%);
-                background-size: auto, auto, 24px 24px, auto;
-                min-height: 100vh;
-                padding: 36px 22px 90px;
-            }
-            .shell { max-width: 1080px; margin: 0 auto; }
-            .topbar {
-                display: flex; align-items: center; justify-content: space-between;
-                gap: 20px; margin-bottom: 22px; padding: 14px 18px;
-                border: 1px solid #e2e2df; border-radius: 14px;
-                background: rgba(255,255,255,0.75); backdrop-filter: blur(6px);
-            }
-            .brand { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px; color: #2c2218; }
-            .menu { display: flex; gap: 18px; font-size: 14px; }
-            .menu a { color: inherit; text-decoration: none; opacity: 0.8; font-weight: 600; }
-
+            body { min-height: 100vh; }
             .profile-wrap {
-                background: #ffffff; border-radius: 18px; overflow: hidden;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-                border: 1px solid #e7e1d7;
+                background: rgba(15, 13, 11, 0.94);
+                border-radius: 22px;
+                overflow: hidden;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.35);
             }
             .banner {
                 height: 190px;
-                background: linear-gradient(120deg, #dfc198 0%, #d4a86c 40%, #c09a69 100%);
+                background: linear-gradient(120deg, rgba(198, 162, 106, 0.16), rgba(255,255,255,0.06), rgba(198, 162, 106, 0.16));
                 background-size: cover;
                 background-position: center;
             }
-            .profile-main { padding: 0 26px 20px; position: relative; text-align: left; }
+            .profile-main { padding: 0 26px 24px; position: relative; text-align: left; }
             .profile-content { max-width: 760px; margin: 0; }
             .avatar {
                 width: 110px; height: 110px; border-radius: 50%;
-                border: 4px solid #ffffff; overflow: hidden;
+                border: 4px solid rgba(255,255,255,0.12); overflow: hidden;
                 position: absolute; top: -55px; left: 26px;
-                background: linear-gradient(180deg, #d9a867 0%, #b98142 100%);
-                display: grid; place-items: center; font-size: 34px; font-weight: 700; color: #1b130b;
+                background: linear-gradient(180deg, rgba(217,168,103,0.18), rgba(112,76,38,0.26));
+                display: grid; place-items: center; font-size: 34px; font-weight: 700; color: var(--text);
             }
             .avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
-
-            .profile-header {
-                display: flex; align-items: center; justify-content: space-between;
-                padding-top: 70px; gap: 20px; flex-wrap: wrap;
-            }
-            .name-block h1 {
-                margin: 0 0 6px; font-size: 30px; letter-spacing: -0.01em;
-                font-family: "Playfair Display", "Times New Roman", serif;
-            }
+            .profile-header { display: flex; align-items: center; justify-content: space-between; padding-top: 70px; gap: 20px; flex-wrap: wrap; }
+            .name-block h1 { margin: 0 0 6px; font-size: 30px; letter-spacing: -0.01em; font-family: "Playfair Display", serif; color: var(--gold-soft); }
+            .handle, .email, .meta, .stat, .sword-body p { color: var(--muted); }
             .handle-row { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
-            .handle { color: #6c6c6c; font-size: 14px; }
-            .email { color: #8a8074; font-size: 13px; }
+            .handle { font-size: 14px; }
+            .email { font-size: 13px; }
+            .action-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; position: relative; }
             .edit-btn {
-                padding: 10px 18px; border-radius: 999px; border: 2px solid #d9a867;
-                color: #fff; background: #d9a867; text-decoration: none; font-weight: 600;
-                transition: all 0.2s ease;
+                padding: 10px 18px; border-radius: 999px; border: 1px solid rgba(217,168,103,0.7);
+                background: rgba(217,168,103,0.16); color: var(--text); text-decoration: none; font-weight: 600;
             }
-            .edit-btn:hover {
-                background: #c49851; border-color: #c49851;
-            }
-            .action-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-
-            .meta { display: flex; gap: 16px; flex-wrap: wrap; color: #7b7166; margin-top: 10px; font-size: 14px; justify-content: flex-start; }
-            .meta span { display: inline-flex; align-items: center; gap: 6px; }
-            .dot { width: 6px; height: 6px; border-radius: 50%; background: #c7b9a6; display: inline-block; }
-
-            .stats { display: flex; gap: 18px; margin-top: 14px; flex-wrap: wrap; justify-content: flex-start; }
-            .stat { font-size: 14px; color: #6c6c6c; }
-            .stat b { color: #111111; font-size: 15px; margin-right: 6px; }
-
-            .tabs {
-                display: block;
-                padding: 14px 26px 0;
-                border-bottom: 1px solid #eee7dc;
-                font-weight: 600;
-                color: #8a7f72;
-            }
-            .tabs input { display: none; }
-            .tab-label { padding: 10px 2px 12px; cursor: pointer; position: relative; white-space: nowrap; }
-            .tab-label-static { color: #111111; }
-            .tab-label-static::after {
-                content: ""; position: absolute; left: 0; right: 0; bottom: -1px;
-                height: 3px; background: #d9a867; border-radius: 999px;
-            }
-            #tab-feed:checked ~ .tab-labels label[for="tab-feed"] {
-                color: #111111;
-            }
-            #tab-feed:checked ~ .tab-labels label[for="tab-feed"]::after {
-                content: ""; position: absolute; left: 0; right: 0; bottom: -1px;
-                height: 3px; background: #d9a867; border-radius: 999px;
-            }
+            .edit-btn:hover { background: rgba(217,168,103,0.28); }
+            .tabs { display: block; padding: 14px 26px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-weight: 600; color: var(--muted); }
+            .tab-label { padding: 10px 14px 12px; cursor: pointer; position: relative; white-space: nowrap; color: var(--muted); transition: color 0.2s ease; }
+            .tab-label:hover { color: var(--gold-soft); }
+            .tab-label-static { color: var(--text); }
+            .tab-label-static::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: linear-gradient(180deg, #c7a961, #d9a867); border-radius: 999px; }
             .tab-labels { display: flex; gap: 26px; justify-content: flex-start; width: 100%; }
             .tab-panels { padding: 22px 26px 26px; text-align: left; }
-            .tab-panel { display: none; text-align: left; }
-            #tab-feed:checked ~ .tab-panels .feed-panel { display: block; }
-            .feed-panel { text-align: left; width: 100%; max-width: 640px; margin-left: 0; margin-right: auto; }
-            .feed-panel .section-title { text-align: left !important; margin-left: 0; }
-
-            .section-title { margin: 0 0 14px; font-size: 18px; font-weight: 700; text-align: left; width: 100%; }
-            .cards {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-                gap: 12px;
-                justify-content: flex-start;
-                max-width: 440px;
-                margin-left: 0 !important;
-                margin-right: auto;
-            }
-            .sword-card { background: #ffffff; border-radius: 16px; border: 1px solid #e0e0e0; overflow: hidden; width: 100%; }
-            .sword-card img {
-                width: 100%;
-                height: auto;
-                aspect-ratio: 1 / 1;
-                object-fit: cover;
-                object-position: center;
-                display: block;
-                background: #f2f2f0;
-            }
+            .section-title { margin: 0 0 14px; font-size: 18px; font-weight: 700; color: var(--text); }
+            .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; justify-content: flex-start; max-width: 440px; margin-left: 0 !important; margin-right: auto; }
+            .sword-card { background: rgba(255,255,255,0.05); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); overflow: hidden; width: 100%; }
+            .sword-card img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; object-position: center; display: block; background: #111; }
             .sword-body { padding: 12px; text-align: left; }
-            .sword-body h3 { margin: 0 0 6px; font-size: 15px; color: #111111; }
-            .sword-body p {
-                margin: 0; font-size: 13px; color: #5f5f5f;
-                display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-            }
-            .tag {
-                display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
-                font-size: 12px; font-weight: 600; color: #7a5a2b; background: #f3e6d5;
-                border-radius: 999px; padding: 4px 8px;
-            }
-            .sword-actions {
-                display: flex;
-                gap: 8px;
-                margin-top: 10px;
-            }
-            .sword-btn {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                padding: 7px 10px;
-                border-radius: 999px;
-                border: 1.5px solid #d9a867;
-                background: #fef9f6;
-                color: #8b5e3c;
-                text-decoration: none;
-                font-size: 12px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-            .sword-btn:hover {
-                background: #d9a867;
-                color: #fff;
-            }
-            .sword-btn.delete {
-                border-color: #e5b8b8;
-                color: #7d2323;
-                background: #fff6f6;
-            }
-            .empty {
-                background: #ffffff; border-radius: 16px; padding: 18px;
-                border: 1px solid #e6dfd3; color: #6c6c6c;
-            }
-
-            .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-            .field label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #7e756a; }
-            .field input {
-                border: 1px solid #e2d4bf; border-radius: 10px; padding: 10px 12px;
-                font-size: 14px; background: #fffdf9; color: #3c2b1c;
-            }
-            .btn {
-                display: inline-flex; align-items: center; justify-content: center;
-                padding: 10px 16px; border-radius: 999px; border: 2px solid #d9a867;
-                background: #fef9f6; color: #8b5e3c; text-decoration: none; font-weight: 600;
-                transition: all 0.2s ease;
-            }
-            .btn:hover {
-                background: #d9a867; color: #fff;
-            }
-            .btn.primary { background: #d9a867; border-color: #d9a867; color: #111111; }
-            .message {
-                margin-top: 12px; padding: 10px 12px; border-radius: 10px;
-                background: #edf7ed; border: 1px solid #cfe6cf; color: #25603a;
-            }
-            .modal-backdrop {
-                position: fixed; inset: 0; background: rgba(0,0,0,0.4);
-                display: none; align-items: center; justify-content: center;
-                padding: 20px; z-index: 1000;
-            }
-            .modal {
-                width: 100%; max-width: 420px; background: #ffffff; border-radius: 16px;
-                box-shadow: 0 20px 50px rgba(0,0,0,0.2); border: 1px solid #e6dfd3;
-                padding: 18px;
-            }
-            .modal-photo {
-                border: 1px dashed #d9c7a8;
-                border-radius: 16px;
-                background: #fff8ee;
-                padding: 18px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-direction: column;
-                gap: 8px;
-                text-align: center;
-                cursor: pointer;
-            }
-            .modal-photo img {
-                width: 72px;
-                height: 72px;
-                border-radius: 16px;
-                object-fit: cover;
-                object-position: center;
-                display: block;
-                border: 2px solid #ffffff;
-                background: #f3e6d5;
-            }
-            .modal-photo span { font-size: 13px; color: #7b7166; font-weight: 600; }
-            .modal-photo small { font-size: 11px; color: #9a8e80; }
-            .modal-photo input { display: none; }
-            .cropper {
-                margin-top: 12px;
-                width: 240px;
-                height: 240px;
-                border-radius: 18px;
-                border: 1px solid #e6dfd3;
-                overflow: hidden;
-                position: relative;
-                background: #f6f2ea;
-                display: none;
-            }
-            .cropper.active { display: block; }
-            .cropper img {
-                position: absolute;
-                top: 0;
-                left: 0;
-                cursor: grab;
-                user-select: none;
-            }
-            .cropper img:active { cursor: grabbing; }
-            .cropper-hint { font-size: 12px; color: #9a8e80; margin-top: 6px; display: none; }
-            .cropper.banner {
-                width: 320px;
-                height: 120px;
-                border-radius: 12px;
-            }
-            .modal h3 { margin: 0 0 12px; font-size: 18px; }
-            .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 12px; }
-            .modal-backdrop.show { display: flex; }
-
+            .sword-body h3 { margin: 0 0 6px; font-size: 15px; color: var(--gold-soft); }
+            .tag { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 600; color: #7a5a2b; background: rgba(255,255,255,0.06); border-radius: 999px; padding: 4px 8px; }
+            .sword-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+            .sword-btn { display: inline-flex; align-items: center; justify-content: center; padding: 7px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.06); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600; cursor: pointer; }
+            .sword-btn.delete { border-color: rgba(192,57,43,0.35); color: #e7babb; background: rgba(192,57,43,0.1); }
+            .empty { background: rgba(255,255,255,0.04); border-radius: 16px; padding: 18px; border: 1px solid rgba(255,255,255,0.08); color: var(--muted); }
+            .field label { color: var(--muted); }
+            .field input { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: var(--text); }
+            .btn { border: 1px solid rgba(217,168,103,0.6); background: rgba(255,255,255,0.06); color: var(--text); }
+            .btn.danger { background: #b02a37; border-color: #8f1f27; color: #fff; }
+            .settings-panel { position: absolute; right: 0; top: calc(100% + 10px); width: 250px; background: rgba(15,13,11,0.98); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; box-shadow: 0 18px 36px rgba(0,0,0,0.45); padding: 16px; display: none; z-index: 20; }
+            .settings-panel.show { display: block; }
+            .settings-panel h3 { margin: 0 0 10px; font-size: 15px; color: var(--gold-soft); }
+            .settings-panel .option { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: var(--text); font-weight: 600; cursor: pointer; }
+            .settings-panel .option:hover { background: rgba(255,255,255,0.08); }
+            .settings-panel small { display: block; margin-top: 10px; color: var(--muted); font-size: 12px; }
+            body.light-mode .profile-wrap { background: #ffffff; border-color: #e7e1d7; }
+            body.light-mode .sword-card { background: #ffffff; border-color: #e0e0e0; }
+            body.light-mode .sword-body h3, body.light-mode .name-block h1 { color: #111; }
+            body.light-mode .handle, body.light-mode .email, body.light-mode .meta, body.light-mode .stat, body.light-mode .sword-body p { color: #6c6c6c; }
+            body.light-mode .settings-panel { background: #ffffff; color: #111; border-color: #e7e1d7; }
+            body.light-mode .settings-panel .option { background: #f7f3ea; color: #111; }
             @media (max-width: 900px) {
                 .profile-header { flex-direction: column; align-items: center; }
                 .profile-main { padding: 0 20px 20px; }
                 .tabs { padding: 14px 20px 0; }
                 .tab-panels { padding: 20px; }
-                .settings-grid { grid-template-columns: 1fr; }
-                .cards { grid-template-columns: repeat(auto-fill, minmax(180px, 180px)); }
+                .cards { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
             }
         </style>
     </head>
@@ -296,14 +110,12 @@
                     $banner = $profileUser?->banner_photo ?? session('profile_banner');
                     $displayName = $profileUser?->name ?? session('user_name', 'Guest Collector');
                     $photoVersion = $profileUser?->updated_at?->timestamp ?? time();
-                    $profilePhotoUrl = $profileUser?->profile_photo_url ?: '';
-                    $bannerPhotoUrl = $profileUser?->banner_photo_url ?: '';
                 @endphp
-                <div class="banner" id="profile-banner" @if ($bannerPhotoUrl) style="background-image: url('{{ $bannerPhotoUrl }}?v={{ $photoVersion }}');" @endif></div>
+                <div class="banner" id="profile-banner" @if ($banner) style="background-image: url('{{ asset('storage/' . $banner) }}?v={{ $photoVersion }}');" @endif></div>
                 <div class="profile-main">
                     <div class="avatar" id="profile-avatar">
-                        @if ($profilePhotoUrl)
-                            <img src="{{ $profilePhotoUrl }}?v={{ $photoVersion }}" alt="{{ $displayName }}">
+                        @if ($photo)
+                            <img src="{{ asset('storage/' . $photo) }}?v={{ $photoVersion }}" alt="{{ $displayName }}">
                         @else
                             {{ strtoupper(substr($displayName, 0, 1)) }}
                         @endif
@@ -318,92 +130,52 @@
                                 <div class="email">{{ $profileUser?->email ?? session('user_email', 'No email available') }}</div>
                             </div>
                         </div>
-                        <div class="action-bar">
-                            @if ($isOwnProfile)
-                                <a class="btn primary" href="/upload">Upload Sword</a>
-                                <button class="edit-btn" type="button" id="open-profile-modal">Edit profile</button>
-                            @elseif ($profileUser)
-                                <button
-                                    class="btn primary js-profile-follow-btn{{ $isFollowing ? ' is-following' : '' }}"
-                                    type="button"
-                                    data-user-id="{{ $profileUser->id }}"
-                                >{{ $isFollowing ? 'Following' : 'Follow' }}</button>
-                            @endif
+                        <div class="action-bar settings-container">
+                            <a class="btn primary" href="/upload">Upload Sword</a>
+                            <button class="btn" type="button" id="open-settings" aria-haspopup="true" aria-expanded="false">⚙️ Settings</button>
+                            <button class="edit-btn" type="button" id="open-profile-modal">Edit profile</button>
+
+                            <div class="settings-panel" id="settingsPanel" aria-hidden="true">
+                                <h3>Profile settings</h3>
+                                <button type="button" class="option" id="toggleTheme">🌗 Switch light/dark</button>
+                                <form method="POST" action="/logout">
+                                    @csrf
+                                    <button type="submit" class="btn danger logout-btn">🚪 Log out</button>
+                                </form>
+                                <small>Use light/dark mode for better accessibility.</small>
+                            </div>
                         </div>
                     </div>
 
                         <div class="meta">
+                            <span><span class="dot"></span> Location not set</span>
+                            <span><span class="dot"></span> Birthday not set</span>
                             <span><span class="dot"></span> Joined {{ $profileUser?->created_at?->format('M Y') ?? 'Recently' }}</span>
                         </div>
 
                         <div class="stats">
                             <div class="stat"><b>{{ $swordCount }}</b>Uploads</div>
                             <div class="stat"><b>{{ $swords->count() }}</b>Posts</div>
-                            <div class="stat"><b class="js-follower-count">{{ $followerCount ?? 0 }}</b>Followers</div>
-                            <div class="stat"><b>{{ $followingCount ?? 0 }}</b>Following</div>
-                            <div class="stat"><b>{{ $swords->first()?->created_at?->format('d M Y') ?? '-' }}</b>Latest</div>
+                            <div class="stat"><b>{{ $swords->first()?->created_at?->format('d M Y') ?? '�' }}</b>Latest</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="tabs">
-                    <input type="radio" id="tab-posts" name="tabs" checked>
-                    <input type="radio" id="tab-likes" name="tabs">
                     <div class="tab-labels">
-                        <label for="tab-posts" class="tab-label">Posts</label>
-                        <label for="tab-likes" class="tab-label">Likes</label>
+                        <span class="tab-label tab-label-static">Posts</span>
                     </div>
                 </div>
 
                 <div class="tab-panels">
                     <div class="tab-panel feed-panel" style="display:block;">
-                        <div class="section-title">{{ $isOwnProfile ? 'My Swords' : $displayName . '\'s Swords' }}</div>
+                        <div class="section-title">My Swords</div>
 
                         @if ($swords->isEmpty())
-                            <div class="empty">{{ $isOwnProfile ? 'You have not uploaded any swords yet.' : 'No swords uploaded yet.' }}</div>
+                            <div class="empty">You have not uploaded any swords yet.</div>
                         @else
                             <section class="cards">
                                 @foreach ($swords as $sword)
-                                    <article class="sword-card">
-                                        @if ($sword->image_url)
-                                            <img src="{{ $sword->image_url }}" alt="{{ $sword->name }}">
-                                        @else
-                                            <img src="/images/katana.jpg" alt="{{ $sword->name }}">
-                                        @endif
-                                        <div class="sword-body">
-                                            <h3>{{ $sword->name }}</h3>
-                                            <p>{{ $sword->description ?: 'No description added yet.' }}</p>
-                                            <div class="tag">{{ $sword->type }}</div>
-                                            @if ($isOwnProfile)
-                                                <div class="sword-actions">
-                                                    <a class="sword-btn" href="/swords/{{ $sword->id }}/edit">Edit</a>
-                                                    <form method="POST" action="/swords/{{ $sword->id }}" onsubmit="return confirm('Delete this sword?');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="sword-btn delete" type="submit">Delete</button>
-                                                    </form>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </article>
-                                @endforeach
-                            </section>
-                        @endif
-                    </div>
-
-                    <div class="tab-panel feed-panel">
-                        <div class="section-title">Liked Swords</div>
-
-                        @php
-                            $likedSwordIds = \App\Models\Like::where('user_id', session('user_id'))->pluck('sword_id');
-                            $likedSwords = \App\Models\Sword::whereIn('id', $likedSwordIds)->get();
-                        @endphp
-
-                        @if ($likedSwords->isEmpty())
-                            <div class="empty">You haven't liked any swords yet.</div>
-                        @else
-                            <section class="cards">
-                                @foreach ($likedSwords as $sword)
                                     <article class="sword-card">
                                         @if ($sword->image)
                                             <img src="{{ asset('storage/' . $sword->image) }}" alt="{{ $sword->name }}">
@@ -414,6 +186,14 @@
                                             <h3>{{ $sword->name }}</h3>
                                             <p>{{ $sword->description ?: 'No description added yet.' }}</p>
                                             <div class="tag">{{ $sword->type }}</div>
+                                            <div class="sword-actions">
+                                                <a class="sword-btn" href="/swords/{{ $sword->id }}/edit">Edit</a>
+                                                <form method="POST" action="/swords/{{ $sword->id }}" onsubmit="return confirm('Delete this sword?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="sword-btn delete" type="submit">Delete</button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </article>
                                 @endforeach
@@ -423,64 +203,58 @@
                 </div>
             </section>
         </div>
-        @if ($isOwnProfile)
-            <div class="modal-backdrop" id="profile-modal">
-                <div class="modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
-                    <h3 id="profile-modal-title">Edit profile</h3>
-                    <form method="POST" action="/profile/update" enctype="multipart/form-data">
-                        @csrf
-                        <div class="field">
-                            <label for="profile-name">Username</label>
-                            <input id="profile-name" type="text" name="name" value="{{ $displayName }}" required>
+        <div class="modal-backdrop" id="profile-modal">
+            <div class="modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+                <h3 id="profile-modal-title">Edit profile</h3>
+                <form method="POST" action="/profile/update" enctype="multipart/form-data">
+                    @csrf
+                    <div class="field">
+                        <label for="profile-name">Username</label>
+                        <input id="profile-name" type="text" name="name" value="{{ $displayName }}" required>
+                    </div>
+                    <div class="field">
+                        <label>Profile picture</label>
+                        <label class="modal-photo" for="profile-photo">
+                            @if ($photo)
+                                <img id="profile-photo-preview" src="{{ asset('storage/' . $photo) }}?v={{ $photoVersion }}" alt="Profile preview">
+                            @else
+                                <img id="profile-photo-preview" src="" alt="Profile preview" style="display:none;">
+                            @endif
+                            <span id="profile-photo-label">{{ $photo ? 'Change photo' : 'Add photo' }}</span>
+                            <small>Drag to crop</small>
+                            <input id="profile-photo" type="file" name="profile_photo" accept="image/*">
+                        </label>
+                        <div class="cropper" id="profile-cropper">
+                            <img id="cropper-image" src="" alt="Crop preview">
                         </div>
-                        <div class="field">
-                            <label>Profile picture</label>
-                            <label class="modal-photo" for="profile-photo">
-                                @if ($profilePhotoUrl)
-                                    <img id="profile-photo-preview" src="{{ $profilePhotoUrl }}?v={{ $photoVersion }}" alt="Profile preview">
-                                @else
-                                    <img id="profile-photo-preview" src="" alt="Profile preview" style="display:none;">
-                                @endif
-                                <span id="profile-photo-label">{{ $photo ? 'Change photo' : 'Add photo' }}</span>
-                                <small>Drag to crop</small>
-                                <input id="profile-photo" type="file" name="profile_photo" accept="image/*">
-                            </label>
-                            <div class="cropper" id="profile-cropper">
-                                <img id="cropper-image" src="" alt="Crop preview">
-                            </div>
-                            <div class="cropper-hint" id="cropper-hint">Drag the photo to position it.</div>
+                        <div class="cropper-hint" id="cropper-hint">Drag the photo to position it.</div>
+                    </div>
+                    <div class="field">
+                        <label>Banner image</label>
+                        <label class="modal-photo" for="banner-photo">
+                            @if ($banner)
+                                <img id="banner-photo-preview" src="{{ asset('storage/' . $banner) }}?v={{ $photoVersion }}" alt="Banner preview">
+                            @else
+                                <img id="banner-photo-preview" src="" alt="Banner preview" style="display:none;">
+                            @endif
+                            <span id="banner-photo-label">{{ $banner ? 'Change banner' : 'Add banner' }}</span>
+                            <small>Drag to crop</small>
+                            <input id="banner-photo" type="file" name="banner_photo" accept="image/*">
+                        </label>
+                        <div class="cropper banner" id="banner-cropper">
+                            <img id="banner-cropper-image" src="" alt="Banner crop preview">
                         </div>
-                        <div class="field">
-                            <label>Banner image</label>
-                            <label class="modal-photo" for="banner-photo">
-                                @if ($bannerPhotoUrl)
-                                    <img id="banner-photo-preview" src="{{ $bannerPhotoUrl }}?v={{ $photoVersion }}" alt="Banner preview">
-                                @else
-                                    <img id="banner-photo-preview" src="" alt="Banner preview" style="display:none;">
-                                @endif
-                                <span id="banner-photo-label">{{ $banner ? 'Change banner' : 'Add banner' }}</span>
-                                <small>Drag to crop</small>
-                                <input id="banner-photo" type="file" name="banner_photo" accept="image/*">
-                            </label>
-                            <div class="cropper banner" id="banner-cropper">
-                                <img id="banner-cropper-image" src="" alt="Banner crop preview">
-                            </div>
-                            <div class="cropper-hint" id="banner-cropper-hint">Drag the banner to position it.</div>
-                        </div>
-                        <div class="modal-actions">
-                            <button class="btn" type="button" id="close-profile-modal">Cancel</button>
-                            <button class="btn primary" type="submit">Save changes</button>
-                        </div>
-                    </form>
-                </div>
+                        <div class="cropper-hint" id="banner-cropper-hint">Drag the banner to position it.</div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn" type="button" id="close-profile-modal">Cancel</button>
+                        <button class="btn primary" type="submit">Save changes</button>
+                    </div>
+                </form>
             </div>
-        @endif
+        </div>
         <script>
             window.addEventListener('DOMContentLoaded', () => {
-                const currentUserLoggedIn = @json((bool) ($currentUser ?? null));
-                const csrfToken = @json(csrf_token());
-                const profileFollowButton = document.querySelector('.js-profile-follow-btn');
-                const followerCount = document.querySelector('.js-follower-count');
                 const profileModal = document.getElementById('profile-modal');
                 const openModalBtn = document.getElementById('open-profile-modal');
                 const closeModalBtn = document.getElementById('close-profile-modal');
@@ -520,60 +294,46 @@
                     displayHeight: 0,
                 };
 
-                profileFollowButton?.addEventListener('click', async () => {
-                    if (!currentUserLoggedIn) {
-                        window.location.href = '/login';
-                        return;
-                    }
-
-                    const userId = profileFollowButton.dataset.userId;
-
-                    if (!userId || profileFollowButton.disabled) {
-                        return;
-                    }
-
-                    const previousLabel = profileFollowButton.textContent;
-                    profileFollowButton.disabled = true;
-                    profileFollowButton.textContent = '...';
-
-                    try {
-                        const response = await fetch(`/users/${userId}/follow`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': csrfToken,
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'Accept': 'application/json',
-                            },
-                            body: JSON.stringify({}),
-                        });
-
-                        const data = await response.json();
-
-                        if (!response.ok) {
-                            throw new Error(data.message || 'Unable to update follow status.');
-                        }
-
-                        profileFollowButton.textContent = data.button_label;
-                        profileFollowButton.classList.toggle('is-following', data.following);
-
-                        if (followerCount) {
-                            followerCount.textContent = data.follower_count;
-                        }
-                    } catch (error) {
-                        profileFollowButton.textContent = previousLabel;
-                        window.alert(error.message || 'Unable to update follow status.');
-                    } finally {
-                        profileFollowButton.disabled = false;
-                    }
-                });
-
                 openModalBtn?.addEventListener('click', () => profileModal?.classList.add('show'));
                 closeModalBtn?.addEventListener('click', () => profileModal?.classList.remove('show'));
                 profileModal?.addEventListener('click', (event) => {
                     if (event.target === profileModal) {
                         profileModal.classList.remove('show');
                     }
+                });
+
+                const settingsButton = document.getElementById('open-settings');
+                const settingsPanel = document.getElementById('settingsPanel');
+                const toggleThemeBtn = document.getElementById('toggleTheme');
+
+                const applyTheme = (theme) => {
+                    document.body.classList.toggle('light-mode', theme === 'light');
+                    localStorage.setItem('profileTheme', theme);
+                };
+
+                const initialTheme = localStorage.getItem('profileTheme') || 'dark';
+                applyTheme(initialTheme);
+
+                settingsButton?.addEventListener('click', () => {
+                    if (!settingsPanel || !settingsButton) return;
+                    const isOpen = settingsPanel.classList.toggle('show');
+                    settingsButton.setAttribute('aria-expanded', String(isOpen));
+                    settingsPanel.setAttribute('aria-hidden', String(!isOpen));
+                });
+
+                document.addEventListener('click', (event) => {
+                    if (!settingsPanel || !settingsButton) return;
+                    if (settingsPanel.contains(event.target) || settingsButton.contains(event.target)) {
+                        return;
+                    }
+                    settingsPanel.classList.remove('show');
+                    settingsPanel.setAttribute('aria-hidden', 'true');
+                    settingsButton.setAttribute('aria-expanded', 'false');
+                });
+
+                toggleThemeBtn?.addEventListener('click', () => {
+                    const nextTheme = document.body.classList.contains('light-mode') ? 'dark' : 'light';
+                    applyTheme(nextTheme);
                 });
 
                 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -820,25 +580,9 @@
 
                     form.submit();
                 });
-
-                // Tab switching
-                const tabPosts = document.getElementById('tab-posts');
-                const tabLikes = document.getElementById('tab-likes');
-                const panels = document.querySelectorAll('.tab-panel');
-
-                if (tabPosts && tabLikes) {
-                    tabPosts.addEventListener('change', function() {
-                        panels.forEach(p => p.style.display = 'none');
-                        panels[0].style.display = 'block';
-                    });
-                    
-                    tabLikes.addEventListener('change', function() {
-                        panels.forEach(p => p.style.display = 'none');
-                        panels[1].style.display = 'block';
-                    });
-                }
             });
         </script>
     </body>
 </html>
+
 
