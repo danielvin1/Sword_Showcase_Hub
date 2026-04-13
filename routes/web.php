@@ -145,7 +145,7 @@ Route::get('/feed', function () {
     return view('feed', compact('swords'));
 });
 
-Route::post('/swords', [SwordController::class, 'store']);
+Route::post('/sword-upload', [SwordController::class, 'store']);
 Route::get('/swords/{sword}/edit', [SwordController::class, 'edit']);
 Route::put('/swords/{sword}', [SwordController::class, 'update']);
 Route::delete('/swords/{sword}', [SwordController::class, 'destroy']);
