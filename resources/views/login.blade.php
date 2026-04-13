@@ -125,7 +125,7 @@
                 <div class="error">{{ session('error') }}</div>
             @endif
 
-            <form method="post" action="/login" enctype="multipart/form-data">
+            <form method="post" action="/login">
                 @csrf
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" placeholder="Password" required>

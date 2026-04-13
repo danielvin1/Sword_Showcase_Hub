@@ -92,7 +92,7 @@
         </div>
     @endif
 
-    <form method="POST" action="/register" enctype="multipart/form-data">
+    <form method="POST" action="/register">
         @csrf
         <input type="text" name="name" placeholder="Name" required>
         <input type="email" name="email" placeholder="Email" required>
