@@ -28,9 +28,9 @@
                 min-height: 100vh;
             }
             .page {
-                max-width: 1100px;
+                max-width: 1600px;
                 margin: 0 auto;
-                padding: 32px 22px 90px;
+                padding: 32px 32px 90px;
             }
             .topbar {
                 display: flex;
@@ -87,77 +87,96 @@
             .btn {
                 padding: 12px 18px;
                 border-radius: 999px;
-                border: 1px solid #d9c7a8;
-                background: transparent;
+                border: 2px solid #d9c7a8;
+                background: rgba(217, 167, 103, 0.2);
                 text-decoration: none;
                 color: #f5f2ea;
                 font-weight: 600;
+                transition: all 0.2s ease;
+            }
+            .btn:hover {
+                background: #d9a867;
+                border-color: #d9a867;
             }
             .btn.primary {
                 background: #d9a867;
                 color: #1b1b1b;
                 border-color: #d9a867;
             }
+            .btn.primary:hover {
+                background: #c49851;
+                border-color: #c49851;
+            }
             .hero-media {
                 position: relative;
-                height: 260px;
+                height: 360px;
                 border-radius: 18px;
                 overflow: hidden;
                 background: radial-gradient(circle at 30% 20%, #ffb45a, transparent 45%),
                             linear-gradient(180deg, #2a1b12 0%, #120f0e 100%);
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
             }
             .hero-media img {
-                position: absolute;
-                right: -10px;
-                bottom: -20px;
-                height: 320px;
+                height: 90%;
                 width: auto;
+                object-fit: contain;
                 filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.45));
             }
             .section-title {
-                margin: 28px 0 12px;
+                margin: 48px 0 20px;
                 font-size: 18px;
                 font-weight: 700;
             }
             .cards {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-                gap: 16px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 28px;
             }
             .card {
                 background: #ffffff;
-                border-radius: 16px;
+                border-radius: 18px;
                 border: 1px solid #e0e0e0;
                 overflow: hidden;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                transition: all 0.3s ease;
+            }
+            .card:hover {
+                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+                transform: translateY(-2px);
             }
             .card img {
                 width: 100%;
-                height: 140px;
+                height: 220px;
                 object-fit: cover;
             }
             .card-body {
-                padding: 12px;
+                padding: 18px;
             }
             .card-body h3 {
-                margin: 0 0 6px;
-                font-size: 15px;
+                margin: 0 0 8px;
+                font-size: 18px;
+                font-weight: 700;
+                color: #111111;
             }
             .card-body p {
-                margin: 0;
-                font-size: 13px;
-                color: #5f5f5f;
+                margin: 0 0 12px;
+                font-size: 14px;
+                color: #666666;
+                line-height: 1.5;
             }
             .tag {
                 display: inline-flex;
                 align-items: center;
                 gap: 6px;
-                margin-top: 10px;
-                font-size: 12px;
+                margin-top: 12px;
+                font-size: 13px;
                 font-weight: 600;
                 color: #7a5a2b;
                 background: #f3e6d5;
                 border-radius: 999px;
-                padding: 4px 8px;
+                padding: 6px 12px;
             }
         </style>
         <link rel='stylesheet' href='/css/theme.css'>

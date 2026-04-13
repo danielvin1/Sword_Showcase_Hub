@@ -47,8 +47,12 @@
         .filter-btn { cursor: pointer; }
         .btn {
             display: inline-flex; align-items: center; justify-content: center;
-            padding: 10px 16px; border-radius: 999px; border: 1px solid #d9c7a8;
-            background: transparent; color: #111111; text-decoration: none; font-weight: 600;
+            padding: 10px 16px; border-radius: 999px; border: 2px solid #d9a867;
+            background: #fef9f6; color: #8b5e3c; text-decoration: none; font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .btn:hover {
+            background: #d9a867; color: #fff;
         }
         .btn.primary { background: #d9a867; border-color: #d9a867; }
 
@@ -63,7 +67,7 @@
         .post-card {
             background: #ffffff; border-radius: 24px;
             border: 1px solid #e7e1d7; overflow: hidden;
-            width: 380px; box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+            width: 600px; box-shadow: 0 18px 35px rgba(0,0,0,0.08);
         }
         .post-media {
             width: 100%; aspect-ratio: 1 / 1; background: #f3eee5;
@@ -78,6 +82,30 @@
         }
         .media-user { display: flex; align-items: center; gap: 8px; font-weight: 600; }
         .media-actions { display: flex; gap: 10px; font-weight: 700; }
+        .media-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px 8px;
+            transition: transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #111;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .media-btn:hover {
+            transform: scale(1.2);
+        }
+        .media-btn.liked {
+            filter: drop-shadow(0 0 3px rgba(217, 167, 103, 0.6));
+        }
+        .media-btn.followed {
+            color: #d9a867;
+            font-weight: bold;
+        }
         .post-body { padding: 12px 14px 16px; text-align: left; }
         .post-user { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
         .avatar {
@@ -95,6 +123,23 @@
             font-size: 11px; font-weight: 600;
             color: #7a5a2b; background: #f3e6d5;
             border-radius: 999px; padding: 4px 8px;
+        }
+        
+        .post-actions {
+            display: flex; gap: 14px; margin-top: 12px; padding-top: 12px;
+            border-top: 1px solid #f0eae2;
+        }
+        .action-btn {
+            display: flex; align-items: center; gap: 6px;
+            background: none; border: none; cursor: pointer;
+            color: #8a7f72; font-weight: 600; font-size: 12px;
+            padding: 0; transition: all 0.2s ease;
+        }
+        .action-btn:hover {
+            color: #d9a867;
+        }
+        .action-btn.liked {
+            color: #d9a867;
         }
 
         @media (max-width: 600px) {
@@ -135,11 +180,18 @@
         }
         .modal-head h3 { margin: 0; font-size: 16px; }
         .modal-reset {
-            border: none;
+            border: 2px solid transparent;
             background: transparent;
-            color: #7a5a2b;
+            color: #8b5e3c;
             font-weight: 600;
             cursor: pointer;
+            padding: 8px 14px;
+            border-radius: 999px;
+            transition: all 0.2s ease;
+        }
+        .modal-reset:hover {
+            background: #fef9f6;
+            border-color: #d9a867;
         }
         .modal-section {
             display: grid;
@@ -179,20 +231,32 @@
         .modal-apply {
             padding: 10px 16px;
             border-radius: 999px;
-            border: 1px solid #1b1b1b;
-            background: #1b1b1b;
+            border: 2px solid #d9a867;
+            background: #d9a867;
             color: #ffffff;
             font-weight: 700;
             font-size: 13px;
             cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .modal-apply:hover {
+            background: #c49851;
+            border-color: #c49851;
         }
         .modal-dismiss {
-            border: none;
+            border: 2px solid transparent;
             background: transparent;
-            color: #8a7b64;
+            color: #8b5e3c;
             font-weight: 600;
             font-size: 12px;
             cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 999px;
+            transition: all 0.2s ease;
+        }
+        .modal-dismiss:hover {
+            background: #fef9f6;
+            border-color: #d9a867;
         }
     </style>
     <link rel='stylesheet' href='/css/theme.css'>
@@ -292,12 +356,19 @@
                 'caption' => $meta['caption'],
                 'image' => '/swords/' . $file,
                 'time' => ($i + 1) . 'd',
+                'user_id' => null,
+                'is_followed' => false,
+                'sword_id' => null,
+                'likes_count' => rand(8, 127),
+                'is_liked' => false,
             ];
         }
         $fypItems = [];
         foreach ($swords as $sword) {
             $creatorName = $sword->user?->name ?? 'Community Collector';
             $creatorHandle = '@' . strtolower(str_replace(' ', '', $creatorName));
+            $isLiked = session('user_id') ? $sword->isLikedBy(session('user_id')) : false;
+            $isFollowed = session('user_id') && $sword->user ? \App\Models\User::find(session('user_id'))->isFollowing($sword->user->id) : false;
             $fypItems[] = [
                 'user' => $creatorName,
                 'handle' => $creatorHandle,
@@ -306,6 +377,11 @@
                 'caption' => $sword->description ?: 'No description added yet.',
                 'image' => $sword->image ? asset('storage/' . $sword->image) : '/images/katana.jpg',
                 'time' => $sword->created_at?->diffForHumans() ?? 'Just now',
+                'user_id' => $sword->user?->id ?? null,
+                'is_followed' => $isFollowed,
+                'sword_id' => $sword->id,
+                'likes_count' => $sword->likes()->count(),
+                'is_liked' => $isLiked,
             ];
         }
         $fypItems = array_merge($fypItems, $folderPosts);
@@ -322,13 +398,27 @@
                         <div class="post-media">
                             <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}">
                             <div class="media-header">
-                                <div class="media-user">
+                                <a href="{{ $item['user_id'] ? '/user/' . $item['user_id'] : '#' }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 8px;">
                                     <div class="avatar">{{ strtoupper(substr($item['user'], 0, 1)) }}</div>
                                     <span>{{ $item['user'] }}</span>
-                                </div>
+                                </a>
                                 <div class="media-actions">
-                                    <span>?</span>
-                                    <span>+</span>
+                                    @if (isset($item['sword_id']) && $item['sword_id'])
+                                        <form action="/swords/{{ $item['sword_id'] }}/like" method="POST" style="margin: 0;">
+                                            @csrf
+                                            <button type="submit" class="media-btn {{ $item['is_liked'] ? 'liked' : '' }}" title="{{ $item['likes_count'] }} likes">❤️ {{ $item['likes_count'] }}</button>
+                                        </form>
+                                    @else
+                                        <span class="media-btn" style="cursor: default; opacity: 0.5;">❤️ {{ $item['likes_count'] }}</span>
+                                    @endif
+                                    @if ($item['user_id'] && session('user_id') && session('user_id') != $item['user_id'])
+                                        <form action="/users/{{ $item['user_id'] }}/follow" method="POST" style="margin: 0;">
+                                            @csrf
+                                            <button type="submit" class="media-btn {{ $item['is_followed'] ? 'followed' : '' }}">
+                                                {{ $item['is_followed'] ? '✓' : '+' }}
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -336,8 +426,8 @@
                             <div class="post-user">
                                 <div class="avatar">{{ strtoupper(substr($item['user'], 0, 1)) }}</div>
                                 <div class="user-meta">
-                                    <strong>{{ $item['user'] }}</strong>
-                                    {{ $item['handle'] }} � {{ $item['time'] }}
+                                    <strong><a href="{{ $item['user_id'] ? '/user/' . $item['user_id'] : '#' }}" style="color: inherit; text-decoration: none;">{{ $item['user'] }}</a></strong>
+                                    {{ $item['handle'] }} � {{ $item['time'] }}
                                 </div>
                             </div>
                             <h3 class="post-title">{{ $item['title'] }}</h3>
@@ -345,6 +435,20 @@
                             <div class="tag-row">
                                 <span class="tag">{{ $item['type'] }}</span>
                             </div>
+                            @if (isset($item['sword_id']))
+                                <div class="post-actions">
+                                    @php
+                                        $likeCount = $item['likes_count'] ?? 0;
+                                        $isLiked = $item['is_liked'] ?? false;
+                                    @endphp
+                                    <form action="/swords/{{ $item['sword_id'] }}/like" method="POST" style="margin: 0;">
+                                        @csrf
+                                        <button type="submit" class="action-btn {{ $isLiked ? 'liked' : '' }}">
+                                            <span>❤️</span> {{ $likeCount }}
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
                         </div>
                     </article>
                 @endforeach

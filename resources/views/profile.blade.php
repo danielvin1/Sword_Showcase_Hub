@@ -73,8 +73,12 @@
             .handle { color: #6c6c6c; font-size: 14px; }
             .email { color: #8a8074; font-size: 13px; }
             .edit-btn {
-                padding: 10px 18px; border-radius: 999px; border: 1px solid #d9c7a8;
-                color: #111111; background: transparent; text-decoration: none; font-weight: 600;
+                padding: 10px 18px; border-radius: 999px; border: 2px solid #d9a867;
+                color: #fff; background: #d9a867; text-decoration: none; font-weight: 600;
+                transition: all 0.2s ease;
+            }
+            .edit-btn:hover {
+                background: #c49851; border-color: #c49851;
             }
             .action-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
@@ -156,13 +160,18 @@
                 justify-content: center;
                 padding: 7px 10px;
                 border-radius: 999px;
-                border: 1px solid #d9c7a8;
-                background: #fff;
-                color: #111111;
+                border: 1.5px solid #d9a867;
+                background: #fef9f6;
+                color: #8b5e3c;
                 text-decoration: none;
                 font-size: 12px;
                 font-weight: 600;
                 cursor: pointer;
+                transition: all 0.2s ease;
+            }
+            .sword-btn:hover {
+                background: #d9a867;
+                color: #fff;
             }
             .sword-btn.delete {
                 border-color: #e5b8b8;
@@ -182,8 +191,12 @@
             }
             .btn {
                 display: inline-flex; align-items: center; justify-content: center;
-                padding: 10px 16px; border-radius: 999px; border: 1px solid #d9c7a8;
-                background: transparent; color: #111111; text-decoration: none; font-weight: 600;
+                padding: 10px 16px; border-radius: 999px; border: 2px solid #d9a867;
+                background: #fef9f6; color: #8b5e3c; text-decoration: none; font-weight: 600;
+                transition: all 0.2s ease;
+            }
+            .btn:hover {
+                background: #d9a867; color: #fff;
             }
             .btn.primary { background: #d9a867; border-color: #d9a867; color: #111111; }
             .message {
@@ -312,22 +325,23 @@
                     </div>
 
                         <div class="meta">
-                            <span><span class="dot"></span> Location not set</span>
-                            <span><span class="dot"></span> Birthday not set</span>
                             <span><span class="dot"></span> Joined {{ $profileUser?->created_at?->format('M Y') ?? 'Recently' }}</span>
                         </div>
 
                         <div class="stats">
                             <div class="stat"><b>{{ $swordCount }}</b>Uploads</div>
-                            <div class="stat"><b>{{ $swords->count() }}</b>Posts</div>
-                            <div class="stat"><b>{{ $swords->first()?->created_at?->format('d M Y') ?? '—' }}</b>Latest</div>
+                            <div class="stat"><b>{{ $followersCount }}</b>Followers</div>
+                            <div class="stat"><b>{{ $followingCount }}</b>Following</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="tabs">
+                    <input type="radio" id="tab-posts" name="tabs" checked>
+                    <input type="radio" id="tab-likes" name="tabs">
                     <div class="tab-labels">
-                        <span class="tab-label tab-label-static">Posts</span>
+                        <label for="tab-posts" class="tab-label">Posts</label>
+                        <label for="tab-likes" class="tab-label">Likes</label>
                     </div>
                 </div>
 
@@ -358,6 +372,36 @@
                                                     <button class="sword-btn delete" type="submit">Delete</button>
                                                 </form>
                                             </div>
+                                        </div>
+                                    </article>
+                                @endforeach
+                            </section>
+                        @endif
+                    </div>
+
+                    <div class="tab-panel feed-panel">
+                        <div class="section-title">Liked Swords</div>
+
+                        @php
+                            $likedSwordIds = \App\Models\Like::where('user_id', session('user_id'))->pluck('sword_id');
+                            $likedSwords = \App\Models\Sword::whereIn('id', $likedSwordIds)->get();
+                        @endphp
+
+                        @if ($likedSwords->isEmpty())
+                            <div class="empty">You haven't liked any swords yet.</div>
+                        @else
+                            <section class="cards">
+                                @foreach ($likedSwords as $sword)
+                                    <article class="sword-card">
+                                        @if ($sword->image)
+                                            <img src="{{ asset('storage/' . $sword->image) }}" alt="{{ $sword->name }}">
+                                        @else
+                                            <img src="/images/katana.jpg" alt="{{ $sword->name }}">
+                                        @endif
+                                        <div class="sword-body">
+                                            <h3>{{ $sword->name }}</h3>
+                                            <p>{{ $sword->description ?: 'No description added yet.' }}</p>
+                                            <div class="tag">{{ $sword->type }}</div>
                                         </div>
                                     </article>
                                 @endforeach
@@ -710,6 +754,23 @@
 
                     form.submit();
                 });
+
+                // Tab switching
+                const tabPosts = document.getElementById('tab-posts');
+                const tabLikes = document.getElementById('tab-likes');
+                const panels = document.querySelectorAll('.tab-panel');
+
+                if (tabPosts && tabLikes) {
+                    tabPosts.addEventListener('change', function() {
+                        panels.forEach(p => p.style.display = 'none');
+                        panels[0].style.display = 'block';
+                    });
+                    
+                    tabLikes.addEventListener('change', function() {
+                        panels.forEach(p => p.style.display = 'none');
+                        panels[1].style.display = 'block';
+                    });
+                }
             });
         </script>
     </body>

@@ -159,17 +159,27 @@
             justify-content: center;
             padding: 10px 16px;
             border-radius: 999px;
-            border: 1px solid #d9c7a8;
-            background: transparent;
-            color: #111111;
+            border: 2px solid #d9a867;
+            background: #fef9f6;
+            color: #8b5e3c;
             text-decoration: none;
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn:hover {
+            background: #d9a867;
+            color: #fff;
         }
         .btn.primary {
             background: #d9a867;
             border-color: #d9a867;
+            color: #fff;
+        }
+        .btn.primary:hover {
+            background: #c49851;
+            border-color: #c49851;
         }
 
         .upload-side {
