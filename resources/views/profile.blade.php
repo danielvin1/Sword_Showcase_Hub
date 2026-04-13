@@ -13,6 +13,16 @@
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
 
+            :root {
+                --text: #111111;
+                --gold-soft: #2c2218;
+                --muted: #6c6c6c;
+            }
+            body.theme-dark {
+                --text: #f3ece2;
+                --gold-soft: #f1d8a8;
+                --muted: #c7b9a6;
+            }
             body { min-height: 100vh; }
             .profile-wrap {
                 background: rgba(15, 13, 11, 0.94);
@@ -46,9 +56,9 @@
             .action-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; position: relative; }
             .edit-btn {
                 padding: 10px 18px; border-radius: 999px; border: 1px solid rgba(217,168,103,0.7);
-                background: rgba(217,168,103,0.16); color: var(--text); text-decoration: none; font-weight: 600;
+                background: rgba(217,168,103,0.22); color: var(--text); text-decoration: none; font-weight: 600;
             }
-            .edit-btn:hover { background: rgba(217,168,103,0.28); }
+            .edit-btn:hover { background: rgba(217,168,103,0.36); }
             .tabs { display: block; padding: 14px 26px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-weight: 600; color: var(--muted); }
             .tab-label { padding: 10px 14px 12px; cursor: pointer; position: relative; white-space: nowrap; color: var(--muted); transition: color 0.2s ease; }
             .tab-label:hover { color: var(--gold-soft); }
@@ -69,7 +79,9 @@
             .empty { background: rgba(255,255,255,0.04); border-radius: 16px; padding: 18px; border: 1px solid rgba(255,255,255,0.08); color: var(--muted); }
             .field label { color: var(--muted); }
             .field input { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: var(--text); }
-            .btn { border: 1px solid rgba(217,168,103,0.6); background: rgba(255,255,255,0.06); color: var(--text); }
+            .btn { border: 1px solid rgba(217,168,103,0.6); background: rgba(217,168,103,0.18); color: var(--text); }
+            .btn.primary { background: #d9a867; border-color: #d9a867; color: #1b130b; }
+            .btn.primary:hover { background: #c69252; border-color: #c69252; }
             .btn.danger { background: #b02a37; border-color: #8f1f27; color: #fff; }
             .settings-panel { position: absolute; right: 0; top: calc(100% + 10px); width: 250px; background: rgba(15,13,11,0.98); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; box-shadow: 0 18px 36px rgba(0,0,0,0.45); padding: 16px; display: none; z-index: 20; }
             .settings-panel.show { display: block; }
