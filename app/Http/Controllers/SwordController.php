@@ -10,6 +10,13 @@ class SwordController extends Controller
 {
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'type' => 'required|string|max:100',
+            'description' => 'required|string|max:1000',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
         $path = null;
 
         if ($request->hasFile('image')) {
@@ -17,9 +24,9 @@ class SwordController extends Controller
         }
 
         Sword::create([
-            'name'        => $request->name,
-            'type'        => $request->type,
-            'description' => $request->description,
+            'name'        => $validated['name'],
+            'type'        => $validated['type'],
+            'description' => $validated['description'],
             'image'       => $path,
             'user_id'     => session('user_id'),
         ]);
@@ -42,6 +49,13 @@ class SwordController extends Controller
             return redirect('/profile')->with('error', 'You can only edit your own swords.');
         }
 
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'type' => 'required|string|max:100',
+            'description' => 'required|string|max:1000',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
         $path = $sword->image;
 
         if ($request->hasFile('image')) {
@@ -53,9 +67,9 @@ class SwordController extends Controller
         }
 
         $sword->update([
-            'name' => $request->name,
-            'type' => $request->type,
-            'description' => $request->description,
+            'name' => $validated['name'],
+            'type' => $validated['type'],
+            'description' => $validated['description'],
             'image' => $path,
         ]);
 

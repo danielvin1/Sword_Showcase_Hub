@@ -117,12 +117,13 @@ Route::post('/profile/update', function (\Illuminate\Http\Request $request) {
 });
 
 Route::post('/login', function (\Illuminate\Http\Request $request) {
-    $email = trim((string) $request->input('email'));
-    $password = trim((string) $request->input('password'));
+    $validated = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|string',
+    ]);
 
-    if ($email === '' || $password === '') {
-        return redirect('/login')->with('error', 'Please enter your email and password.');
-    }
+    $email = trim((string) $validated['email']);
+    $password = trim((string) $validated['password']);
 
     $user = User::where('email', $email)->first();
 
