@@ -80,7 +80,7 @@
             }
             .menu a:hover { opacity: 1; }
             .profile-wrap {
-                background: rgba(15, 13, 11, 0.94);
+                background: linear-gradient(180deg, rgba(38, 35, 32, 0.95), rgba(20, 18, 16, 0.95));
                 border-radius: 22px;
                 overflow: hidden;
                 border: 1px solid rgba(255, 255, 255, 0.08);
@@ -123,15 +123,19 @@
             .tab-panels { padding: 22px 26px 26px; text-align: left; }
             .section-title { margin: 0 0 14px; font-size: 18px; font-weight: 700; color: var(--text); }
             .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; justify-content: flex-start; max-width: 440px; margin-left: 0 !important; margin-right: auto; }
-            .sword-card { background: rgba(255,255,255,0.05); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); overflow: hidden; width: 100%; }
+            .sword-card { background: linear-gradient(180deg, rgba(38, 35, 32, 0.95), rgba(20, 18, 16, 0.95)); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); overflow: hidden; width: 100%; box-shadow: 0 12px 24px rgba(0,0,0,0.26); }
             .sword-card img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; object-position: center; display: block; background: #111; }
             .sword-body { padding: 12px; text-align: left; }
             .sword-body h3 { margin: 0 0 6px; font-size: 15px; color: var(--gold-soft); }
             .tag { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 600; color: #7a5a2b; background: rgba(255,255,255,0.06); border-radius: 999px; padding: 4px 8px; }
             .sword-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-            .sword-btn { display: inline-flex; align-items: center; justify-content: center; padding: 7px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.06); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600; cursor: pointer; }
-            .sword-btn.delete { border-color: rgba(192,57,43,0.35); color: #e7babb; background: rgba(192,57,43,0.1); }
+            .sword-btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 16px; border-radius: 999px; border: 1px solid rgba(198,162,106,0.45); background: transparent; color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease; }
+            .sword-btn:hover { background: rgba(217,168,103,0.14); border-color: rgba(217,168,103,0.65); transform: translateY(-1px); }
+            .sword-btn.delete { border-color: rgba(192,57,43,0.45); color: #f4d7d2; background: rgba(192,57,43,0.12); }
+            .sword-btn.delete:hover { background: rgba(192,57,43,0.22); }
             .empty { background: rgba(255,255,255,0.04); border-radius: 16px; padding: 18px; border: 1px solid rgba(255,255,255,0.08); color: var(--muted); }
+            .dot { display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: var(--gold-soft); margin-right: 8px; vertical-align: middle; }
+            .meta { display: flex; flex-wrap: wrap; gap: 14px; margin: 18px 0; font-size: 13px; color: var(--muted); }
             .field label { color: var(--muted); }
             .field input { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: var(--text); }
             .btn { border: 1px solid rgba(217,168,103,0.6); background: rgba(217,168,103,0.18); color: var(--text); }
@@ -242,8 +246,6 @@
                     </div>
 
                         <div class="meta">
-                            <span><span class="dot"></span> Location not set</span>
-                            <span><span class="dot"></span> Birthday not set</span>
                             <span><span class="dot"></span> Joined {{ $profileUser?->created_at?->format('M Y') ?? 'Recently' }}</span>
                         </div>
 
@@ -303,58 +305,67 @@
                 </div>
             </section>
         </div>
-        <div class="modal-backdrop" id="profile-modal">
-            <div class="modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
-                <h3 id="profile-modal-title">Edit profile</h3>
-                <form method="POST" action="/profile/update" enctype="multipart/form-data">
-                    @csrf
-                    <div class="field">
-                        <label for="profile-name">Username</label>
-                        <input id="profile-name" type="text" name="name" value="{{ $displayName }}" required>
-                    </div>
-                    <div class="field">
-                        <label>Profile picture</label>
-                        <label class="modal-photo" for="profile-photo">
-                            @if ($photo)
-                                <img id="profile-photo-preview" src="{{ asset('storage/' . $photo) }}?v={{ $photoVersion }}" alt="Profile preview">
-                            @else
-                                <img id="profile-photo-preview" src="" alt="Profile preview" style="display:none;">
-                            @endif
-                            <span id="profile-photo-label">{{ $photo ? 'Change photo' : 'Add photo' }}</span>
-                            <small>Drag to crop</small>
-                            <input id="profile-photo" type="file" name="profile_photo" accept="image/*">
-                        </label>
-                        <div class="cropper" id="profile-cropper">
-                            <img id="cropper-image" src="" alt="Crop preview">
+        @if ($isOwnProfile)
+            <div class="modal-backdrop" id="profile-modal">
+                <div class="modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+                    <h3 id="profile-modal-title">Edit profile</h3>
+                    <form method="POST" action="/profile/update" enctype="multipart/form-data">
+                        @csrf
+                        <div class="field">
+                            <label for="profile-name">Username</label>
+                            <input id="profile-name" type="text" name="name" value="{{ $displayName }}" required>
                         </div>
-                        <div class="cropper-hint" id="cropper-hint">Drag the photo to position it.</div>
-                    </div>
-                    <div class="field">
-                        <label>Banner image</label>
-                        <label class="modal-photo" for="banner-photo">
-                            @if ($banner)
-                                <img id="banner-photo-preview" src="{{ asset('storage/' . $banner) }}?v={{ $photoVersion }}" alt="Banner preview">
-                            @else
-                                <img id="banner-photo-preview" src="" alt="Banner preview" style="display:none;">
-                            @endif
-                            <span id="banner-photo-label">{{ $banner ? 'Change banner' : 'Add banner' }}</span>
-                            <small>Drag to crop</small>
-                            <input id="banner-photo" type="file" name="banner_photo" accept="image/*">
-                        </label>
-                        <div class="cropper banner" id="banner-cropper">
-                            <img id="banner-cropper-image" src="" alt="Banner crop preview">
+                        <div class="field">
+                            <label>Profile picture</label>
+                            <label class="modal-photo" for="profile-photo">
+                                @if ($profilePhotoUrl)
+                                    <img id="profile-photo-preview" src="{{ $profilePhotoUrl }}?v={{ $photoVersion }}" alt="Profile preview">
+                                @else
+                                    <img id="profile-photo-preview" src="" alt="Profile preview" style="display:none;">
+                                @endif
+                                <span id="profile-photo-label">{{ $photo ? 'Change photo' : 'Add photo' }}</span>
+                                <small>Drag to crop</small>
+                                <input id="profile-photo" type="file" name="profile_photo" accept="image/*">
+                            </label>
+                            <div class="cropper" id="profile-cropper">
+                                <img id="cropper-image" src="" alt="Crop preview">
+                            </div>
+                            <div class="cropper-hint" id="cropper-hint">Drag the photo to position it.</div>
                         </div>
-                        <div class="cropper-hint" id="banner-cropper-hint">Drag the banner to position it.</div>
-                    </div>
-                    <div class="modal-actions">
-                        <button class="btn" type="button" id="close-profile-modal">Cancel</button>
-                        <button class="btn primary" type="submit">Save changes</button>
-                    </div>
-                </form>
+                        <div class="field">
+                            <label>Banner image</label>
+                            <label class="modal-photo" for="banner-photo">
+                                @if ($bannerPhotoUrl)
+                                    <img id="banner-photo-preview" src="{{ $bannerPhotoUrl }}?v={{ $photoVersion }}" alt="Banner preview">
+                                @else
+                                    <img id="banner-photo-preview" src="" alt="Banner preview" style="display:none;">
+                                @endif
+                                <span id="banner-photo-label">{{ $banner ? 'Change banner' : 'Add banner' }}</span>
+                                <small>Drag to crop</small>
+                                <input id="banner-photo" type="file" name="banner_photo" accept="image/*">
+                            </label>
+                            <div class="cropper banner" id="banner-cropper">
+                                <img id="banner-cropper-image" src="" alt="Banner crop preview">
+                            </div>
+                            <div class="cropper-hint" id="banner-cropper-hint">Drag the banner to position it.</div>
+                        </div>
+                        <div class="modal-actions">
+                            <button class="btn" type="button" id="close-profile-modal">Cancel</button>
+                            <button class="btn primary" type="submit">Save changes</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
+        @endif
         <script>
             window.addEventListener('DOMContentLoaded', () => {
+                const currentUserLoggedIn = @json((bool) ($currentUser ?? null));
+                const csrfToken = @json(csrf_token());
+                const profileFollowButton = document.querySelector('.js-profile-follow-btn');
+                const followerCount = document.querySelector('.js-follower-count');
+                const settingsButton = document.getElementById('open-settings');
+                const settingsPanel = document.getElementById('settingsPanel');
+                const toggleThemeBtn = document.getElementById('toggleTheme');
                 const profileModal = document.getElementById('profile-modal');
                 const openModalBtn = document.getElementById('open-profile-modal');
                 const closeModalBtn = document.getElementById('close-profile-modal');
@@ -394,25 +405,16 @@
                     displayHeight: 0,
                 };
 
-                openModalBtn?.addEventListener('click', () => profileModal?.classList.add('show'));
-                closeModalBtn?.addEventListener('click', () => profileModal?.classList.remove('show'));
-                profileModal?.addEventListener('click', (event) => {
-                    if (event.target === profileModal) {
-                        profileModal.classList.remove('show');
-                    }
-                });
-
-                const settingsButton = document.getElementById('open-settings');
-                const settingsPanel = document.getElementById('settingsPanel');
-                const toggleThemeBtn = document.getElementById('toggleTheme');
-
                 const applyTheme = (theme) => {
                     document.body.classList.toggle('light-mode', theme === 'light');
+                    document.body.classList.toggle('theme-dark', theme === 'dark');
                     localStorage.setItem('profileTheme', theme);
+                    if (toggleThemeBtn) {
+                        toggleThemeBtn.textContent = theme === 'light' ? 'Theme mode: Dark' : 'Theme mode: Light';
+                    }
                 };
 
-                const initialTheme = localStorage.getItem('profileTheme') || 'dark';
-                applyTheme(initialTheme);
+                applyTheme(localStorage.getItem('profileTheme') === 'light' ? 'light' : 'dark');
 
                 settingsButton?.addEventListener('click', () => {
                     if (!settingsPanel || !settingsButton) return;
@@ -434,6 +436,62 @@
                 toggleThemeBtn?.addEventListener('click', () => {
                     const nextTheme = document.body.classList.contains('light-mode') ? 'dark' : 'light';
                     applyTheme(nextTheme);
+                });
+
+                profileFollowButton?.addEventListener('click', async () => {
+                    if (!currentUserLoggedIn) {
+                        window.location.href = '/login';
+                        return;
+                    }
+
+                    const userId = profileFollowButton.dataset.userId;
+
+                    if (!userId || profileFollowButton.disabled) {
+                        return;
+                    }
+
+                    const previousLabel = profileFollowButton.textContent;
+                    profileFollowButton.disabled = true;
+                    profileFollowButton.textContent = '...';
+
+                    try {
+                        const response = await fetch(`/users/${userId}/follow`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json',
+                            },
+                            body: JSON.stringify({}),
+                        });
+
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(data.message || 'Unable to update follow status.');
+                        }
+
+                        profileFollowButton.textContent = data.button_label;
+                        profileFollowButton.classList.toggle('is-following', data.following);
+
+                        if (followerCount) {
+                            followerCount.textContent = data.follower_count;
+                        }
+                    } catch (error) {
+                        profileFollowButton.textContent = previousLabel;
+                        window.alert(error.message || 'Unable to update follow status.');
+                    } finally {
+                        profileFollowButton.disabled = false;
+                    }
+                });
+
+                openModalBtn?.addEventListener('click', () => profileModal?.classList.add('show'));
+                closeModalBtn?.addEventListener('click', () => profileModal?.classList.remove('show'));
+                profileModal?.addEventListener('click', (event) => {
+                    if (event.target === profileModal) {
+                        profileModal.classList.remove('show');
+                    }
                 });
 
                 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
