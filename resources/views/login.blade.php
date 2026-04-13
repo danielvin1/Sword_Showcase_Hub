@@ -125,11 +125,10 @@
                 <div class="error">{{ session('error') }}</div>
             @endif
 
-            <form method="post" action="/login" enctype="multipart/form-data">
+            <form method="post" action="/login">
                 @csrf
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" placeholder="Password" required>
-                <input type="file" name="profile_photo" accept="image/*">
                 <button type="submit">Login</button>
                 <p style="margin-top: 14px; text-align:center;">
 
