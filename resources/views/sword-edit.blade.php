@@ -280,8 +280,8 @@
 
         <aside class="preview-panel panel" aria-label="Current sword preview">
             <div class="preview-media">
-                @if ($sword->image)
-                    <img src="{{ asset('storage/' . $sword->image) }}" alt="{{ $sword->name }}">
+                @if ($sword->image_url)
+                    <img src="{{ $sword->image_url }}" alt="{{ $sword->name }}">
                 @else
                     <div class="preview-placeholder">No image uploaded for this sword yet.</div>
                 @endif

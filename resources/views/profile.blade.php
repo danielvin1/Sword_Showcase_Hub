@@ -285,12 +285,14 @@
                     $banner = $profileUser?->banner_photo ?? session('profile_banner');
                     $displayName = $profileUser?->name ?? session('user_name', 'Guest Collector');
                     $photoVersion = $profileUser?->updated_at?->timestamp ?? time();
+                    $profilePhotoUrl = $profileUser?->profile_photo_url ?: '';
+                    $bannerPhotoUrl = $profileUser?->banner_photo_url ?: '';
                 @endphp
-                <div class="banner" id="profile-banner" @if ($banner) style="background-image: url('{{ asset('storage/' . $banner) }}?v={{ $photoVersion }}');" @endif></div>
+                <div class="banner" id="profile-banner" @if ($bannerPhotoUrl) style="background-image: url('{{ $bannerPhotoUrl }}?v={{ $photoVersion }}');" @endif></div>
                 <div class="profile-main">
                     <div class="avatar" id="profile-avatar">
-                        @if ($photo)
-                            <img src="{{ asset('storage/' . $photo) }}?v={{ $photoVersion }}" alt="{{ $displayName }}">
+                        @if ($profilePhotoUrl)
+                            <img src="{{ $profilePhotoUrl }}?v={{ $photoVersion }}" alt="{{ $displayName }}">
                         @else
                             {{ strtoupper(substr($displayName, 0, 1)) }}
                         @endif
@@ -306,8 +308,16 @@
                             </div>
                         </div>
                         <div class="action-bar">
-                            <a class="btn primary" href="/upload">Upload Sword</a>
-                            <button class="edit-btn" type="button" id="open-profile-modal">Edit profile</button>
+                            @if ($isOwnProfile)
+                                <a class="btn primary" href="/upload">Upload Sword</a>
+                                <button class="edit-btn" type="button" id="open-profile-modal">Edit profile</button>
+                            @elseif ($profileUser)
+                                <button
+                                    class="btn primary js-profile-follow-btn{{ $isFollowing ? ' is-following' : '' }}"
+                                    type="button"
+                                    data-user-id="{{ $profileUser->id }}"
+                                >{{ $isFollowing ? 'Following' : 'Follow' }}</button>
+                            @endif
                         </div>
                     </div>
 
@@ -320,7 +330,9 @@
                         <div class="stats">
                             <div class="stat"><b>{{ $swordCount }}</b>Uploads</div>
                             <div class="stat"><b>{{ $swords->count() }}</b>Posts</div>
-                            <div class="stat"><b>{{ $swords->first()?->created_at?->format('d M Y') ?? '—' }}</b>Latest</div>
+                            <div class="stat"><b class="js-follower-count">{{ $followerCount ?? 0 }}</b>Followers</div>
+                            <div class="stat"><b>{{ $followingCount ?? 0 }}</b>Following</div>
+                            <div class="stat"><b>{{ $swords->first()?->created_at?->format('d M Y') ?? '-' }}</b>Latest</div>
                         </div>
                     </div>
                 </div>
@@ -333,16 +345,16 @@
 
                 <div class="tab-panels">
                     <div class="tab-panel feed-panel" style="display:block;">
-                        <div class="section-title">My Swords</div>
+                        <div class="section-title">{{ $isOwnProfile ? 'My Swords' : $displayName . '\'s Swords' }}</div>
 
                         @if ($swords->isEmpty())
-                            <div class="empty">You have not uploaded any swords yet.</div>
+                            <div class="empty">{{ $isOwnProfile ? 'You have not uploaded any swords yet.' : 'No swords uploaded yet.' }}</div>
                         @else
                             <section class="cards">
                                 @foreach ($swords as $sword)
                                     <article class="sword-card">
-                                        @if ($sword->image)
-                                            <img src="{{ asset('storage/' . $sword->image) }}" alt="{{ $sword->name }}">
+                                        @if ($sword->image_url)
+                                            <img src="{{ $sword->image_url }}" alt="{{ $sword->name }}">
                                         @else
                                             <img src="/images/katana.jpg" alt="{{ $sword->name }}">
                                         @endif
@@ -350,14 +362,16 @@
                                             <h3>{{ $sword->name }}</h3>
                                             <p>{{ $sword->description ?: 'No description added yet.' }}</p>
                                             <div class="tag">{{ $sword->type }}</div>
-                                            <div class="sword-actions">
-                                                <a class="sword-btn" href="/swords/{{ $sword->id }}/edit">Edit</a>
-                                                <form method="POST" action="/swords/{{ $sword->id }}" onsubmit="return confirm('Delete this sword?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="sword-btn delete" type="submit">Delete</button>
-                                                </form>
-                                            </div>
+                                            @if ($isOwnProfile)
+                                                <div class="sword-actions">
+                                                    <a class="sword-btn" href="/swords/{{ $sword->id }}/edit">Edit</a>
+                                                    <form method="POST" action="/swords/{{ $sword->id }}" onsubmit="return confirm('Delete this sword?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="sword-btn delete" type="submit">Delete</button>
+                                                    </form>
+                                                </div>
+                                            @endif
                                         </div>
                                     </article>
                                 @endforeach
@@ -367,58 +381,64 @@
                 </div>
             </section>
         </div>
-        <div class="modal-backdrop" id="profile-modal">
-            <div class="modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
-                <h3 id="profile-modal-title">Edit profile</h3>
-                <form method="POST" action="/profile/update" enctype="multipart/form-data">
-                    @csrf
-                    <div class="field">
-                        <label for="profile-name">Username</label>
-                        <input id="profile-name" type="text" name="name" value="{{ $displayName }}" required>
-                    </div>
-                    <div class="field">
-                        <label>Profile picture</label>
-                        <label class="modal-photo" for="profile-photo">
-                            @if ($photo)
-                                <img id="profile-photo-preview" src="{{ asset('storage/' . $photo) }}?v={{ $photoVersion }}" alt="Profile preview">
-                            @else
-                                <img id="profile-photo-preview" src="" alt="Profile preview" style="display:none;">
-                            @endif
-                            <span id="profile-photo-label">{{ $photo ? 'Change photo' : 'Add photo' }}</span>
-                            <small>Drag to crop</small>
-                            <input id="profile-photo" type="file" name="profile_photo" accept="image/*">
-                        </label>
-                        <div class="cropper" id="profile-cropper">
-                            <img id="cropper-image" src="" alt="Crop preview">
+        @if ($isOwnProfile)
+            <div class="modal-backdrop" id="profile-modal">
+                <div class="modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+                    <h3 id="profile-modal-title">Edit profile</h3>
+                    <form method="POST" action="/profile/update" enctype="multipart/form-data">
+                        @csrf
+                        <div class="field">
+                            <label for="profile-name">Username</label>
+                            <input id="profile-name" type="text" name="name" value="{{ $displayName }}" required>
                         </div>
-                        <div class="cropper-hint" id="cropper-hint">Drag the photo to position it.</div>
-                    </div>
-                    <div class="field">
-                        <label>Banner image</label>
-                        <label class="modal-photo" for="banner-photo">
-                            @if ($banner)
-                                <img id="banner-photo-preview" src="{{ asset('storage/' . $banner) }}?v={{ $photoVersion }}" alt="Banner preview">
-                            @else
-                                <img id="banner-photo-preview" src="" alt="Banner preview" style="display:none;">
-                            @endif
-                            <span id="banner-photo-label">{{ $banner ? 'Change banner' : 'Add banner' }}</span>
-                            <small>Drag to crop</small>
-                            <input id="banner-photo" type="file" name="banner_photo" accept="image/*">
-                        </label>
-                        <div class="cropper banner" id="banner-cropper">
-                            <img id="banner-cropper-image" src="" alt="Banner crop preview">
+                        <div class="field">
+                            <label>Profile picture</label>
+                            <label class="modal-photo" for="profile-photo">
+                                @if ($profilePhotoUrl)
+                                    <img id="profile-photo-preview" src="{{ $profilePhotoUrl }}?v={{ $photoVersion }}" alt="Profile preview">
+                                @else
+                                    <img id="profile-photo-preview" src="" alt="Profile preview" style="display:none;">
+                                @endif
+                                <span id="profile-photo-label">{{ $photo ? 'Change photo' : 'Add photo' }}</span>
+                                <small>Drag to crop</small>
+                                <input id="profile-photo" type="file" name="profile_photo" accept="image/*">
+                            </label>
+                            <div class="cropper" id="profile-cropper">
+                                <img id="cropper-image" src="" alt="Crop preview">
+                            </div>
+                            <div class="cropper-hint" id="cropper-hint">Drag the photo to position it.</div>
                         </div>
-                        <div class="cropper-hint" id="banner-cropper-hint">Drag the banner to position it.</div>
-                    </div>
-                    <div class="modal-actions">
-                        <button class="btn" type="button" id="close-profile-modal">Cancel</button>
-                        <button class="btn primary" type="submit">Save changes</button>
-                    </div>
-                </form>
+                        <div class="field">
+                            <label>Banner image</label>
+                            <label class="modal-photo" for="banner-photo">
+                                @if ($bannerPhotoUrl)
+                                    <img id="banner-photo-preview" src="{{ $bannerPhotoUrl }}?v={{ $photoVersion }}" alt="Banner preview">
+                                @else
+                                    <img id="banner-photo-preview" src="" alt="Banner preview" style="display:none;">
+                                @endif
+                                <span id="banner-photo-label">{{ $banner ? 'Change banner' : 'Add banner' }}</span>
+                                <small>Drag to crop</small>
+                                <input id="banner-photo" type="file" name="banner_photo" accept="image/*">
+                            </label>
+                            <div class="cropper banner" id="banner-cropper">
+                                <img id="banner-cropper-image" src="" alt="Banner crop preview">
+                            </div>
+                            <div class="cropper-hint" id="banner-cropper-hint">Drag the banner to position it.</div>
+                        </div>
+                        <div class="modal-actions">
+                            <button class="btn" type="button" id="close-profile-modal">Cancel</button>
+                            <button class="btn primary" type="submit">Save changes</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
+        @endif
         <script>
             window.addEventListener('DOMContentLoaded', () => {
+                const currentUserLoggedIn = @json((bool) ($currentUser ?? null));
+                const csrfToken = @json(csrf_token());
+                const profileFollowButton = document.querySelector('.js-profile-follow-btn');
+                const followerCount = document.querySelector('.js-follower-count');
                 const profileModal = document.getElementById('profile-modal');
                 const openModalBtn = document.getElementById('open-profile-modal');
                 const closeModalBtn = document.getElementById('close-profile-modal');
@@ -457,6 +477,54 @@
                     displayWidth: 0,
                     displayHeight: 0,
                 };
+
+                profileFollowButton?.addEventListener('click', async () => {
+                    if (!currentUserLoggedIn) {
+                        window.location.href = '/login';
+                        return;
+                    }
+
+                    const userId = profileFollowButton.dataset.userId;
+
+                    if (!userId || profileFollowButton.disabled) {
+                        return;
+                    }
+
+                    const previousLabel = profileFollowButton.textContent;
+                    profileFollowButton.disabled = true;
+                    profileFollowButton.textContent = '...';
+
+                    try {
+                        const response = await fetch(`/users/${userId}/follow`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json',
+                            },
+                            body: JSON.stringify({}),
+                        });
+
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(data.message || 'Unable to update follow status.');
+                        }
+
+                        profileFollowButton.textContent = data.button_label;
+                        profileFollowButton.classList.toggle('is-following', data.following);
+
+                        if (followerCount) {
+                            followerCount.textContent = data.follower_count;
+                        }
+                    } catch (error) {
+                        profileFollowButton.textContent = previousLabel;
+                        window.alert(error.message || 'Unable to update follow status.');
+                    } finally {
+                        profileFollowButton.disabled = false;
+                    }
+                });
 
                 openModalBtn?.addEventListener('click', () => profileModal?.classList.add('show'));
                 closeModalBtn?.addEventListener('click', () => profileModal?.classList.remove('show'));
@@ -714,7 +782,6 @@
         </script>
     </body>
 </html>
-
 
 
 

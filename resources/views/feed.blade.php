@@ -286,6 +286,7 @@
             ];
             $folderPosts[] = [
                 'user' => $names[$i % count($names)],
+                'user_id' => null,
                 'handle' => $handles[$i % count($handles)],
                 'title' => $meta['title'],
                 'type' => $meta['type'],
@@ -300,11 +301,12 @@
             $creatorHandle = '@' . strtolower(str_replace(' ', '', $creatorName));
             $fypItems[] = [
                 'user' => $creatorName,
+                'user_id' => $sword->user?->id,
                 'handle' => $creatorHandle,
                 'title' => $sword->name,
                 'type' => $sword->type,
                 'caption' => $sword->description ?: 'No description added yet.',
-                'image' => $sword->image ? asset('storage/' . $sword->image) : '/images/katana.jpg',
+                'image' => $sword->image_url,
                 'time' => $sword->created_at?->diffForHumans() ?? 'Just now',
             ];
         }
@@ -324,11 +326,23 @@
                             <div class="media-header">
                                 <div class="media-user">
                                     <div class="avatar">{{ strtoupper(substr($item['user'], 0, 1)) }}</div>
-                                    <span>{{ $item['user'] }}</span>
+                                    @if (! empty($item['user_id']))
+                                        <a href="/user/{{ $item['user_id'] }}" class="user-link">{{ $item['user'] }}</a>
+                                    @else
+                                        <span>{{ $item['user'] }}</span>
+                                    @endif
                                 </div>
                                 <div class="media-actions">
-                                    <span>?</span>
-                                    <span>+</span>
+                                    <button class="feed-action like" type="button">Like</button>
+                                    @if (! empty($item['user_id']) && (! isset($currentUser) || (int) $currentUser->id !== (int) $item['user_id']))
+                                        @php $isFollowingUser = in_array((int) $item['user_id'], $followingIds ?? [], true); @endphp
+                                        <button
+                                            class="feed-action follow js-follow-btn{{ $isFollowingUser ? ' is-following' : '' }}"
+                                            type="button"
+                                            data-user-id="{{ $item['user_id'] }}"
+                                            data-following="{{ $isFollowingUser ? 'true' : 'false' }}"
+                                        >{{ $isFollowingUser ? 'Following' : 'Follow' }}</button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -336,8 +350,12 @@
                             <div class="post-user">
                                 <div class="avatar">{{ strtoupper(substr($item['user'], 0, 1)) }}</div>
                                 <div class="user-meta">
-                                    <strong>{{ $item['user'] }}</strong>
-                                    {{ $item['handle'] }} · {{ $item['time'] }}
+                                    @if (! empty($item['user_id']))
+                                        <strong><a href="/user/{{ $item['user_id'] }}" class="user-link">{{ $item['user'] }}</a></strong>
+                                    @else
+                                        <strong>{{ $item['user'] }}</strong>
+                                    @endif
+                                    {{ $item['handle'] }} | {{ $item['time'] }}
                                 </div>
                             </div>
                             <h3 class="post-title">{{ $item['title'] }}</h3>
@@ -383,6 +401,9 @@
     const resetBtn = document.getElementById('resetFilters');
     const typeSelect = document.getElementById('typeSelect');
     const cards = Array.from(document.querySelectorAll('.post-card'));
+    const followButtons = Array.from(document.querySelectorAll('.js-follow-btn'));
+    const currentUserLoggedIn = @json((bool) ($currentUser ?? null));
+    const csrfToken = @json(csrf_token());
 
     const showModal = () => {
         modal.classList.add('show');
@@ -421,10 +442,56 @@
         hideModal();
     });
     resetBtn.addEventListener('click', resetFilters);
+
+    followButtons.forEach((button) => {
+        button.addEventListener('click', async () => {
+            if (!currentUserLoggedIn) {
+                window.location.href = '/login';
+                return;
+            }
+
+            const userId = button.dataset.userId;
+
+            if (!userId || button.disabled) {
+                return;
+            }
+
+            const previousLabel = button.textContent;
+            button.disabled = true;
+            button.textContent = '...';
+
+            try {
+                const response = await fetch(`/users/${userId}/follow`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({}),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Unable to update follow status.');
+                }
+
+                button.dataset.following = data.following ? 'true' : 'false';
+                button.textContent = data.button_label;
+                button.classList.toggle('is-following', data.following);
+            } catch (error) {
+                button.textContent = previousLabel;
+                window.alert(error.message || 'Unable to update follow status.');
+            } finally {
+                button.disabled = false;
+            }
+        });
+    });
 </script>
 </body>
 </html>
-
 
 
 

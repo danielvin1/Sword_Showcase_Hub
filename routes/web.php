@@ -2,10 +2,22 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\FollowController;
+use App\Http\Controllers\StorageController;
 use App\Http\Controllers\SwordController;
 use App\Models\Sword;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+
+$resolveSessionUser = function () {
+    $profileUser = session('user_id') ? User::find(session('user_id')) : null;
+
+    if (! $profileUser && session('user_email')) {
+        $profileUser = User::where('email', session('user_email'))->first();
+    }
+
+    return $profileUser;
+};
 
 Route::get('/', function () {
     return redirect('/welcome');
@@ -14,6 +26,8 @@ Route::get('/', function () {
 Route::get('/welcome', function () {
     return view('welcome');
 });
+
+Route::get('/storage/{path}', [StorageController::class, 'show'])->where('path', '.*');
 
 Route::get('/login', function () {
     return view('login');
@@ -29,20 +43,37 @@ Route::get('/upload', function () {
     return view('upload');
 });
 
-Route::get('/profile', function () {
-    $profileUser = session('user_id') ? User::find(session('user_id')) : null;
+Route::get('/profile', function () use ($resolveSessionUser) {
+    $currentUser = $resolveSessionUser();
+    $profileUser = $currentUser;
+    $swords = $profileUser ? $profileUser->swords()->latest()->get() : collect();
 
-    if (! $profileUser && session('user_email')) {
-        $profileUser = User::where('email', session('user_email'))->first();
-    }
+    return view('profile', [
+        'currentUser' => $currentUser,
+        'profileUser' => $profileUser,
+        'swords' => $swords,
+        'swordCount' => $swords->count(),
+        'isOwnProfile' => true,
+        'isFollowing' => false,
+        'followerCount' => $profileUser?->followers()->count() ?? 0,
+        'followingCount' => $profileUser?->following()->count() ?? 0,
+    ]);
+});
 
-    $swords = $profileUser
-        ? Sword::where('user_id', $profileUser->id)->latest()->get()
-        : collect();
+Route::get('/user/{user}', function (User $user) use ($resolveSessionUser) {
+    $currentUser = $resolveSessionUser();
+    $swords = $user->swords()->latest()->get();
 
-    $swordCount = $swords->count();
-
-    return view('profile', compact('profileUser', 'swords', 'swordCount'));
+    return view('profile', [
+        'currentUser' => $currentUser,
+        'profileUser' => $user,
+        'swords' => $swords,
+        'swordCount' => $swords->count(),
+        'isOwnProfile' => $currentUser ? (int) $currentUser->id === (int) $user->id : false,
+        'isFollowing' => $currentUser ? $currentUser->isFollowing($user) : false,
+        'followerCount' => $user->followers()->count(),
+        'followingCount' => $user->following()->count(),
+    ]);
 });
 
 Route::post('/profile/photo', function (\Illuminate\Http\Request $request) {
@@ -140,11 +171,17 @@ Route::post('/login', function (\Illuminate\Http\Request $request) {
     return redirect('/feed');
 });
 
-Route::get('/feed', function () {
+Route::get('/feed', function () use ($resolveSessionUser) {
+    $currentUser = $resolveSessionUser();
     $swords = Sword::with('user')->latest()->get();
-    return view('feed', compact('swords'));
+    $followingIds = $currentUser
+        ? $currentUser->following()->pluck('users.id')->map(fn ($id) => (int) $id)->all()
+        : [];
+
+    return view('feed', compact('swords', 'currentUser', 'followingIds'));
 });
 
+Route::post('/users/{user}/follow', [FollowController::class, 'toggle']);
 Route::post('/swords', [SwordController::class, 'store']);
 Route::get('/swords/{sword}/edit', [SwordController::class, 'edit']);
 Route::put('/swords/{sword}', [SwordController::class, 'update']);
