@@ -294,6 +294,10 @@
         }
         $names = ['Avery Cole','Mila Hart','Ronan Vale','Zara Quinn','Theo Marsh','Lena Park','Omar Finch'];
         $handles = ['@averycole','@milahart','@ronanvale','@zaraquinn','@theomarsh','@lenapark','@omarfinch'];
+        
+        // Query real users from database
+        $realUsers = \App\Models\User::whereIn('name', $names)->get()->keyBy('name');
+        
         $showcaseMeta = [
             'bastard-longsword.jpg' => [
                 'title' => 'Warden Bastard Sword',
@@ -348,16 +352,20 @@
                 'type' => 'Sword',
                 'caption' => 'A featured blade from the community showcase.',
             ];
+            $userName = $names[$i % count($names)];
+            $user = $realUsers[$userName] ?? null;
+            $isUserFollowed = session('user_id') && $user ? \App\Models\User::find(session('user_id'))->isFollowing($user->id) : false;
+            
             $folderPosts[] = [
-                'user' => $names[$i % count($names)],
-                'handle' => $handles[$i % count($handles)],
+                'user' => $userName,
+                'handle' => $handles[$i % count($names)],
                 'title' => $meta['title'],
                 'type' => $meta['type'],
                 'caption' => $meta['caption'],
                 'image' => '/swords/' . $file,
                 'time' => ($i + 1) . 'd',
-                'user_id' => null,
-                'is_followed' => false,
+                'user_id' => $user?->id ?? null,
+                'is_followed' => $isUserFollowed,
                 'sword_id' => null,
                 'likes_count' => rand(8, 127),
                 'is_liked' => false,
@@ -427,7 +435,7 @@
                                 <div class="avatar">{{ strtoupper(substr($item['user'], 0, 1)) }}</div>
                                 <div class="user-meta">
                                     <strong><a href="{{ $item['user_id'] ? '/user/' . $item['user_id'] : '#' }}" style="color: inherit; text-decoration: none;">{{ $item['user'] }}</a></strong>
-                                    {{ $item['handle'] }} � {{ $item['time'] }}
+                                    {{ $item['handle'] }} • {{ $item['time'] }}
                                 </div>
                             </div>
                             <h3 class="post-title">{{ $item['title'] }}</h3>

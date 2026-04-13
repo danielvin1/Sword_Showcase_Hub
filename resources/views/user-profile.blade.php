@@ -81,18 +81,49 @@
                 background: #c49851; border-color: #c49851;
             }
             .action-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+            .action-bar form {
+                margin: 0;
+            }
+            .follow-btn {
+                padding: 10px 22px; 
+                border-radius: 999px; 
+                border: 2px solid #d9a867;
+                color: #fff; 
+                background: #d9a867; 
+                text-decoration: none; 
+                font-weight: 600;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                font-size: 14px;
+            }
+            .follow-btn:hover {
+                background: #c49851; 
+                border-color: #c49851;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(217, 167, 103, 0.3);
+            }
+            .follow-btn.following {
+                background: #f5f2ea;
+                color: #7a7a7a;
+                border-color: #d0d0d0;
+            }
+            .follow-btn.following:hover {
+                background: #e8e5dc;
+                border-color: #c0c0c0;
+            }
 
             .meta { display: flex; gap: 16px; flex-wrap: wrap; color: #7b7166; margin-top: 10px; font-size: 14px; justify-content: flex-start; }
             .meta span { display: inline-flex; align-items: center; gap: 6px; }
             .dot { width: 6px; height: 6px; border-radius: 50%; background: #c7b9a6; display: inline-block; }
 
-            .stats { display: flex; gap: 18px; margin-top: 14px; flex-wrap: wrap; justify-content: flex-start; }
+            .stats { display: flex; gap: 18px; margin-top: 14px; flex-wrap: wrap; justify-content: flex-start; padding-top: 14px; border-top: 1px solid #f0ebe2; }
             .stat { font-size: 14px; color: #6c6c6c; }
-            .stat b { color: #111111; font-size: 15px; margin-right: 6px; }
+            .stat b { color: #111111; font-size: 16px; margin-right: 6px; font-weight: 700; }
 
             .tabs { display: block; padding: 14px 26px 0; border-bottom: 1px solid #eee7dc; font-weight: 600; color: #8a7f72; }
             .tabs input { display: none; }
-            .tab-label { padding: 10px 2px 12px; cursor: pointer; position: relative; white-space: nowrap; }
+            .tab-label { padding: 10px 14px 12px; cursor: pointer; position: relative; white-space: nowrap; color: #8a7f72; transition: color 0.2s ease; }
+            .tab-label:hover { color: #d9a867; }
             .tab-label-static { color: #111111; }
             .tab-label-static::after {
                 content: ""; position: absolute; left: 0; right: 0; bottom: -1px;
@@ -104,7 +135,7 @@
             .feed-panel { text-align: left; width: 100%; max-width: 640px; margin-left: 0; margin-right: auto; }
             .feed-panel .section-title { text-align: left !important; margin-left: 0; }
 
-            .section-title { margin: 0 0 14px; font-size: 18px; font-weight: 700; text-align: left; width: 100%; }
+            .section-title { margin: 0 0 14px; font-size: 18px; font-weight: 700; text-align: left; width: 100%; color: #111111; letter-spacing: -0.01em; }
             .cards {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -114,7 +145,12 @@
                 margin-left: 0 !important;
                 margin-right: auto;
             }
-            .sword-card { background: #ffffff; border-radius: 16px; border: 1px solid #e0e0e0; overflow: hidden; width: 100%; }
+            .sword-card { background: #ffffff; border-radius: 16px; border: 1px solid #e0e0e0; overflow: hidden; width: 100%; transition: all 0.3s ease; }
+            .sword-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+                border-color: #d9a867;
+            }
             .sword-card img {
                 width: 100%;
                 height: auto;
@@ -137,7 +173,7 @@
             }
             .empty {
                 background: #ffffff; border-radius: 16px; padding: 18px;
-                border: 1px solid #e6dfd3; color: #6c6c6c;
+                border: 1px solid #e6dfd3; color: #6c6c6c; text-align: center;
             }
 
             @media (max-width: 900px) {
@@ -190,10 +226,10 @@
                         </div>
                         <div class="action-bar">
                             @if (session('user_id') && session('user_id') != $user->id)
-                                <form action="/users/{{ $user->id }}/follow" method="POST">
+                                <form action="/users/{{ $user->id }}/follow" method="POST" style="margin: 0;">
                                     @csrf
-                                    <button type="submit" class="edit-btn" style="background: {{ $isFollowed ? '#c49851' : '#d9a867' }};">
-                                        {{ $isFollowed ? 'Following' : 'Follow' }}
+                                    <button type="submit" class="follow-btn {{ $isFollowed ? 'following' : '' }}">
+                                        {{ $isFollowed ? '✓ Following' : '+ Follow' }}
                                     </button>
                                 </form>
                             @endif
