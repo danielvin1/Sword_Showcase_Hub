@@ -126,7 +126,7 @@
 
 <main>
     <h2>Upload Your Sword</h2>
-    <form method="POST" action="/sword-upload" enctype="multipart/form-data">
+    <form method="POST" action="/swords" enctype="multipart/form-data">
         @csrf
         <input type="text" name="name" placeholder="Sword Name" required>
         <input type="text" name="type" placeholder="Type (Katana, Claymore etc)" required>

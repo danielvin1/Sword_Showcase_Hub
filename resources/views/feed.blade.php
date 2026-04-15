@@ -144,18 +144,6 @@
         .modal-dismiss {
             border: none; background: transparent; color: #8a7b64; font-weight: 600; font-size: 12px; cursor: pointer;
         }
-        .search-box {
-            display: flex; align-items: center;
-            border: 1px solid #d9c7a8; border-radius: 999px;
-            padding: 10px 16px; background: #ffffff;
-            min-width: 200px;
-        }
-        .search-box input {
-            border: none; background: transparent; outline: none;
-            font-size: 14px; color: #111111; width: 100%;
-            font-family: "Poppins", "Trebuchet MS", sans-serif;
-        }
-        .search-box input::placeholder { color: #9a9a9a; }
         @media (max-width: 600px) {
             .post-card { width: 100%; }
         }
@@ -303,29 +291,9 @@
     const typeSelect = document.getElementById('typeSelect');
     const searchInput = document.getElementById('searchInput');
     const cards = Array.from(document.querySelectorAll('.post-card'));
-
-    const applySearch = () => {
-        const searchTerm = searchInput?.value.toLowerCase().trim() || '';
-        
-        cards.forEach((card) => {
-            if (!searchTerm) {
-                card.style.display = '';
-                return;
-            }
-            
-            const title = (card.querySelector('.post-title')?.textContent || '').toLowerCase();
-            const user = (card.querySelector('.media-user')?.textContent || '').toLowerCase();
-            const type = (card.getAttribute('data-type') || '').toLowerCase();
-            
-            const matches = title.includes(searchTerm) || 
-                          user.includes(searchTerm) || 
-                          type.includes(searchTerm);
-            
-            card.style.display = matches ? '' : 'none';
-        });
-    };
-
-    searchInput?.addEventListener('input', applySearch);
+    const followButtons = Array.from(document.querySelectorAll('.js-follow-btn'));
+    const currentUserLoggedIn = @json((bool) ($sessionUser ?? null));
+    const csrfToken = @json(csrf_token());
 
     const showModal = () => {
         modal.classList.add('show');
@@ -344,9 +312,10 @@
         cards.forEach((card) => {
             const cardType = (card.getAttribute('data-type') || '').toLowerCase();
             const cardTitle = (card.querySelector('.post-title')?.textContent || '').toLowerCase();
+            const cardUser = (card.querySelector('.media-user')?.textContent || '').toLowerCase();
             
             const typeMatch = !filterType || filterType.toLowerCase() === 'all' || cardType === filterType.toLowerCase();
-            const searchMatch = !searchTerm || cardTitle.includes(searchTerm);
+            const searchMatch = !searchTerm || cardTitle.includes(searchTerm) || cardUser.includes(searchTerm) || cardType.includes(searchTerm);
             
             card.style.display = (typeMatch && searchMatch) ? '' : 'none';
         });
