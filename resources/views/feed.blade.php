@@ -134,6 +134,18 @@
         .modal-dismiss {
             border: none; background: transparent; color: #8a7b64; font-weight: 600; font-size: 12px; cursor: pointer;
         }
+        .search-box {
+            display: flex; align-items: center;
+            border: 1px solid #d9c7a8; border-radius: 999px;
+            padding: 10px 16px; background: #ffffff;
+            min-width: 200px;
+        }
+        .search-box input {
+            border: none; background: transparent; outline: none;
+            font-size: 14px; color: #111111; width: 100%;
+            font-family: "Poppins", "Trebuchet MS", sans-serif;
+        }
+        .search-box input::placeholder { color: #9a9a9a; }
         @media (max-width: 600px) {
             .post-card { width: 100%; }
         }
@@ -158,6 +170,9 @@
             <p>Latest uploads from the community.</p>
         </div>
         <div class="feed-actions">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search swords..." />
+            </div>
             <button class="btn filter-btn" type="button" id="openFilters">Filter Blades</button>
             <a class="btn primary" href="/upload">Upload Sword</a>
         </div>
@@ -275,6 +290,7 @@
     const applyBtn = document.getElementById('applyFilters');
     const resetBtn = document.getElementById('resetFilters');
     const typeSelect = document.getElementById('typeSelect');
+    const searchInput = document.getElementById('searchInput');
     const cards = Array.from(document.querySelectorAll('.post-card'));
     const followButtons = Array.from(document.querySelectorAll('.js-follow-btn'));
     const currentUserLoggedIn = @json((bool) ($currentUser ?? null));
@@ -292,20 +308,25 @@
 
     const applyFilter = () => {
         const filterType = typeSelect ? typeSelect.value : '';
-        if (!filterType || filterType.toLowerCase() === 'all') {
-            cards.forEach((card) => { card.style.display = ''; });
-            return;
-        }
-
+        const searchTerm = (searchInput ? searchInput.value : '').toLowerCase();
+        
         cards.forEach((card) => {
             const cardType = (card.getAttribute('data-type') || '').toLowerCase();
-            card.style.display = cardType === filterType.toLowerCase() ? '' : 'none';
+            const cardTitle = (card.querySelector('.post-title')?.textContent || '').toLowerCase();
+            
+            const typeMatch = !filterType || filterType.toLowerCase() === 'all' || cardType === filterType.toLowerCase();
+            const searchMatch = !searchTerm || cardTitle.includes(searchTerm);
+            
+            card.style.display = (typeMatch && searchMatch) ? '' : 'none';
         });
     };
 
     const resetFilters = () => {
         if (typeSelect) {
             typeSelect.value = 'All';
+        }
+        if (searchInput) {
+            searchInput.value = '';
         }
 
         cards.forEach((card) => { card.style.display = ''; });
@@ -323,6 +344,11 @@
         hideModal();
     });
     resetBtn.addEventListener('click', resetFilters);
+    
+    // Search functionality
+    if (searchInput) {
+        searchInput.addEventListener('input', applyFilter);
+    }
 
     followButtons.forEach((button) => {
         button.addEventListener('click', async () => {
