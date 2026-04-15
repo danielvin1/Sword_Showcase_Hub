@@ -43,6 +43,16 @@
         .feed-title h1 { margin: 0; font-size: 28px; }
         .feed-title p { margin: 6px 0 0; color: #6c6c6c; }
         .feed-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .search-bar {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 12px; border: 1px solid #e2e2df; border-radius: 999px;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(6px);
+        }
+        .search-bar input {
+            border: none; background: transparent; outline: none;
+            font-size: 14px; color: #111111; width: 200px;
+        }
+        .search-bar input::placeholder { color: #999; }
         .filter-btn { cursor: pointer; }
         .btn {
             display: inline-flex; align-items: center; justify-content: center;
@@ -170,8 +180,9 @@
             <p>Latest uploads from the community.</p>
         </div>
         <div class="feed-actions">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search swords..." />
+            <div class="search-bar">
+                <span>🔍</span>
+                <input type="text" id="searchInput" placeholder="Search swords...">
             </div>
             <button class="btn filter-btn" type="button" id="openFilters">Filter Blades</button>
             <a class="btn primary" href="/upload">Upload Sword</a>
@@ -292,9 +303,29 @@
     const typeSelect = document.getElementById('typeSelect');
     const searchInput = document.getElementById('searchInput');
     const cards = Array.from(document.querySelectorAll('.post-card'));
-    const followButtons = Array.from(document.querySelectorAll('.js-follow-btn'));
-    const currentUserLoggedIn = @json((bool) ($currentUser ?? null));
-    const csrfToken = @json(csrf_token());
+
+    const applySearch = () => {
+        const searchTerm = searchInput?.value.toLowerCase().trim() || '';
+        
+        cards.forEach((card) => {
+            if (!searchTerm) {
+                card.style.display = '';
+                return;
+            }
+            
+            const title = (card.querySelector('.post-title')?.textContent || '').toLowerCase();
+            const user = (card.querySelector('.media-user')?.textContent || '').toLowerCase();
+            const type = (card.getAttribute('data-type') || '').toLowerCase();
+            
+            const matches = title.includes(searchTerm) || 
+                          user.includes(searchTerm) || 
+                          type.includes(searchTerm);
+            
+            card.style.display = matches ? '' : 'none';
+        });
+    };
+
+    searchInput?.addEventListener('input', applySearch);
 
     const showModal = () => {
         modal.classList.add('show');
