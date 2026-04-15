@@ -46,9 +46,12 @@
             }
             .banner {
                 height: 190px;
-                background: linear-gradient(120deg, #dfc198 0%, #d4a86c 40%, #c09a69 100%);
+                background:
+                    radial-gradient(circle at 20% 24%, rgba(198, 162, 106, 0.14), transparent 42%),
+                    linear-gradient(120deg, #2a2118 0%, #35281c 46%, #231a13 100%);
                 background-size: cover;
                 background-position: center;
+                border-bottom: 1px solid rgba(255,255,255,0.06);
             }
             .profile-main { padding: 0 26px 20px; position: relative; text-align: left; }
             .profile-content { max-width: 760px; margin: 0; }
@@ -56,7 +59,7 @@
                 width: 110px; height: 110px; border-radius: 50%;
                 border: 4px solid #ffffff; overflow: hidden;
                 position: absolute; top: -55px; left: 26px;
-                background: linear-gradient(180deg, #d9a867 0%, #b98142 100%);
+                background: linear-gradient(180deg, #9b7344 0%, #694625 100%);
                 display: grid; place-items: center; font-size: 34px; font-weight: 700; color: #1b130b;
             }
             .avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
@@ -72,44 +75,64 @@
             .handle-row { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
             .handle { color: #6c6c6c; font-size: 14px; }
             .email { color: #8a8074; font-size: 13px; }
-            .edit-btn {
-                padding: 10px 18px; border-radius: 999px; border: 2px solid #d9a867;
-                color: #fff; background: #d9a867; text-decoration: none; font-weight: 600;
-                transition: all 0.2s ease;
+            .profile-btn,
+            .edit-btn,
+            .follow-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                min-height: 42px;
+                padding: 10px 18px;
+                border-radius: 999px;
+                border: 2px solid #d9a867;
+                color: #ffffff;
+                background: linear-gradient(180deg, #dfb472 0%, #cc9550 100%);
+                text-decoration: none;
+                font-weight: 700;
+                font-size: 14px;
+                line-height: 1;
+                letter-spacing: 0.01em;
+                cursor: pointer;
+                box-shadow: 0 10px 18px rgba(169, 113, 44, 0.22);
+                transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
             }
-            .edit-btn:hover {
-                background: #c49851; border-color: #c49851;
+            .profile-btn:hover,
+            .edit-btn:hover,
+            .follow-btn:hover {
+                background: linear-gradient(180deg, #cfa163 0%, #b98242 100%);
+                border-color: #c08b49;
+                transform: translateY(-1px);
+                box-shadow: 0 14px 24px rgba(169, 113, 44, 0.3);
+            }
+            .profile-btn:active,
+            .edit-btn:active,
+            .follow-btn:active {
+                transform: translateY(0);
+                box-shadow: 0 8px 16px rgba(169, 113, 44, 0.2);
+            }
+            .profile-btn:focus-visible,
+            .edit-btn:focus-visible,
+            .follow-btn:focus-visible {
+                outline: 2px solid #5d3c18;
+                outline-offset: 2px;
             }
             .action-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
             .action-bar form {
                 margin: 0;
             }
             .follow-btn {
-                padding: 10px 22px; 
-                border-radius: 999px; 
-                border: 2px solid #d9a867;
-                color: #fff; 
-                background: #d9a867; 
-                text-decoration: none; 
-                font-weight: 600;
-                transition: all 0.3s ease;
-                cursor: pointer;
-                font-size: 14px;
-            }
-            .follow-btn:hover {
-                background: #c49851; 
-                border-color: #c49851;
-                transform: translateY(-1px);
-                box-shadow: 0 4px 12px rgba(217, 167, 103, 0.3);
+                min-width: 132px;
             }
             .follow-btn.following {
-                background: #f5f2ea;
-                color: #7a7a7a;
-                border-color: #d0d0d0;
+                background: linear-gradient(180deg, #f5f2ea 0%, #e5ded2 100%);
+                color: #655949;
+                border-color: #d1c5b2;
+                box-shadow: 0 8px 14px rgba(81, 70, 56, 0.16);
             }
             .follow-btn.following:hover {
-                background: #e8e5dc;
-                border-color: #c0c0c0;
+                background: linear-gradient(180deg, #ece5d8 0%, #dfd4c2 100%);
+                border-color: #bfae95;
             }
 
             .meta { display: flex; gap: 16px; flex-wrap: wrap; color: #7b7166; margin-top: 10px; font-size: 14px; justify-content: flex-start; }
@@ -184,6 +207,7 @@
                 .cards { grid-template-columns: repeat(auto-fill, minmax(180px, 180px)); }
             }
         </style>
+        <script src='/js/theme-mode.js'></script>
         <link rel='stylesheet' href='/css/theme.css'>
 </head>
     <body>

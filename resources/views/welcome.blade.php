@@ -179,6 +179,7 @@
                 padding: 6px 12px;
             }
         </style>
+        <script src='/js/theme-mode.js'></script>
         <link rel='stylesheet' href='/css/theme.css'>
 </head>
     <body>

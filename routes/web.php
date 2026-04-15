@@ -57,8 +57,8 @@ Route::get('/profile', function () use ($resolveSessionUser) {
     $currentUser = $resolveSessionUser();
     $profileUser = $currentUser;
     $swords = $profileUser ? $profileUser->swords()->latest()->get() : collect();
-    $likedSwords = $currentUser
-        ? Sword::whereIn('id', Like::where('user_id', $currentUser->id)->pluck('sword_id'))->get()
+    $likedSwords = $profileUser
+        ? Sword::whereIn('id', Like::where('user_id', $profileUser->id)->pluck('sword_id'))->latest()->get()
         : collect();
 
     return view('profile', [
@@ -77,9 +77,7 @@ Route::get('/profile', function () use ($resolveSessionUser) {
 Route::get('/user/{user}', function (User $user) use ($resolveSessionUser) {
     $currentUser = $resolveSessionUser();
     $swords = $user->swords()->latest()->get();
-    $likedSwords = $currentUser
-        ? Sword::whereIn('id', Like::where('user_id', $currentUser->id)->pluck('sword_id'))->get()
-        : collect();
+    $likedSwords = Sword::whereIn('id', Like::where('user_id', $user->id)->pluck('sword_id'))->latest()->get();
 
     return view('profile', [
         'currentUser' => $currentUser,
@@ -199,7 +197,7 @@ Route::post('/logout', function (\Illuminate\Http\Request $request) {
 
 Route::get('/feed', function () use ($resolveSessionUser) {
     $currentUser = $resolveSessionUser();
-    $swords = Sword::with('user')->latest()->get();
+    $swords = Sword::with('user')->inRandomOrder()->get();
     $followingIds = $currentUser
         ? $currentUser->following()->pluck('following_id')->map(fn ($id) => (int) $id)->all()
         : [];

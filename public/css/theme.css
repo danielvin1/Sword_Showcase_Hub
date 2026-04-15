@@ -381,3 +381,161 @@ textarea::placeholder { color: rgba(233, 226, 214, 0.6); }
 @media (max-width: 720px) {
     .topbar { flex-direction: column; align-items: flex-start; }
 }
+
+body.light-mode {
+    --bg: #ffffff;
+    --panel: #ffffff;
+    --panel-2: #f7f9f9;
+    --panel-3: #f1f5f9;
+    --gold: #0f1419;
+    --gold-soft: #0f1419;
+    --text: #0f1419;
+    --muted: #536471;
+    --border: rgba(15, 20, 25, 0.12);
+    --shadow: 0 8px 24px rgba(15, 20, 25, 0.08);
+}
+
+body.light-mode {
+    color: var(--text) !important;
+    background-color: #ffffff !important;
+    background-image:
+        radial-gradient(circle at 14% 12%, rgba(15, 20, 25, 0.045), transparent 40%),
+        radial-gradient(circle at 86% 10%, rgba(15, 20, 25, 0.035), transparent 42%),
+        repeating-linear-gradient(135deg, rgba(15, 20, 25, 0.02) 0 1px, transparent 1px 16px),
+        linear-gradient(180deg, #ffffff 0%, #f8fafb 100%) !important;
+}
+
+body.light-mode .topbar {
+    background: #ffffff !important;
+    border: 1px solid #e6ecf0 !important;
+    box-shadow: 0 1px 0 rgba(15, 20, 25, 0.06) !important;
+}
+
+body.light-mode .brand,
+body.light-mode .menu a,
+body.light-mode .name-block h1,
+body.light-mode .user-meta strong,
+body.light-mode .post-title,
+body.light-mode .stat b {
+    color: #0f1419 !important;
+}
+
+body.light-mode .hero,
+body.light-mode .profile-wrap,
+body.light-mode .card,
+body.light-mode .sword-card,
+body.light-mode .post-card,
+body.light-mode .panel,
+body.light-mode .empty,
+body.light-mode .modal {
+    background: #ffffff !important;
+    border: 1px solid #e6ecf0 !important;
+    box-shadow: 0 4px 16px rgba(15, 20, 25, 0.06) !important;
+}
+
+body.light-mode .section-title,
+body.light-mode .feed-title h1,
+body.light-mode .card-body h3,
+body.light-mode .sword-body h3 {
+    color: #0f1419 !important;
+}
+
+body.light-mode .feed-title p,
+body.light-mode .user-meta,
+body.light-mode .handle,
+body.light-mode .email,
+body.light-mode .stat,
+body.light-mode .meta,
+body.light-mode .post-caption,
+body.light-mode .card-body p,
+body.light-mode .sword-body p {
+    color: #536471 !important;
+}
+
+body.light-mode .btn,
+body.light-mode .sword-btn,
+body.light-mode .filter-btn {
+    background: #ffffff !important;
+    color: #0f1419 !important;
+    border: 1px solid #cfd9de !important;
+}
+
+body.light-mode .btn.primary,
+body.light-mode .modal-apply {
+    background: #0f1419 !important;
+    color: #ffffff !important;
+    border-color: #0f1419 !important;
+}
+
+body.light-mode .btn.is-following,
+body.light-mode .feed-action.follow.is-following {
+    background: #eff3f4 !important;
+    color: #0f1419 !important;
+    border-color: #cfd9de !important;
+}
+
+body.light-mode .feed-action.like {
+    background: #eff3f4;
+    color: #0f1419;
+    border: 1px solid #cfd9de;
+}
+
+body.light-mode .feed-action.follow {
+    background: #0f1419;
+    color: #ffffff;
+}
+
+body.light-mode .media-header {
+    background: #ffffff !important;
+    color: #0f1419 !important;
+    border: 1px solid #e6ecf0 !important;
+    box-shadow: 0 4px 12px rgba(15, 20, 25, 0.06) !important;
+}
+
+body.light-mode .post-media,
+body.light-mode .hero-media {
+    background: #f7f9f9 !important;
+}
+
+body.light-mode .avatar {
+    background: #eff3f4 !important;
+    color: #0f1419 !important;
+}
+
+body.light-mode .banner {
+    background: linear-gradient(180deg, #f7f9f9 0%, #eef3f4 100%) !important;
+}
+
+body.light-mode .tabs {
+    border-bottom: 1px solid #e6ecf0 !important;
+    color: #536471 !important;
+}
+
+body.light-mode .tab-label-static,
+body.light-mode #tab-feed:checked ~ .tab-labels label[for="tab-feed"] {
+    color: #0f1419 !important;
+}
+
+body.light-mode .tab-label-static::after,
+body.light-mode #tab-feed:checked ~ .tab-labels label[for="tab-feed"]::after {
+    background: #0f1419 !important;
+}
+
+body.light-mode .tag {
+    color: #536471 !important;
+    background: #f7f9f9 !important;
+    border: 1px solid #e6ecf0;
+}
+
+body.light-mode input,
+body.light-mode select,
+body.light-mode textarea {
+    background: #ffffff !important;
+    color: #0f1419 !important;
+    border: 1px solid #cfd9de !important;
+}
+
+body.light-mode input::placeholder,
+body.light-mode textarea::placeholder {
+    color: #8899a6;
+}

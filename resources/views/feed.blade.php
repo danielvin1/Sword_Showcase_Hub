@@ -44,15 +44,34 @@
         .feed-title p { margin: 6px 0 0; color: #6c6c6c; }
         .feed-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         .search-bar {
-            display: flex; align-items: center; gap: 8px;
-            padding: 8px 12px; border: 1px solid #e2e2df; border-radius: 999px;
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(6px);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 42px;
+            padding: 0 14px;
+            border: 1px solid rgba(198, 162, 106, 0.35);
+            border-radius: 999px;
+            background: linear-gradient(180deg, rgba(30, 28, 25, 0.96), rgba(18, 17, 15, 0.96));
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+        }
+        .search-icon {
+            font-size: 13px;
+            color: #c9b08a;
+            opacity: 0.95;
         }
         .search-bar input {
-            border: none; background: transparent; outline: none;
-            font-size: 14px; color: #111111; width: 200px;
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 14px;
+            color: #f2eadf;
+            width: 220px;
         }
-        .search-bar input::placeholder { color: #999; }
+        .search-bar input::placeholder { color: #a79680; }
+        .search-bar:focus-within {
+            border-color: rgba(225, 193, 142, 0.7);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
+        }
         .filter-btn { cursor: pointer; }
         .btn {
             display: inline-flex; align-items: center; justify-content: center;
@@ -73,9 +92,18 @@
         }
         .post-media {
             width: 100%; aspect-ratio: 1 / 1; background: #f3eee5;
-            position: relative; display: flex; align-items: center; justify-content: center;
+            position: relative; display: block;
         }
-        .post-media img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+        .shell .post-media {
+            background: #1a1714 !important;
+        }
+        .shell .post-media img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            object-position: center;
+            display: block;
+        }
         .media-header {
             position: absolute; top: 12px; left: 12px; right: 12px;
             display: flex; align-items: center; justify-content: space-between;
@@ -146,8 +174,22 @@
         }
         @media (max-width: 600px) {
             .post-card { width: 100%; }
+            .search-bar input { width: 170px; }
+        }
+
+        body.light-mode .search-bar {
+            background: #ffffff;
+            border-color: #cfd9de;
+            box-shadow: 0 4px 12px rgba(15, 20, 25, 0.08);
+        }
+        body.light-mode .search-icon { color: #536471; }
+        body.light-mode .search-bar input { color: #0f1419; }
+        body.light-mode .search-bar input::placeholder { color: #8899a6; }
+        body.light-mode .shell .post-media {
+            background: #f2f4f7 !important;
         }
     </style>
+    <script src='/js/theme-mode.js'></script>
     <link rel='stylesheet' href='/css/theme.css'>
 </head>
 <body>
@@ -169,7 +211,7 @@
         </div>
         <div class="feed-actions">
             <div class="search-bar">
-                <span>🔍</span>
+                <span class="search-icon">Search</span>
                 <input type="text" id="searchInput" placeholder="Search swords...">
             </div>
             <button class="btn filter-btn" type="button" id="openFilters">Filter Blades</button>
