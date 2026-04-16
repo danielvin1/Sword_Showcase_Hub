@@ -65,6 +65,8 @@ a { color: inherit; }
     display: flex;
     gap: 18px;
     font-size: 14px;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .menu a {
@@ -380,6 +382,10 @@ textarea::placeholder { color: rgba(233, 226, 214, 0.6); }
 
 @media (max-width: 720px) {
     .topbar { flex-direction: column; align-items: flex-start; }
+    .menu {
+        gap: 12px;
+        row-gap: 8px;
+    }
 }
 
 body.light-mode {

@@ -26,27 +26,38 @@
             min-height: 100vh;
             padding: 36px 22px 80px;
         }
-        .shell { max-width: 980px; margin: 0 auto; }
+        .shell { max-width: 1240px; margin: 0 auto; }
         .topbar {
             display: flex; align-items: center; justify-content: space-between;
             gap: 20px; margin-bottom: 22px; padding: 14px 18px;
             border: 1px solid #e2e2df; border-radius: 14px;
             background: rgba(255,255,255,0.75); backdrop-filter: blur(6px);
+            flex-wrap: wrap;
         }
         .brand { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px; }
-        .menu { display: flex; gap: 18px; font-size: 14px; }
+        .menu { display: flex; gap: 18px; font-size: 14px; flex-wrap: wrap; row-gap: 8px; }
         .menu a { color: inherit; text-decoration: none; opacity: 0.8; }
         .feed-header {
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 20px; flex-wrap: wrap; margin-bottom: 18px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
         }
         .feed-title h1 { margin: 0; font-size: 28px; }
         .feed-title p { margin: 6px 0 0; color: #6c6c6c; }
-        .feed-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .feed-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
         .search-bar {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             min-height: 42px;
             padding: 0 14px;
             border: 1px solid rgba(198, 162, 106, 0.35);
@@ -55,7 +66,7 @@
             box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
         }
         .search-icon {
-            font-size: 13px;
+            font-size: 14px;
             color: #c9b08a;
             opacity: 0.95;
         }
@@ -65,7 +76,7 @@
             outline: none;
             font-size: 14px;
             color: #f2eadf;
-            width: 220px;
+            width: 240px;
         }
         .search-bar input::placeholder { color: #a79680; }
         .search-bar:focus-within {
@@ -84,11 +95,95 @@
             background: #ffffff; border-radius: 18px; padding: 24px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.08); color: #6c6c6c;
         }
-        .fyp-list { display: grid; gap: 18px; justify-items: center; }
+        .fyp-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 18px;
+            align-items: start;
+        }
         .post-card {
             background: #ffffff; border-radius: 24px;
             border: 1px solid #e7e1d7; overflow: hidden;
-            width: min(100%, 600px); box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+            width: 100%;
+            box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+        }
+        .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 22px 40px rgba(0,0,0,0.14);
+        }
+        .refresh-card {
+            display: block;
+            padding: 0;
+                linear-gradient(180deg, rgba(34, 31, 27, 0.95), rgba(18, 16, 14, 0.95));
+            color: var(--text);
+            cursor: pointer;
+            text-align: left;
+        }
+        .refresh-card:hover {
+            text-align: left;
+            transform: translateY(-2px);
+            box-shadow: 0 22px 40px rgba(0,0,0,0.14);
+            border-color: rgba(217, 168, 103, 0.8);
+        }
+        .refresh-card .refresh-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            min-height: 100%;
+            padding: 24px;
+            text-align: center;
+        }
+        .refresh-media {
+            background: radial-gradient(circle at 35% 25%, rgba(255, 193, 100, 0.18), transparent 50%),
+                        linear-gradient(180deg, #1a120b 0%, #090807 100%);
+        }
+        .refresh-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(217, 168, 103, 0.5);
+            background: rgba(217, 168, 103, 0.12);
+            color: #f1d8a8;
+            font-size: 24px;
+            line-height: 1;
+        }
+        .refresh-card h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #f1d8a8;
+        }
+        .refresh-card p {
+            margin: 0;
+            font-size: 13px;
+            color: #c8b9a8;
+            line-height: 1.5;
+            max-width: 220px;
+        }
+        .refresh-copy {
+            font-size: 13px;
+            font-weight: 600;
+            color: #f2eadf;
+            letter-spacing: 0.02em;
+        }
+        .refresh-card .post-media {
+            background: radial-gradient(circle at 35% 25%, rgba(255, 193, 100, 0.18), transparent 50%),
+                        linear-gradient(180deg, #1a120b 0%, #090807 100%);
+        }
+        .refresh-copy {
+            font-size: 13px;
+            font-weight: 600;
+            color: #f2eadf;
+            letter-spacing: 0.02em;
+        }
+        .refresh-card:focus-visible {
+            outline: 2px solid rgba(225, 193, 142, 0.85);
+            outline-offset: 3px;
         }
         .post-media {
             width: 100%; aspect-ratio: 1 / 1; background: #f3eee5;
@@ -107,12 +202,22 @@
         .media-header {
             position: absolute; top: 12px; left: 12px; right: 12px;
             display: flex; align-items: center; justify-content: space-between;
-            background: #ffffff; border-radius: 999px; padding: 6px 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+            background: rgba(24, 22, 20, 0.86);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 999px;
+            padding: 7px 10px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.28);
         }
         .media-user { display: flex; align-items: center; gap: 8px; font-weight: 600; }
-        .media-actions { display: flex; gap: 10px; align-items: center; }
-        .post-body { padding: 12px 14px 16px; text-align: left; }
+        .media-user span {
+            max-width: 130px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .media-actions { display: flex; gap: 8px; align-items: center; }
+        .post-body { padding: 14px 15px 18px; text-align: left; }
         .post-user { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
         .avatar {
             width: 32px; height: 32px; border-radius: 50%;
@@ -142,7 +247,7 @@
             width: 100%; max-width: 300px; background: #ffffff; border-radius: 24px;
             border: 1px solid #e9e2d7; box-shadow: 0 18px 36px rgba(0,0,0,0.12);
             padding: 16px; display: grid; gap: 12px; text-align: left;
-            position: fixed; right: 160px; top: 140px;
+            position: fixed; right: 24px; top: 110px;
         }
         .modal-head {
             display: flex; align-items: center; justify-content: space-between; gap: 10px;
@@ -172,9 +277,53 @@
         .modal-dismiss {
             border: none; background: transparent; color: #8a7b64; font-weight: 600; font-size: 12px; cursor: pointer;
         }
+        @media (max-width: 980px) {
+            .feed-header {
+                align-items: flex-start;
+            }
+            .feed-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            .menu { row-gap: 8px; }
+            .search-bar input { width: 180px; }
+            .modal {
+                right: 16px;
+                top: 96px;
+            }
+        }
+
         @media (max-width: 600px) {
-            .post-card { width: 100%; }
-            .search-bar input { width: 170px; }
+            .shell { max-width: 100%; }
+            .topbar { padding: 12px; }
+            .menu { gap: 12px; font-size: 13px; }
+            .feed-title h1 { font-size: 24px; }
+            .feed-title p { font-size: 13px; }
+            .feed-actions { gap: 8px; }
+            .search-bar { width: 100%; }
+            .search-bar input { width: 100%; min-width: 0; }
+            .btn { min-height: 40px; }
+            .fyp-list { grid-template-columns: 1fr; }
+            .post-card { width: 100%; border-radius: 18px; }
+            .media-header {
+                left: 8px;
+                right: 8px;
+                top: 8px;
+                padding: 6px 8px;
+                border-radius: 14px;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .media-user span { max-width: 92px; font-size: 12px; }
+            .media-actions { gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+            .modal {
+                left: 12px;
+                right: 12px;
+                top: auto;
+                bottom: 12px;
+                max-width: none;
+                border-radius: 18px;
+            }
         }
 
         body.light-mode .search-bar {
@@ -188,6 +337,24 @@
         body.light-mode .shell .post-media {
             background: #f2f4f7 !important;
         }
+        body.light-mode .refresh-card {
+            border-color: #d7e0e5;
+            background:
+                radial-gradient(circle at 20% 18%, rgba(15, 20, 25, 0.06), transparent 40%),
+                linear-gradient(180deg, #ffffff 0%, #f7f9fb 100%);
+            color: #0f1419;
+        }
+        body.light-mode .refresh-card .post-media {
+            background: linear-gradient(180deg, #f7f9fb 0%, #eef3f4 100%);
+        }
+        body.light-mode .refresh-card h3 { color: #0f1419; }
+        body.light-mode .refresh-card p { color: #536471; }
+        body.light-mode .refresh-copy { color: #0f1419; }
+        body.light-mode .refresh-icon {
+            border-color: #cfd9de;
+            background: #eff3f4;
+            color: #0f1419;
+        }
     </style>
     <script src='/js/theme-mode.js'></script>
     <link rel='stylesheet' href='/css/theme.css'>
@@ -199,6 +366,7 @@
         <nav class="menu">
             <a href="/welcome">Explore</a>
             <a href="/feed">Feed</a>
+            <a href="/shop">Shop</a>
             <a href="/profile">Profile</a>
             <a href="/upload">Upload Sword</a>
         </nav>
@@ -211,7 +379,7 @@
         </div>
         <div class="feed-actions">
             <div class="search-bar">
-                <span class="search-icon">Search</span>
+                <span class="search-icon" aria-hidden="true">⌕</span>
                 <input type="text" id="searchInput" placeholder="Search swords...">
             </div>
             <button class="btn filter-btn" type="button" id="openFilters">Filter Blades</button>
@@ -295,6 +463,22 @@
                         </div>
                     </article>
                 @endforeach
+
+                <button class="post-card refresh-card" type="button" id="refreshFeedCard" aria-label="Refresh feed and reshuffle swords">
+                    <div class="post-media refresh-media">
+                        <div class="refresh-inner">
+                            <div class="refresh-icon">⟳</div>
+                            <div class="refresh-copy">Tap to shuffle the feed</div>
+                        </div>
+                    </div>
+                    <div class="post-body">
+                        <h3 class="post-title">Refresh Feed</h3>
+                        <p class="post-caption">Load a fresh mix of swords from different users.</p>
+                        <div class="tag-row">
+                            <span class="tag">Randomize</span>
+                        </div>
+                    </div>
+                </button>
             </div>
         @endif
     </section>
@@ -332,7 +516,8 @@
     const resetBtn = document.getElementById('resetFilters');
     const typeSelect = document.getElementById('typeSelect');
     const searchInput = document.getElementById('searchInput');
-    const cards = Array.from(document.querySelectorAll('.post-card'));
+    const refreshFeedCard = document.getElementById('refreshFeedCard');
+    const cards = Array.from(document.querySelectorAll('.post-card:not(.refresh-card)'));
     const followButtons = Array.from(document.querySelectorAll('.js-follow-btn'));
     const currentUserLoggedIn = @json((bool) ($sessionUser ?? null));
     const csrfToken = @json(csrf_token());
@@ -386,6 +571,10 @@
         hideModal();
     });
     resetBtn.addEventListener('click', resetFilters);
+
+    refreshFeedCard?.addEventListener('click', () => {
+        window.location.reload();
+    });
     
     // Search functionality
     if (searchInput) {

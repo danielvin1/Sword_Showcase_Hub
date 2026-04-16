@@ -114,6 +114,7 @@
             <nav class="menu" aria-label="Top navigation">
                 <a href="/welcome">Explore</a>
                 <a href="/feed">Feed</a>
+                <a href="/shop">Shop</a>
                 <a href="/profile">Profile</a>
             </nav>
         </div>

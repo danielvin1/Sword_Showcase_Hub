@@ -29,6 +29,10 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 
+Route::get('/shop', function () {
+    return view('shop');
+});
+
 Route::get('/storage/{path}', [StorageController::class, 'show'])->where('path', '.*');
 
 Route::get('/login', function () {
@@ -197,7 +201,12 @@ Route::post('/logout', function (\Illuminate\Http\Request $request) {
 
 Route::get('/feed', function () use ($resolveSessionUser) {
     $currentUser = $resolveSessionUser();
-    $swords = Sword::with('user')->inRandomOrder()->get();
+    $swords = Sword::with('user')
+        ->get()
+        ->groupBy('user_id')
+        ->map(fn ($group) => $group->shuffle()->first())
+        ->values()
+        ->shuffle();
     $followingIds = $currentUser
         ? $currentUser->following()->pluck('following_id')->map(fn ($id) => (int) $id)->all()
         : [];

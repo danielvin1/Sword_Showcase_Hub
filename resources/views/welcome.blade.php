@@ -28,9 +28,9 @@
                 min-height: 100vh;
             }
             .page {
-                max-width: 1600px;
+                max-width: 1440px;
                 margin: 0 auto;
-                padding: 32px 32px 90px;
+                padding: 32px 24px 90px;
             }
             .topbar {
                 display: flex;
@@ -54,30 +54,43 @@
                 display: flex;
                 gap: 18px;
                 font-size: 14px;
+                flex-wrap: wrap;
+                row-gap: 8px;
             }
             .menu a {
                 color: inherit;
                 text-decoration: none;
                 opacity: 0.8;
+                transition: opacity 0.2s ease, color 0.2s ease;
             }
+            .menu a:hover { opacity: 1; }
             .hero {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
                 gap: 28px;
                 align-items: center;
-                background: #1b1b1b;
+                position: relative;
+                overflow: hidden;
+                background:
+                    radial-gradient(circle at 20% 20%, rgba(217, 168, 103, 0.22), transparent 34%),
+                    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.12), transparent 30%),
+                    linear-gradient(180deg, #201d1a 0%, #141210 100%);
                 color: #f5f2ea;
-                padding: 28px;
-                border-radius: 24px;
+                padding: 30px;
+                border-radius: 28px;
                 box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+                border: 1px solid rgba(255,255,255,0.08);
             }
             .hero h1 {
-                font-size: clamp(28px, 4vw, 46px);
+                font-size: clamp(30px, 4vw, 52px);
                 margin: 0 0 12px;
+                line-height: 0.98;
             }
             .hero p {
                 margin: 0 0 18px;
-                color: #d4cec2;
+                color: #d7d0c3;
+                max-width: 34rem;
+                line-height: 1.6;
             }
             .hero-actions {
                 display: flex;
@@ -85,6 +98,9 @@
                 flex-wrap: wrap;
             }
             .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
                 padding: 12px 18px;
                 border-radius: 999px;
                 border: 2px solid #d9c7a8;
@@ -107,48 +123,82 @@
                 background: #c49851;
                 border-color: #c49851;
             }
+            .hero-copy {
+                display: grid;
+                gap: 14px;
+                align-content: center;
+            }
+            .hero-stats {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 6px;
+            }
+            .hero-pill {
+                padding: 8px 12px;
+                border-radius: 999px;
+                border: 1px solid rgba(255,255,255,0.12);
+                background: rgba(255,255,255,0.06);
+                color: #efe7d7;
+                font-size: 12px;
+                font-weight: 600;
+                letter-spacing: 0.02em;
+            }
             .hero-media {
                 position: relative;
-                height: 360px;
-                border-radius: 18px;
+                min-height: 360px;
+                border-radius: 22px;
                 overflow: hidden;
                 background: radial-gradient(circle at 30% 20%, #ffb45a, transparent 45%),
                             linear-gradient(180deg, #2a1b12 0%, #120f0e 100%);
                 display: flex;
                 align-items: center;
-                justify-content: flex-end;
+                justify-content: center;
+                box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 18px 34px rgba(0, 0, 0, 0.35);
             }
             .hero-media img {
-                height: 90%;
-                width: auto;
+                width: min(100%, 520px);
+                height: auto;
                 object-fit: contain;
                 filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.45));
+                transform: translateY(6px);
             }
             .section-title {
-                margin: 48px 0 20px;
+                margin: 42px 0 18px;
                 font-size: 18px;
                 font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .section-title::after {
+                content: "";
+                height: 1px;
+                flex: 1;
+                background: linear-gradient(90deg, rgba(217, 168, 103, 0.6), rgba(217, 168, 103, 0.08));
             }
             .cards {
                 display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 28px;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 20px;
             }
             .card {
+                position: relative;
                 background: #ffffff;
-                border-radius: 18px;
+                border-radius: 20px;
                 border: 1px solid #e0e0e0;
                 overflow: hidden;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-                transition: all 0.3s ease;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+                transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
             }
             .card:hover {
-                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
-                transform: translateY(-2px);
+                box-shadow: 0 18px 34px rgba(0, 0, 0, 0.14);
+                transform: translateY(-4px);
+                border-color: rgba(217, 168, 103, 0.55);
             }
             .card img {
                 width: 100%;
-                height: 220px;
+                height: 240px;
                 object-fit: cover;
             }
             .card-body {
@@ -156,7 +206,7 @@
             }
             .card-body h3 {
                 margin: 0 0 8px;
-                font-size: 18px;
+                font-size: 19px;
                 font-weight: 700;
                 color: #111111;
             }
@@ -178,6 +228,63 @@
                 border-radius: 999px;
                 padding: 6px 12px;
             }
+            .featured-badge {
+                position: absolute;
+                top: 14px;
+                left: 14px;
+                padding: 6px 10px;
+                border-radius: 999px;
+                background: rgba(25, 22, 19, 0.84);
+                color: #f2eadf;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                backdrop-filter: blur(8px);
+            }
+            @media (max-width: 960px) {
+                .hero {
+                    grid-template-columns: 1fr;
+                    padding: 24px;
+                }
+                .hero-media {
+                    min-height: 280px;
+                    order: -1;
+                }
+            }
+            @media (max-width: 640px) {
+                .page {
+                    padding: 20px 16px 70px;
+                }
+                .topbar {
+                    align-items: flex-start;
+                }
+                .menu {
+                    gap: 12px;
+                    row-gap: 8px;
+                }
+                .hero {
+                    padding: 18px;
+                    border-radius: 22px;
+                }
+                .hero h1 {
+                    font-size: 30px;
+                }
+                .hero-media {
+                    min-height: 240px;
+                }
+                .section-title {
+                    margin-top: 34px;
+                    font-size: 17px;
+                }
+                .cards {
+                    grid-template-columns: 1fr;
+                    gap: 16px;
+                }
+                .card img {
+                    height: 200px;
+                }
+            }
         </style>
         <script src='/js/theme-mode.js'></script>
         <link rel='stylesheet' href='/css/theme.css'>
@@ -189,28 +296,35 @@
                 <nav class="menu" aria-label="Top navigation">
                     <a href="/welcome">Explore</a>
                     <a href="/feed">Feed</a>
+                    <a href="/shop">Shop</a>
                     <a href="/profile">Profile</a>
                     <a href="/upload">Upload Sword</a>
                 </nav>
             </div>
 
             <section class="hero">
-                <div>
+                <div class="hero-copy">
                     <h1>Forge Your Legacy</h1>
                     <p>Discover legendary blades, real craftsmanship, and the stories behind steel.</p>
+                    <div class="hero-stats" aria-hidden="true">
+                        <span class="hero-pill">Curated blades</span>
+                        <span class="hero-pill">Community showcase</span>
+                        <span class="hero-pill">Fresh uploads</span>
+                    </div>
                     <div class="hero-actions">
                         <a class="btn primary" href="/feed">Explore Blades</a>
                         <a class="btn" href="/login">Login</a>
                     </div>
                 </div>
                 <div class="hero-media" aria-hidden="true">
-                    <img src="/images/sword-hero.webp" alt="">
+                    <img src="/images/ezgif.com-gif-maker-4.webp" alt="Sword showcase animation">
                 </div>
             </section>
 
             <div class="section-title">Featured Blades</div>
             <section class="cards">
                 <article class="card">
+                    <span class="featured-badge">Featured</span>
                     <img src="/images/katana.jpg" alt="Katana">
                     <div class="card-body">
                         <h3>Water Dragon</h3>
@@ -219,6 +333,7 @@
                     </div>
                 </article>
                 <article class="card">
+                    <span class="featured-badge">Featured</span>
                     <img src="/images/claymore.webp" alt="Claymore">
                     <div class="card-body">
                         <h3>Highland Oath</h3>
@@ -227,6 +342,7 @@
                     </div>
                 </article>
                 <article class="card">
+                    <span class="featured-badge">Featured</span>
                     <img src="/images/bastard-longsword.jpg" alt="Bastard longsword">
                     <div class="card-body">
                         <h3>Guild Bastard</h3>
