@@ -11,12 +11,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ $user->name }} | Sword Showcase Hub</title>
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
 
             * { box-sizing: border-box; }
             body {
                 margin: 0;
-                font-family: "Plus Jakarta Sans", "Poppins", "Trebuchet MS", sans-serif;
+                font-family: "Cormorant Garamond", Georgia, serif;
                 color: #111111;
                 background-color: #f2f2f0;
                 background-image:
@@ -70,7 +70,7 @@
             }
             .name-block h1 {
                 margin: 0 0 6px; font-size: 30px; letter-spacing: -0.01em;
-                font-family: "Playfair Display", "Times New Roman", serif;
+                font-family: "Cinzel", serif;
             }
             .handle-row { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
             .handle { color: #6c6c6c; font-size: 14px; }

@@ -77,6 +77,11 @@ class User extends Authenticatable
         return $this->hasMany(Sword::class);
     }
 
+    public function swordOrders()
+    {
+        return $this->hasMany(SwordOrder::class);
+    }
+
     public function likes()
     {
         return $this->hasMany(Like::class);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SwordOrderController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\FollowController;
@@ -8,7 +9,9 @@ use App\Http\Controllers\StorageController;
 use App\Http\Controllers\SwordController;
 use App\Models\Like;
 use App\Models\Sword;
+use App\Models\SwordOrder;
 use App\Models\User;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Hash;
 
 $resolveSessionUser = function () {
@@ -30,7 +33,63 @@ Route::get('/welcome', function () {
 });
 
 Route::get('/shop', function () {
-    return view('shop');
+    $orders = collect();
+
+    if (Schema::hasTable('sword_orders')) {
+        $orders = SwordOrder::with('user')
+            ->latest()
+            ->take(12)
+            ->get()
+            ->map(function (SwordOrder $order) {
+                $userName = $order->user?->name ?? 'Anonymous Collector';
+
+                return [
+                    'user' => $userName,
+                    'user_id' => $order->user?->id,
+                    'handle' => '@' . strtolower(str_replace(' ', '', $userName)),
+                    'sword_name' => $order->sword_name,
+                    'sword_type' => $order->sword_type,
+                    'budget' => $order->budget ?: 'Budget on request',
+                    'timeline' => $order->timeline ?: 'Flexible timeline',
+                    'description' => $order->description ?: 'A custom commission request awaiting the right maker.',
+                    'status' => $order->status,
+                    'time' => $order->created_at?->diffForHumans() ?? 'Just now',
+                ];
+            });
+    }
+
+    if ($orders->isEmpty()) {
+        $demoOrders = [
+            ['user' => 'Avery Cole', 'sword_name' => 'Warden Bastard Sword', 'sword_type' => 'Bastard Sword', 'budget' => '$320 - $450', 'timeline' => '2 weeks', 'description' => 'A dependable hand-and-a-half sword with a reinforced grip, tuned for balanced cuts and tighter guard work.'],
+            ['user' => 'Mila Hart', 'sword_name' => 'Highland Claymore Request', 'sword_type' => 'Claymore', 'budget' => '$480 - $620', 'timeline' => '3 weeks', 'description' => 'A broad two-handed blade with a taller profile, long pommel, and a dramatic battlefield silhouette.'],
+            ['user' => 'Ronan Vale', 'sword_name' => 'Ridgecrest Broadsword', 'sword_type' => 'Broadsword', 'budget' => '$260 - $340', 'timeline' => '10 days', 'description' => 'A sturdy one-handed broadsword for reliable edge alignment and a clean, formal finish.'],
+            ['user' => 'Zara Quinn', 'sword_name' => 'Nightborne Longsword', 'sword_type' => 'Longsword', 'budget' => '$300 - $420', 'timeline' => '2-4 weeks', 'description' => 'A dark, refined longsword with a leaner profile and a fast, elegant line.'],
+            ['user' => 'Theo Marsh', 'sword_name' => 'Crestwind Arming Sword', 'sword_type' => 'Arming Sword', 'budget' => '$180 - $240', 'timeline' => '1 week', 'description' => 'A compact sidearm built for quick recovery, light handling, and daily carry aesthetics.'],
+        ];
+
+        $orders = collect($demoOrders)->map(function (array $item) {
+            $user = User::where('name', $item['user'])->first();
+            $userName = $item['user'];
+
+            return [
+                'user' => $userName,
+                'user_id' => $user?->id,
+                'handle' => '@' . strtolower(str_replace(' ', '', $userName)),
+                'sword_name' => $item['sword_name'],
+                'sword_type' => $item['sword_type'],
+                'budget' => $item['budget'],
+                'timeline' => $item['timeline'],
+                'description' => $item['description'],
+                'status' => 'Open',
+                'time' => 'Featured request',
+            ];
+        });
+    }
+
+    return view('shop', [
+        'orders' => $orders,
+        'orderCount' => $orders->count(),
+    ]);
 });
 
 Route::get('/storage/{path}', [StorageController::class, 'show'])->where('path', '.*');
@@ -54,6 +113,7 @@ Route::get('/upload', function () {
 });
 
 Route::post('/upload/swords', [SwordController::class, 'store'])->name('upload.swords.store');
+Route::post('/orders', [SwordOrderController::class, 'store'])->name('orders.store');
 
 Route::get('/profile', function () use ($resolveSessionUser) {
     if (! session('user_id')) {
@@ -63,6 +123,7 @@ Route::get('/profile', function () use ($resolveSessionUser) {
     $currentUser = $resolveSessionUser();
     $profileUser = $currentUser;
     $swords = $profileUser ? $profileUser->swords()->latest()->get() : collect();
+    $orders = $profileUser ? $profileUser->swordOrders()->latest()->get() : collect();
     $likedSwords = $profileUser
         ? Sword::whereIn('id', Like::where('user_id', $profileUser->id)->pluck('sword_id'))->latest()->get()
         : collect();
@@ -73,6 +134,8 @@ Route::get('/profile', function () use ($resolveSessionUser) {
         'swords' => $swords,
         'likedSwords' => $likedSwords,
         'swordCount' => $swords->count(),
+        'orderCount' => $orders->count(),
+        'orders' => $orders,
         'isOwnProfile' => true,
         'isFollowing' => false,
         'followerCount' => $profileUser?->followers()->count() ?? 0,
@@ -83,6 +146,7 @@ Route::get('/profile', function () use ($resolveSessionUser) {
 Route::get('/user/{user}', function (User $user) use ($resolveSessionUser) {
     $currentUser = $resolveSessionUser();
     $swords = $user->swords()->latest()->get();
+    $orders = $user->swordOrders()->latest()->get();
     $likedSwords = Sword::whereIn('id', Like::where('user_id', $user->id)->pluck('sword_id'))->latest()->get();
 
     return view('profile', [
@@ -91,6 +155,8 @@ Route::get('/user/{user}', function (User $user) use ($resolveSessionUser) {
         'swords' => $swords,
         'likedSwords' => $likedSwords,
         'swordCount' => $swords->count(),
+        'orderCount' => $orders->count(),
+        'orders' => $orders,
         'isOwnProfile' => $currentUser ? (int) $currentUser->id === (int) $user->id : false,
         'isFollowing' => $currentUser ? $currentUser->isFollowing($user->id) : false,
         'followerCount' => $user->followers()->count(),

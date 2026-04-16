@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Profile | Sword Showcase Hub</title>
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
 
             * { box-sizing: border-box; }
 
@@ -33,7 +33,7 @@
             body {
                 min-height: 100vh;
                 margin: 0;
-                font-family: "Poppins", "Trebuchet MS", sans-serif;
+                font-family: "Cormorant Garamond", Georgia, serif;
                 color: var(--text);
                 background-color: #0d0c0b;
                 background-image:
@@ -108,7 +108,7 @@
             }
             .avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
             .profile-header { display: flex; align-items: center; justify-content: space-between; padding-top: 70px; gap: 20px; flex-wrap: wrap; }
-            .name-block h1 { margin: 0 0 6px; font-size: 30px; letter-spacing: -0.01em; font-family: "Playfair Display", serif; color: var(--gold-soft); }
+            .name-block h1 { margin: 0 0 6px; font-size: 32px; letter-spacing: -0.01em; font-family: "Cinzel", serif; color: var(--gold-soft); }
             .handle, .email, .meta, .stat, .sword-body p { color: var(--muted); }
             .handle-row { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
             .handle { font-size: 14px; }
@@ -185,9 +185,172 @@
             .meta { display: flex; flex-wrap: wrap; gap: 14px; margin: 18px 0; font-size: 13px; color: var(--muted); }
             .field label { color: var(--muted); }
             .field input { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: var(--text); }
+            .field textarea {
+                width: 100%;
+                min-height: 132px;
+                resize: vertical;
+                border-radius: 14px;
+                border: 1px solid rgba(255,255,255,0.12);
+                background: rgba(255,255,255,0.05);
+                color: var(--text);
+                padding: 12px 14px;
+                font-size: 14px;
+                line-height: 1.6;
+            }
             .btn.primary { background: #d9a867; border-color: #d9a867; color: #1b130b; }
             .btn.primary:hover { background: #c69252; border-color: #c69252; }
             .btn.danger { background: #b02a37; border-color: #8f1f27; color: #fff; }
+            .order-section {
+                margin-top: 24px;
+                padding: 22px;
+                border-radius: 20px;
+                border: 1px solid rgba(241, 216, 168, 0.12);
+                background:
+                    radial-gradient(circle at 18% 18%, rgba(217,168,103,0.14), transparent 36%),
+                    linear-gradient(180deg, rgba(27, 24, 21, 0.96), rgba(16, 14, 12, 0.98));
+                box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
+            }
+            .order-section-header {
+                display: flex;
+                align-items: flex-end;
+                justify-content: space-between;
+                gap: 16px;
+                flex-wrap: wrap;
+                margin-bottom: 18px;
+            }
+            .eyebrow {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 12px;
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+                color: var(--gold-soft);
+                font-weight: 700;
+                margin-bottom: 8px;
+            }
+            .eyebrow::before {
+                content: '';
+                width: 28px;
+                height: 1px;
+                background: rgba(241, 216, 168, 0.6);
+            }
+            .order-section h2 {
+                margin: 0 0 6px;
+                font-size: 24px;
+                letter-spacing: -0.02em;
+                color: var(--text);
+                font-family: "Cinzel", serif;
+            }
+            .order-section p {
+                margin: 0;
+                color: var(--muted);
+                max-width: 640px;
+                line-height: 1.6;
+            }
+            .order-layout {
+                display: grid;
+                grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+                gap: 18px;
+                align-items: start;
+            }
+            .order-form,
+            .order-board {
+                border-radius: 18px;
+                border: 1px solid rgba(255,255,255,0.08);
+                background: rgba(255,255,255,0.04);
+                padding: 18px;
+            }
+            .order-form {
+                display: grid;
+                gap: 16px;
+            }
+            .order-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px;
+            }
+            .field-wide {
+                grid-column: 1 / -1;
+            }
+            .order-form .field input::placeholder,
+            .order-form .field textarea::placeholder {
+                color: rgba(199, 185, 166, 0.72);
+            }
+            .order-note,
+            .order-meta {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                color: var(--muted);
+                font-size: 12px;
+            }
+            .order-note span,
+            .order-meta span,
+            .order-pill {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .order-pill {
+                padding: 5px 10px;
+                border-radius: 999px;
+                border: 1px solid rgba(241, 216, 168, 0.16);
+                background: rgba(241, 216, 168, 0.06);
+                color: var(--gold-soft);
+                font-size: 12px;
+                font-weight: 700;
+                letter-spacing: 0.01em;
+            }
+            .order-board h3 {
+                margin: 0 0 10px;
+                font-size: 18px;
+                color: var(--text);
+            }
+            .order-list {
+                display: grid;
+                gap: 12px;
+            }
+            .order-card {
+                border-radius: 16px;
+                border: 1px solid rgba(255,255,255,0.08);
+                background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+                padding: 14px;
+                display: grid;
+                gap: 10px;
+            }
+            .order-card-head {
+                display: flex;
+                justify-content: space-between;
+                gap: 12px;
+                align-items: flex-start;
+            }
+            .order-card h4 {
+                margin: 0 0 4px;
+                font-size: 15px;
+                color: var(--text);
+            }
+            .order-card p {
+                margin: 0;
+                color: var(--muted);
+                font-size: 13px;
+            }
+            .order-card .meta-line {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                font-size: 12px;
+                color: var(--muted);
+            }
+            .order-card .meta-line span {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .order-card.empty-state {
+                text-align: left;
+                color: var(--muted);
+            }
             .settings-panel {
                 position: absolute;
                 right: 0;
@@ -440,6 +603,11 @@
                 color: #0f1419;
                 border-color: #cfd9de;
             }
+            body.light-mode .field textarea {
+                background: #ffffff;
+                color: #0f1419;
+                border-color: #cfd9de;
+            }
             body.light-mode .modal-backdrop { background: rgba(15, 20, 25, 0.35); }
             body.light-mode .modal-photo,
             body.light-mode .cropper {
@@ -462,6 +630,35 @@
                     repeating-linear-gradient(135deg, rgba(83, 100, 113, 0.07) 0 1px, transparent 1px 12px),
                     #f4f7f8;
             }
+            body.light-mode .order-section {
+                background:
+                    radial-gradient(circle at 18% 18%, rgba(217,168,103,0.08), transparent 36%),
+                    linear-gradient(180deg, #ffffff 0%, #f8f5ef 100%);
+                border-color: #e6d9c2;
+                box-shadow: 0 10px 24px rgba(15, 20, 25, 0.06);
+            }
+            body.light-mode .order-section h2,
+            body.light-mode .order-board h3,
+            body.light-mode .order-card h4 {
+                color: #0f1419;
+            }
+            body.light-mode .order-section p,
+            body.light-mode .order-card p,
+            body.light-mode .order-card .meta-line,
+            body.light-mode .order-note {
+                color: #536471;
+            }
+            body.light-mode .order-form,
+            body.light-mode .order-board,
+            body.light-mode .order-card {
+                background: #ffffff;
+                border-color: #e6ecf0;
+            }
+            body.light-mode .order-pill {
+                color: #7a5a2b;
+                background: #f3e6d5;
+                border-color: #ead7b9;
+            }
             @media (max-width: 900px) {
                 .profile-header { flex-direction: column; align-items: center; }
                 .profile-main { padding: 0 20px 20px; }
@@ -475,6 +672,12 @@
                     width: min(320px, calc(100vw - 42px));
                     right: 50%;
                     transform: translateX(50%);
+                }
+                .order-layout {
+                    grid-template-columns: 1fr;
+                }
+                .order-grid {
+                    grid-template-columns: 1fr;
                 }
             }
         </style>
@@ -555,12 +758,14 @@
                         <div class="stats">
                             <div class="stat"><b>{{ $swordCount }}</b>Uploads</div>
                             <div class="stat"><b>{{ $swords->count() }}</b>Posts</div>
+                            <div class="stat"><b>{{ $orderCount ?? 0 }}</b>Orders</div>
                             @if (! $isOwnProfile)
                                 <div class="stat"><b class="js-follower-count">{{ $followerCount ?? 0 }}</b>Followers</div>
                                 <div class="stat"><b>{{ $followingCount ?? 0 }}</b>Following</div>
                             @endif
                             <div class="stat"><b>{{ $swords->first()?->created_at?->format('d M Y') ?? '-' }}</b>Latest</div>
                         </div>
+
                     </div>
                 </div>
 
@@ -568,6 +773,9 @@
                     <div class="tab-labels">
                         <button type="button" class="tab-label tab-label-static" data-tab-target="posts-panel">Posts</button>
                         <button type="button" class="tab-label" data-tab-target="likes-panel">Likes</button>
+                        @if ($isOwnProfile)
+                            <button type="button" class="tab-label" data-tab-target="orders-panel">Place Order</button>
+                        @endif
                     </div>
                 </div>
 
@@ -631,6 +839,88 @@
                             </section>
                         @endif
                     </div>
+
+                    @if ($isOwnProfile)
+                        <div class="tab-panel feed-panel orders-panel">
+                            <section class="order-section" style="margin-top: 0;">
+                                <div class="order-section-header">
+                                    <div>
+                                        <div class="eyebrow">Custom commission</div>
+                                        <h2>Place your next sword order</h2>
+                                        <p>Describe the blade you want forged, add your budget and timeline, and it will appear in the shop board as an open request.</p>
+                                    </div>
+                                    <div class="order-note">
+                                        <span class="order-pill">Visible in shop feed</span>
+                                        <span class="order-pill">Saved to your profile</span>
+                                    </div>
+                                </div>
+
+                                <div class="order-layout">
+                                    <form class="order-form" method="POST" action="/orders">
+                                        @csrf
+                                        <div class="order-grid">
+                                            <div class="field">
+                                                <label for="order-sword-name">Desired sword name</label>
+                                                <input id="order-sword-name" type="text" name="sword_name" placeholder="Eclipse Bastard Sword" required>
+                                            </div>
+                                            <div class="field">
+                                                <label for="order-sword-type">Blade type</label>
+                                                <input id="order-sword-type" type="text" name="sword_type" placeholder="Longsword, katana, claymore..." required>
+                                            </div>
+                                            <div class="field">
+                                                <label for="order-budget">Budget</label>
+                                                <input id="order-budget" type="text" name="budget" placeholder="$240 - $400">
+                                            </div>
+                                            <div class="field">
+                                                <label for="order-timeline">Timeline</label>
+                                                <input id="order-timeline" type="text" name="timeline" placeholder="2-3 weeks">
+                                            </div>
+                                            <div class="field field-wide">
+                                                <label for="order-description">Commission notes</label>
+                                                <textarea id="order-description" name="description" rows="5" placeholder="Materials, finish, engravings, balance preferences, or any reference details."></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="order-note">
+                                            <span><span class="dot"></span> Requests are published as open commissions.</span>
+                                        </div>
+
+                                        <div class="action-bar">
+                                            <button class="btn primary" type="submit">Place Order</button>
+                                            <span class="order-note">Professional requests make the board feel active and credible.</span>
+                                        </div>
+                                    </form>
+
+                                    <div class="order-board">
+                                        <h3>Your Recent Requests</h3>
+                                        @if ($orders->isEmpty())
+                                            <div class="empty order-card empty-state">No commission requests yet. Use the form to create your first order.</div>
+                                        @else
+                                            <div class="order-list">
+                                                @foreach ($orders as $order)
+                                                    <article class="order-card">
+                                                        <div class="order-card-head">
+                                                            <div>
+                                                                <h4>{{ $order->sword_name }}</h4>
+                                                                <p>{{ $order->sword_type }}</p>
+                                                            </div>
+                                                            <span class="order-pill">{{ $order->status }}</span>
+                                                        </div>
+                                                        <p>{{ $order->description ?: 'No notes provided for this request.' }}</p>
+                                                        <div class="meta-line">
+                                                            <span><span class="dot"></span>{{ $order->budget ?: 'Budget on request' }}</span>
+                                                            <span><span class="dot"></span>{{ $order->timeline ?: 'Flexible timeline' }}</span>
+                                                            <span><span class="dot"></span>{{ $order->created_at?->diffForHumans() }}</span>
+                                                        </div>
+                                                    </article>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    @endif
                 </div>
             </section>
         </div>
@@ -881,6 +1171,8 @@
                         setActiveTab(button.dataset.tabTarget);
                     });
                 });
+
+                setActiveTab('posts-panel');
 
                 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
