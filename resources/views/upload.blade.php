@@ -15,22 +15,14 @@
 
         body {
             margin: 0;
-            font-family: "Poppins", "Trebuchet MS", sans-serif;
-            color: #111111;
-            background-color: #f2f2f0;
-            background-image:
-                radial-gradient(circle at 15% 12%, rgba(120, 120, 120, 0.08), transparent 38%),
-                radial-gradient(circle at 85% 18%, rgba(0, 0, 0, 0.06), transparent 34%),
-                repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0 1px, transparent 1px 16px),
-                linear-gradient(180deg, #f6f6f4 0%, #efefec 45%, #f2f2f0 100%);
-            background-size: auto, auto, 24px 24px, auto;
             min-height: 100vh;
-            padding: 36px 22px 80px;
+            color: #e8e1d6;
         }
 
         .shell {
-            max-width: 980px;
+            max-width: 1180px;
             margin: 0 auto;
+            padding: 30px 22px 90px;
         }
 
         .topbar {
@@ -40,9 +32,9 @@
             gap: 20px;
             margin-bottom: 24px;
             padding: 14px 18px;
-            border: 1px solid #e2e2df;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 14px;
-            background: rgba(255, 255, 255, 0.75);
+            background: rgba(28, 25, 22, 0.92);
             backdrop-filter: blur(6px);
         }
 
@@ -51,6 +43,7 @@
             letter-spacing: 0.08em;
             text-transform: uppercase;
             font-size: 12px;
+            color: #f6eedf;
         }
 
         .menu {
@@ -62,7 +55,7 @@
         }
 
         .menu a {
-            color: inherit;
+            color: #e8e1d6;
             text-decoration: none;
             opacity: 0.82;
         }
@@ -71,9 +64,9 @@
 
         .panel {
             border-radius: 24px;
-            border: 1px solid #e7e1d7;
-            background: #ffffff;
-            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(180deg, rgba(34, 30, 26, 0.96), rgba(20, 18, 16, 0.98));
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4);
             padding: 28px;
         }
 
@@ -83,19 +76,19 @@
             letter-spacing: 0.09em;
             text-transform: uppercase;
             font-weight: 700;
-            color: #8a7b64;
+            color: #d8bc87;
         }
 
         h1 {
             margin: 0;
             font-size: clamp(28px, 4vw, 38px);
             line-height: 1.05;
-            color: #1b1b1b;
+            color: #f6eedf;
         }
 
         .subtitle {
             margin: 10px 0 0;
-            color: #666666;
+            color: #bfb6a7;
             line-height: 1.6;
             max-width: 58ch;
         }
@@ -114,18 +107,17 @@
         .field label {
             font-size: 13px;
             font-weight: 700;
-            color: #4f4a43;
+            color: #ddd4c3;
         }
 
         input[type='text'],
         select,
-        textarea,
-        input[type='file'] {
+        textarea {
             width: 100%;
             border-radius: 14px;
-            border: 1px solid #d8d3c8;
-            background: #ffffff;
-            color: #1b1b1b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            color: #f4ede2;
             padding: 12px 14px;
             font-size: 14px;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -133,7 +125,7 @@
 
         select {
             appearance: none;
-            background-image: linear-gradient(45deg, transparent 50%, #8a7b64 50%), linear-gradient(135deg, #8a7b64 50%, transparent 50%);
+            background-image: linear-gradient(45deg, transparent 50%, #d8bc87 50%), linear-gradient(135deg, #d8bc87 50%, transparent 50%);
             background-position: calc(100% - 18px) calc(50% - 3px), calc(100% - 12px) calc(50% - 3px);
             background-size: 6px 6px, 6px 6px;
             background-repeat: no-repeat;
@@ -147,11 +139,10 @@
 
         input[type='text']:focus,
         select:focus,
-        textarea:focus,
-        input[type='file']:focus {
+        textarea:focus {
             outline: none;
-            border-color: #d9a867;
-            box-shadow: 0 0 0 3px rgba(217, 168, 103, 0.2);
+            border-color: #d8bc87;
+            box-shadow: 0 0 0 3px rgba(216, 188, 135, 0.18);
         }
 
         .image-upload-wrap {
@@ -159,25 +150,66 @@
             gap: 10px;
         }
 
-        .preview-card {
-            width: 100%;
-            min-height: 190px;
-            border-radius: 16px;
-            border: 1px dashed #d8c7ad;
-            background:
-                radial-gradient(circle at 20% 28%, rgba(217, 168, 103, 0.18), transparent 50%),
-                linear-gradient(180deg, #fbf8f3 0%, #f2ece3 100%);
-            display: grid;
-            place-items: center;
+        .file-input-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
             overflow: hidden;
-            text-align: center;
-            color: #7a6a52;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 14px;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
-        .preview-card img {
+        .preview-card {
+            width: 100%;
+            border-radius: 18px;
+            border: 1px solid rgba(216, 188, 135, 0.2);
+            background: linear-gradient(180deg, rgba(38, 34, 30, 0.96), rgba(23, 21, 18, 0.98));
+            display: grid;
+            overflow: hidden;
+            color: #e8e1d6;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .preview-card:hover {
+            border-color: rgba(216, 188, 135, 0.45);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.32);
+        }
+
+        .preview-card:focus-visible {
+            outline: none;
+            border-color: #d8bc87;
+            box-shadow: 0 0 0 3px rgba(216, 188, 135, 0.22);
+        }
+
+        .preview-chrome {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-bottom: 1px solid rgba(216, 188, 135, 0.16);
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 11px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #d8bc87;
+        }
+
+        .preview-media {
+            min-height: 220px;
+            display: grid;
+            place-items: center;
+            padding: 12px;
+        }
+
+        .preview-media img {
             width: 100%;
             height: 220px;
             object-fit: cover;
@@ -190,14 +222,15 @@
             display: grid;
             place-items: center;
             gap: 6px;
+            text-align: center;
         }
 
         .preview-plus {
             width: 38px;
             height: 38px;
             border-radius: 999px;
-            border: 1px solid #bda27b;
-            color: #8a6b3e;
+            border: 1px solid rgba(216, 188, 135, 0.45);
+            color: #d8bc87;
             display: grid;
             place-items: center;
             font-size: 24px;
@@ -223,9 +256,9 @@
             min-height: 42px;
             padding: 10px 18px;
             border-radius: 999px;
-            border: 1px solid #d9c7a8;
+            border: 1px solid rgba(216, 188, 135, 0.42);
             background: transparent;
-            color: #1b1b1b;
+            color: #f4ede2;
             text-decoration: none;
             font-weight: 700;
             font-size: 14px;
@@ -235,19 +268,19 @@
 
         .btn:hover {
             transform: translateY(-1px);
-            border-color: #d0a66f;
-            background: rgba(217, 168, 103, 0.16);
+            border-color: rgba(216, 188, 135, 0.65);
+            background: rgba(216, 188, 135, 0.12);
         }
 
         .btn.primary {
-            background: linear-gradient(180deg, #e0bf8d 0%, #c99756 100%);
+            background: linear-gradient(180deg, #f1d8a8 0%, #b7894e 100%);
             color: #1b130b;
-            border-color: #bf8d4a;
+            border-color: transparent;
         }
 
         .btn.primary:hover {
-            background: linear-gradient(180deg, #d6b079 0%, #b78342 100%);
-            border-color: #b78342;
+            background: linear-gradient(180deg, #f1d8a8 0%, #a8793f 100%);
+            border-color: transparent;
         }
 
         .message {
@@ -258,9 +291,9 @@
         }
 
         .message.error {
-            background: #ffe9e6;
-            border: 1px solid #ffc8be;
-            color: #8a2c1d;
+            background: rgba(156, 54, 37, 0.22);
+            border: 1px solid rgba(236, 145, 128, 0.28);
+            color: #ffd8d1;
         }
 
         @media (max-width: 760px) {
@@ -268,11 +301,36 @@
             .panel { padding: 20px; border-radius: 18px; }
             .actions { width: 100%; }
             .actions .btn { width: 100%; }
-            .preview-card img { height: 180px; }
+            .preview-media { min-height: 180px; }
+            .preview-media img { height: 180px; }
         }
     </style>
     <script src='/js/theme-mode.js'></script>
     <link rel='stylesheet' href='/css/theme.css'>
+    <style>
+        body.theme-dark .preview-card {
+            border-color: rgba(216, 188, 135, 0.28);
+            background: linear-gradient(180deg, rgba(36, 33, 29, 0.96), rgba(24, 22, 19, 0.98));
+            color: #e8dbc6;
+        }
+
+        body.theme-dark .preview-chrome {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom-color: rgba(236, 204, 151, 0.2);
+            color: #d7c19b;
+        }
+
+        body.theme-dark .preview-media {
+            background:
+                radial-gradient(circle at 20% 24%, rgba(217, 168, 103, 0.18), transparent 50%),
+                linear-gradient(180deg, rgba(45, 39, 33, 0.8), rgba(31, 27, 23, 0.85));
+        }
+
+        body.theme-dark .preview-plus {
+            border-color: rgba(236, 204, 151, 0.5);
+            color: #f1d8a8;
+        }
+    </style>
 </head>
 <body>
 <div class="shell">
@@ -303,7 +361,7 @@
             </div>
         @endif
 
-        <form class="form-grid" method="POST" action="/swords" enctype="multipart/form-data">
+        <form class="form-grid" method="POST" action="upload/swords" enctype="multipart/form-data">
             @csrf
 
             <div class="field">
@@ -338,15 +396,21 @@
 
             <div class="field image-upload-wrap">
                 <label for="sword-image">Image</label>
-                <div class="preview-card" id="preview-card">
-                    <img id="sword-image-preview" alt="Selected sword preview">
-                    <div class="preview-placeholder" id="preview-placeholder" aria-hidden="false">
-                        <span class="preview-plus">+</span>
-                        <span>Choose an image to preview</span>
-                        <span class="preview-note">Square or landscape images look best</span>
+                <label class="preview-card" id="preview-card" for="sword-image" tabindex="0" role="button" aria-label="Choose sword image">
+                    <div class="preview-chrome">
+                        <span>Blade Preview</span>
+                        <span>Tap To Upload</span>
                     </div>
-                </div>
-                <input id="sword-image" type="file" name="image" accept="image/*">
+                    <div class="preview-media">
+                        <img id="sword-image-preview" alt="Selected sword preview">
+                        <div class="preview-placeholder" id="preview-placeholder" aria-hidden="false">
+                            <span class="preview-plus">+</span>
+                            <span>Click to choose an image</span>
+                            <span class="preview-note">Square or landscape images look best</span>
+                        </div>
+                    </div>
+                </label>
+                <input class="file-input-hidden" id="sword-image" type="file" name="image" accept="image/*">
             </div>
 
             <div class="actions">
@@ -362,8 +426,15 @@
         const input = document.getElementById('sword-image');
         const image = document.getElementById('sword-image-preview');
         const placeholder = document.getElementById('preview-placeholder');
+        const trigger = document.getElementById('preview-card');
 
-        if (!input || !image || !placeholder) return;
+        if (!input || !image || !placeholder || !trigger) return;
+
+        trigger.addEventListener('keydown', function (event) {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            input.click();
+        });
 
         input.addEventListener('change', function () {
             const file = input.files && input.files[0];

@@ -53,6 +53,8 @@ Route::get('/upload', function () {
     return view('upload');
 });
 
+Route::post('/upload/swords', [SwordController::class, 'store'])->name('upload.swords.store');
+
 Route::get('/profile', function () use ($resolveSessionUser) {
     if (! session('user_id')) {
         return redirect('/register')->with('error', 'Please create an account to view your profile.');
@@ -215,7 +217,7 @@ Route::get('/feed', function () use ($resolveSessionUser) {
 });
 
 Route::post('/users/{user}/follow', [FollowController::class, 'toggle']);
-Route::post('/swords', [SwordController::class, 'store']);
+Route::post('/swords', [SwordController::class, 'store'])->name('swords.store');
 Route::get('/swords/{sword}/edit', [SwordController::class, 'edit']);
 Route::put('/swords/{sword}', [SwordController::class, 'update']);
 Route::delete('/swords/{sword}', [SwordController::class, 'destroy']);

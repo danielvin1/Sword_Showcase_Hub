@@ -13,7 +13,7 @@ class SwordController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'type' => 'required|string|max:100',
-            'description' => 'required|string|max:1000',
+            'description' => 'nullable|string|max:1000',
             'image' => 'nullable|image|max:2048',
         ]);
 
@@ -52,7 +52,7 @@ class SwordController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'type' => 'required|string|max:100',
-            'description' => 'required|string|max:1000',
+            'description' => 'nullable|string|max:1000',
             'image' => 'nullable|image|max:2048',
         ]);
 
