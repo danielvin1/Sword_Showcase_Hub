@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'paypal' => [
+        'client_id' => env('PAYPAL_CLIENT_ID', 'sb'),
+        'currency' => env('PAYPAL_CURRENCY', 'EUR'),
+    ],
+
 ];

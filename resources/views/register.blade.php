@@ -75,6 +75,20 @@
             color: black;
             font-weight: 600;
         }
+        .site-footer {
+            margin-top: 12px;
+            color: #6f6a62;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .site-footer a {
+            text-decoration: none;
+            color: inherit;
+        }
     </style>
     <script src='/js/theme-mode.js'></script>
     <link rel='stylesheet' href='/css/theme.css'>
@@ -103,6 +117,15 @@
 
     <div class="login-link">
         Already have an account? <a href="/login">Login</a>
+    </div>
+
+    <div class="site-footer" aria-label="Site footer">
+        <span>© {{ date('Y') }} Sword Showcase Hub</span>
+        <span>
+            <a href="/privacy">Privacy</a>
+            ·
+            <a href="/terms">Terms</a>
+        </span>
     </div>
 </div>
 

@@ -38,35 +38,6 @@
                 box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
                 text-align: center;
             }
-            .topbar {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 20px;
-                margin: 0 auto 22px;
-                padding: 14px 18px;
-                border: 1px solid #e2e2df;
-                border-radius: 14px;
-                background: rgba(255, 255, 255, 0.75);
-                backdrop-filter: blur(6px);
-                width: min(520px, 100%);
-            }
-            .brand {
-                font-weight: 700;
-                letter-spacing: 0.08em;
-                text-transform: uppercase;
-                font-size: 12px;
-            }
-            .menu {
-                display: flex;
-                gap: 18px;
-                font-size: 14px;
-            }
-            .menu a {
-                color: inherit;
-                text-decoration: none;
-                opacity: 0.8;
-            }
             h1 {
                 margin: 0 0 8px;
                 font-size: 28px;
@@ -104,21 +75,25 @@
                 margin-bottom: 12px;
                 text-align: left;
             }
+            .site-footer {
+                margin-top: 14px;
+                color: #6f6a62;
+                font-size: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .site-footer a {
+                text-decoration: none;
+                color: inherit;
+            }
         </style>
         <script src='/js/theme-mode.js'></script>
         <link rel='stylesheet' href='/css/theme.css'>
 </head>
     <body>
-        <div class="topbar">
-            <div class="brand">Sword Showcase Hub</div>
-            <nav class="menu" aria-label="Top navigation">
-                <a href="/welcome">Explore</a>
-                <a href="/feed">Feed</a>
-                <a href="/shop">Shop</a>
-                <a href="/profile">Profile</a>
-            </nav>
-        </div>
-
         <div class="panel">
             <h1>Login</h1>
             <p>Enter your details to reach the feed.</p>
@@ -148,6 +123,15 @@
 </a>
    
             </form>
+
+            <div class="site-footer" aria-label="Site footer">
+                <span>© {{ date('Y') }} Sword Showcase Hub</span>
+                <span>
+                    <a href="/privacy">Privacy</a>
+                    ·
+                    <a href="/terms">Terms</a>
+                </span>
+            </div>
         </div>
     </body>
 </html>

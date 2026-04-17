@@ -8,6 +8,7 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\SwordController;
 use App\Models\Like;
+use App\Models\Discussion;
 use App\Models\Sword;
 use App\Models\SwordOrder;
 use App\Models\User;
@@ -32,64 +33,86 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 
-Route::get('/shop', function () {
-    $orders = collect();
+Route::get('/terms', function () {
+    return view('terms');
+});
 
-    if (Schema::hasTable('sword_orders')) {
-        $orders = SwordOrder::with('user')
+Route::get('/privacy', function () {
+    return view('privacy');
+});
+
+Route::get('/shop', function () {
+    $swords = collect();
+
+    if (Schema::hasTable('swords')) {
+        $swords = Sword::with('user')
             ->latest()
-            ->take(12)
+            ->take(24)
             ->get()
-            ->map(function (SwordOrder $order) {
-                $userName = $order->user?->name ?? 'Anonymous Collector';
+            ->map(function (Sword $sword) {
+                $makerName = $sword->user?->name ?? 'Anonymous Maker';
+                $basePrice = 180 + (($sword->id * 17) % 320);
+                $price = round($basePrice + 0.99, 2);
 
                 return [
-                    'user' => $userName,
-                    'user_id' => $order->user?->id,
-                    'handle' => '@' . strtolower(str_replace(' ', '', $userName)),
-                    'sword_name' => $order->sword_name,
-                    'sword_type' => $order->sword_type,
-                    'budget' => $order->budget ?: 'Budget on request',
-                    'timeline' => $order->timeline ?: 'Flexible timeline',
-                    'description' => $order->description ?: 'A custom commission request awaiting the right maker.',
-                    'status' => $order->status,
-                    'time' => $order->created_at?->diffForHumans() ?? 'Just now',
+                    'id' => $sword->id,
+                    'name' => $sword->name,
+                    'type' => $sword->type,
+                    'description' => $sword->description ?: 'Hand-forged showcase blade.',
+                    'image' => $sword->image_url,
+                    'maker' => $makerName,
+                    'maker_id' => $sword->user?->id,
+                    'price' => $price,
                 ];
             });
     }
 
-    if ($orders->isEmpty()) {
-        $demoOrders = [
-            ['user' => 'Avery Cole', 'sword_name' => 'Warden Bastard Sword', 'sword_type' => 'Bastard Sword', 'budget' => '$320 - $450', 'timeline' => '2 weeks', 'description' => 'A dependable hand-and-a-half sword with a reinforced grip, tuned for balanced cuts and tighter guard work.'],
-            ['user' => 'Mila Hart', 'sword_name' => 'Highland Claymore Request', 'sword_type' => 'Claymore', 'budget' => '$480 - $620', 'timeline' => '3 weeks', 'description' => 'A broad two-handed blade with a taller profile, long pommel, and a dramatic battlefield silhouette.'],
-            ['user' => 'Ronan Vale', 'sword_name' => 'Ridgecrest Broadsword', 'sword_type' => 'Broadsword', 'budget' => '$260 - $340', 'timeline' => '10 days', 'description' => 'A sturdy one-handed broadsword for reliable edge alignment and a clean, formal finish.'],
-            ['user' => 'Zara Quinn', 'sword_name' => 'Nightborne Longsword', 'sword_type' => 'Longsword', 'budget' => '$300 - $420', 'timeline' => '2-4 weeks', 'description' => 'A dark, refined longsword with a leaner profile and a fast, elegant line.'],
-            ['user' => 'Theo Marsh', 'sword_name' => 'Crestwind Arming Sword', 'sword_type' => 'Arming Sword', 'budget' => '$180 - $240', 'timeline' => '1 week', 'description' => 'A compact sidearm built for quick recovery, light handling, and daily carry aesthetics.'],
-        ];
-
-        $orders = collect($demoOrders)->map(function (array $item) {
-            $user = User::where('name', $item['user'])->first();
-            $userName = $item['user'];
-
-            return [
-                'user' => $userName,
-                'user_id' => $user?->id,
-                'handle' => '@' . strtolower(str_replace(' ', '', $userName)),
-                'sword_name' => $item['sword_name'],
-                'sword_type' => $item['sword_type'],
-                'budget' => $item['budget'],
-                'timeline' => $item['timeline'],
-                'description' => $item['description'],
-                'status' => 'Open',
-                'time' => 'Featured request',
-            ];
-        });
+    if ($swords->isEmpty()) {
+        $swords = collect([
+            ['id' => 1001, 'name' => 'Warden Bastard Sword', 'type' => 'Bastard Sword', 'description' => 'Balanced hand-and-a-half blade for dependable cuts and guard control.', 'image' => '/images/katana.jpg', 'maker' => 'Avery Cole', 'maker_id' => null, 'price' => 349.99],
+            ['id' => 1002, 'name' => 'Nightborne Longsword', 'type' => 'Longsword', 'description' => 'Lean profile with elegant handling and responsive point work.', 'image' => '/images/katana.jpg', 'maker' => 'Zara Quinn', 'maker_id' => null, 'price' => 389.99],
+            ['id' => 1003, 'name' => 'Highland Claymore', 'type' => 'Claymore', 'description' => 'Broad two-handed silhouette with dramatic battlefield presence.', 'image' => '/images/katana.jpg', 'maker' => 'Mila Hart', 'maker_id' => null, 'price' => 519.99],
+            ['id' => 1004, 'name' => 'Crestwind Arming Sword', 'type' => 'Arming Sword', 'description' => 'Compact and quick recovering sidearm for fast exchanges.', 'image' => '/images/katana.jpg', 'maker' => 'Theo Marsh', 'maker_id' => null, 'price' => 229.99],
+        ]);
     }
 
     return view('shop', [
-        'orders' => $orders,
-        'orderCount' => $orders->count(),
+        'swords' => $swords,
+        'swordCount' => $swords->count(),
     ]);
+});
+
+Route::get('/discussions', function () {
+    $discussions = collect();
+
+    if (Schema::hasTable('discussions')) {
+        $discussions = Discussion::latest()->take(40)->get();
+    }
+
+    return view('discussions', [
+        'discussions' => $discussions,
+    ]);
+});
+
+Route::post('/discussions', function (\Illuminate\Http\Request $request) {
+    $validated = $request->validate([
+        'author' => 'nullable|string|max:60',
+        'content' => 'required|string|max:1200',
+    ]);
+
+    if (! Schema::hasTable('discussions')) {
+        return redirect('/discussions')->with('error', 'Discussions are not available yet. Run migrations first.');
+    }
+
+    $author = trim((string) ($validated['author'] ?? ''));
+
+    Discussion::create([
+        'user_id' => session('user_id'),
+        'author' => $author !== '' ? $author : (session('user_name') ?: 'Anonymous Collector'),
+        'content' => trim((string) $validated['content']),
+    ]);
+
+    return redirect('/discussions')->with('success', 'Discussion posted.');
 });
 
 Route::get('/storage/{path}', [StorageController::class, 'show'])->where('path', '.*');

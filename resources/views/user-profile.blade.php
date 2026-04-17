@@ -36,7 +36,16 @@
                 background: rgba(255,255,255,0.75); backdrop-filter: blur(6px);
             }
             .brand { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px; color: #2c2218; }
-            .menu { display: flex; gap: 18px; font-size: 14px; }
+            .menu {
+                display: flex;
+                gap: 18px;
+                font-size: 14px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                max-width: 100%;
+                white-space: nowrap;
+                padding-bottom: 2px;
+            }
             .menu a { color: inherit; text-decoration: none; opacity: 0.8; font-weight: 600; }
 
             .profile-wrap {
@@ -139,9 +148,27 @@
             .meta span { display: inline-flex; align-items: center; gap: 6px; }
             .dot { width: 6px; height: 6px; border-radius: 50%; background: #c7b9a6; display: inline-block; }
 
-            .stats { display: flex; gap: 18px; margin-top: 14px; flex-wrap: wrap; justify-content: flex-start; padding-top: 14px; border-top: 1px solid #f0ebe2; }
-            .stat { font-size: 14px; color: #6c6c6c; }
-            .stat b { color: #111111; font-size: 16px; margin-right: 6px; font-weight: 700; }
+            .stats {
+                display: flex;
+                gap: 18px;
+                margin-top: 14px;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                padding-top: 14px;
+                border-top: 1px solid #f0ebe2;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .stat {
+                display: inline-flex;
+                align-items: baseline;
+                gap: 6px;
+                white-space: nowrap;
+                font-size: 14px;
+                color: #6c6c6c;
+                flex: 0 0 auto;
+            }
+            .stat b { color: #111111; font-size: 16px; font-weight: 700; }
 
             .tabs { display: block; padding: 14px 26px 0; border-bottom: 1px solid #eee7dc; font-weight: 600; color: #8a7f72; }
             .tabs input { display: none; }
@@ -198,6 +225,89 @@
                 background: #ffffff; border-radius: 16px; padding: 18px;
                 border: 1px solid #e6dfd3; color: #6c6c6c; text-align: center;
             }
+            .discussion-board { display: grid; gap: 12px; }
+            .discussion-card {
+                background: #ffffff;
+                border-radius: 16px;
+                border: 1px solid #e6dfd3;
+                padding: 14px;
+                display: grid;
+                gap: 10px;
+            }
+            .discussion-head {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .discussion-title { margin: 0; font-size: 16px; color: #111111; }
+            .discussion-meta {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                color: #7b7166;
+                font-size: 12px;
+            }
+            .discussion-body {
+                margin: 0;
+                color: #5f5f5f;
+                font-size: 13px;
+                line-height: 1.65;
+            }
+            .vote-chip {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 28px;
+                padding: 0 10px;
+                border-radius: 999px;
+                background: #f3e6d5;
+                color: #7a5a2b;
+                font-size: 12px;
+                font-weight: 700;
+                white-space: nowrap;
+            }
+            .reply-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: grid;
+                gap: 8px;
+            }
+            .reply-item {
+                border-left: 2px solid #d9a867;
+                background: #faf8f4;
+                border-radius: 10px;
+                padding: 8px 10px 8px 12px;
+            }
+            .reply-meta {
+                margin: 0 0 4px;
+                color: #7a5a2b;
+                font-size: 11px;
+                font-weight: 600;
+            }
+            .reply-item p {
+                margin: 0;
+                color: #5f5f5f;
+                font-size: 12px;
+                line-height: 1.55;
+            }
+            .site-footer {
+                margin-top: 20px;
+                padding-top: 12px;
+                border-top: 1px solid #e6dfd3;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+                color: #7b7166;
+                font-size: 13px;
+            }
+            .site-footer a {
+                color: inherit;
+                text-decoration: none;
+            }
 
             @media (max-width: 900px) {
                 .profile-header { flex-direction: column; align-items: center; }
@@ -218,6 +328,7 @@
                     <a href="/welcome">Explore</a>
                     <a href="/feed">Feed</a>
                     <a href="/shop">Shop</a>
+                    <a href="/discussions">Discussions</a>
                     <a href="/profile">Profile</a>
                     <a href="/upload">Upload Sword</a>
                 </nav>
@@ -285,7 +396,7 @@
                 </div>
 
                 <div class="tab-panels">
-                    <div class="tab-panel feed-panel" style="display:block;">
+                    <div class="tab-panel feed-panel posts-panel" style="display:block;">
                         <div class="section-title">{{ $user->name }}'s Swords</div>
 
                         @if ($swords->isEmpty())
@@ -311,7 +422,7 @@
                     </div>
 
                     @if (session('user_id') == $user->id)
-                        <div class="tab-panel feed-panel">
+                        <div class="tab-panel feed-panel likes-panel">
                             <div class="section-title">Liked Swords</div>
 
                             @if ($likedSwords->isEmpty())
@@ -336,21 +447,41 @@
                             @endif
                         </div>
                     @endif
+
                 </div>
             </section>
+
+            <footer class="site-footer" aria-label="Site footer">
+                <span>© {{ date('Y') }} Sword Showcase Hub</span>
+                <span>
+                    <a href="/privacy">Privacy</a>
+                    ·
+                    <a href="/terms">Terms</a>
+                </span>
+            </footer>
         </div>
 
         <script>
-            document.getElementById('tab-posts').addEventListener('change', function() {
-                document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
-                document.querySelectorAll('.tab-panel')[0].style.display = 'block';
-            });
-            document.getElementById('tab-likes').addEventListener('change', function() {
-                if (document.getElementById('tab-likes')) {
-                    document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
-                    document.querySelectorAll('.tab-panel')[1].style.display = 'block';
+            const hidePanels = () => {
+                document.querySelectorAll('.tab-panel').forEach((panel) => {
+                    panel.style.display = 'none';
+                });
+            };
+
+            const showPanel = (selector) => {
+                hidePanels();
+                const panel = document.querySelector(selector);
+                if (panel) {
+                    panel.style.display = 'block';
                 }
-            });
+            };
+
+            const postsTab = document.getElementById('tab-posts');
+            const likesTab = document.getElementById('tab-likes');
+            postsTab?.addEventListener('change', () => showPanel('.posts-panel'));
+            likesTab?.addEventListener('change', () => showPanel('.likes-panel'));
+
+            showPanel('.posts-panel');
         </script>
     </body>
 </html>

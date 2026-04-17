@@ -54,8 +54,11 @@
                 display: flex;
                 gap: 18px;
                 font-size: 14px;
-                flex-wrap: wrap;
-                row-gap: 8px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                max-width: 100%;
+                white-space: nowrap;
+                padding-bottom: 2px;
             }
             .menu a {
                 color: inherit;
@@ -242,6 +245,24 @@
                 text-transform: uppercase;
                 backdrop-filter: blur(8px);
             }
+            .site-footer {
+                margin-top: 30px;
+                padding-top: 16px;
+                border-top: 1px solid #ded8ce;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+                flex-wrap: wrap;
+                color: #6f6a62;
+                font-size: 13px;
+            }
+            .site-footer a {
+                text-decoration: none;
+                color: inherit;
+                opacity: 0.9;
+            }
+            .site-footer a:hover { opacity: 1; }
             @media (max-width: 960px) {
                 .hero {
                     grid-template-columns: 1fr;
@@ -297,6 +318,7 @@
                     <a href="/welcome">Explore</a>
                     <a href="/feed">Feed</a>
                     <a href="/shop">Shop</a>
+                    <a href="/discussions">Discussions</a>
                     <a href="/profile">Profile</a>
                     <a href="/upload">Upload Sword</a>
                 </nav>
@@ -351,6 +373,15 @@
                     </div>
                 </article>
             </section>
+
+            <footer class="site-footer" aria-label="Site footer">
+                <span>© {{ date('Y') }} Sword Showcase Hub</span>
+                <span>
+                    <a href="/privacy">Privacy</a>
+                    ·
+                    <a href="/terms">Terms</a>
+                </span>
+            </footer>
         </main>
     </body>
 </html>

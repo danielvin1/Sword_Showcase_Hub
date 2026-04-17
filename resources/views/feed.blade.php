@@ -36,6 +36,13 @@
         }
         .brand { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px; }
         .menu { display: flex; gap: 18px; font-size: 14px; flex-wrap: wrap; row-gap: 8px; }
+        .menu {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            max-width: 100%;
+            white-space: nowrap;
+            padding-bottom: 2px;
+        }
         .menu a { color: inherit; text-decoration: none; opacity: 0.8; }
         .feed-header {
             display: flex;
@@ -115,7 +122,7 @@
         .refresh-card {
             display: block;
             padding: 0;
-                linear-gradient(180deg, rgba(34, 31, 27, 0.95), rgba(18, 16, 14, 0.95));
+            background: linear-gradient(180deg, rgba(34, 31, 27, 0.95), rgba(18, 16, 14, 0.95));
             color: var(--text);
             cursor: pointer;
             text-align: left;
@@ -355,6 +362,22 @@
             background: #eff3f4;
             color: #0f1419;
         }
+        .site-footer {
+            margin-top: 28px;
+            padding-top: 14px;
+            border-top: 1px solid #ded8ce;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            color: #6f6a62;
+            font-size: 13px;
+        }
+        .site-footer a {
+            text-decoration: none;
+            color: inherit;
+        }
     </style>
     <script src='/js/theme-mode.js'></script>
     <link rel='stylesheet' href='/css/theme.css'>
@@ -367,6 +390,7 @@
             <a href="/welcome">Explore</a>
             <a href="/feed">Feed</a>
             <a href="/shop">Shop</a>
+            <a href="/discussions">Discussions</a>
             <a href="/profile">Profile</a>
             <a href="/upload">Upload Sword</a>
         </nav>
@@ -482,6 +506,15 @@
             </div>
         @endif
     </section>
+
+    <footer class="site-footer" aria-label="Site footer">
+        <span>© {{ date('Y') }} Sword Showcase Hub</span>
+        <span>
+            <a href="/privacy">Privacy</a>
+            ·
+            <a href="/terms">Terms</a>
+        </span>
+    </footer>
 </div>
 
 <div class="modal-overlay" id="filterModal" aria-hidden="true">

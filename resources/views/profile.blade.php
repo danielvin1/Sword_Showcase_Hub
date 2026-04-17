@@ -74,6 +74,11 @@
                 display: flex;
                 gap: 18px;
                 font-size: 14px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                max-width: 100%;
+                white-space: nowrap;
+                padding-bottom: 2px;
             }
             .menu a {
                 text-decoration: none;
@@ -81,6 +86,22 @@
                 opacity: 0.85;
             }
             .menu a:hover { opacity: 1; }
+            .site-footer {
+                margin-top: 22px;
+                padding-top: 14px;
+                border-top: 1px solid rgba(255,255,255,0.12);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+                color: var(--muted);
+                font-size: 13px;
+            }
+            .site-footer a {
+                color: inherit;
+                text-decoration: none;
+            }
             .profile-wrap {
                 background: linear-gradient(180deg, rgba(38, 35, 32, 0.95), rgba(20, 18, 16, 0.95));
                 border-radius: 22px;
@@ -183,6 +204,30 @@
             .empty { background: rgba(255,255,255,0.04); border-radius: 16px; padding: 18px; border: 1px solid rgba(255,255,255,0.08); color: var(--muted); }
             .dot { display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: var(--gold-soft); margin-right: 8px; vertical-align: middle; }
             .meta { display: flex; flex-wrap: wrap; gap: 14px; margin: 18px 0; font-size: 13px; color: var(--muted); }
+            .stats {
+                display: flex;
+                flex-wrap: nowrap;
+                gap: 18px;
+                margin-top: 14px;
+                padding-top: 14px;
+                border-top: 1px solid rgba(255,255,255,0.08);
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .stat {
+                display: inline-flex;
+                align-items: baseline;
+                gap: 6px;
+                white-space: nowrap;
+                font-size: 14px;
+                color: var(--muted);
+                flex: 0 0 auto;
+            }
+            .stat b {
+                color: var(--text);
+                font-size: 16px;
+                font-weight: 700;
+            }
             .field label { color: var(--muted); }
             .field input { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: var(--text); }
             .field textarea {
@@ -351,6 +396,99 @@
                 text-align: left;
                 color: var(--muted);
             }
+            .discussion-board {
+                display: grid;
+                gap: 14px;
+            }
+            .discussion-card {
+                border-radius: 18px;
+                border: 1px solid rgba(255,255,255,0.08);
+                background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+                padding: 16px;
+                display: grid;
+                gap: 12px;
+            }
+            .discussion-head {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 10px;
+            }
+            .discussion-title {
+                margin: 0;
+                font-size: 17px;
+                color: var(--text);
+                letter-spacing: -0.01em;
+            }
+            .discussion-topic {
+                margin: 6px 0 0;
+                color: var(--muted);
+                font-size: 12px;
+            }
+            .vote-chip {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 28px;
+                padding: 0 10px;
+                border-radius: 999px;
+                border: 1px solid rgba(241, 216, 168, 0.2);
+                background: rgba(241, 216, 168, 0.08);
+                color: var(--gold-soft);
+                font-size: 12px;
+                font-weight: 700;
+                white-space: nowrap;
+            }
+            .discussion-body {
+                margin: 0;
+                color: var(--muted);
+                font-size: 13px;
+                line-height: 1.7;
+            }
+            .discussion-meta {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                color: var(--muted);
+                font-size: 12px;
+            }
+            .discussion-replies {
+                display: grid;
+                gap: 8px;
+                margin-top: 2px;
+            }
+            .discussion-replies h5 {
+                margin: 0;
+                color: var(--text);
+                font-size: 13px;
+                font-weight: 700;
+            }
+            .reply-list {
+                display: grid;
+                gap: 8px;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+            .reply-item {
+                margin-left: 10px;
+                padding: 9px 10px 9px 12px;
+                border-left: 2px solid rgba(217, 168, 103, 0.5);
+                border-radius: 10px;
+                background: rgba(255,255,255,0.03);
+            }
+            .reply-item p {
+                margin: 0;
+                color: var(--muted);
+                font-size: 12px;
+                line-height: 1.6;
+            }
+            .reply-item .reply-meta {
+                margin-bottom: 4px;
+                font-size: 11px;
+                color: var(--gold-soft);
+                letter-spacing: 0.01em;
+            }
             .settings-panel {
                 position: absolute;
                 right: 0;
@@ -428,7 +566,7 @@
             .modal h3 { margin: 0 0 20px; font-size: 22px; color: var(--gold-soft); }
             .field { margin-bottom: 20px; }
             .field label { display: block; margin-bottom: 10px; color: var(--muted); font-size: 14px; font-weight: 600; }
-            .field input[type='text'], .field input[type='file'] { width: 100%; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: var(--text); padding: 12px 14px; font-size: 14px; }
+            .field input[type='text'], .field input[type='number'], .field input[type='file'] { width: 100%; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: var(--text); padding: 12px 14px; font-size: 14px; }
             .modal-photo { display: block; position: relative; width: 100%; border-radius: 18px; padding: 16px; background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.12); cursor: pointer; overflow: hidden; }
             .modal-photo img { width: 100%; height: auto; max-height: 180px; object-fit: cover; border-radius: 14px; display: block; }
             .modal-photo.banner-picker img {
@@ -598,6 +736,7 @@
             }
             body.light-mode .field input,
             body.light-mode .field input[type='text'],
+            body.light-mode .field input[type='number'],
             body.light-mode .field input[type='file'] {
                 background: #ffffff;
                 color: #0f1419;
@@ -642,15 +781,29 @@
             body.light-mode .order-card h4 {
                 color: #0f1419;
             }
+            body.light-mode .discussion-title,
+            body.light-mode .discussion-replies h5 {
+                color: #0f1419;
+            }
             body.light-mode .order-section p,
             body.light-mode .order-card p,
             body.light-mode .order-card .meta-line,
             body.light-mode .order-note {
                 color: #536471;
             }
+            body.light-mode .discussion-body,
+            body.light-mode .discussion-meta,
+            body.light-mode .reply-item p {
+                color: #536471;
+            }
             body.light-mode .order-form,
             body.light-mode .order-board,
             body.light-mode .order-card {
+                background: #ffffff;
+                border-color: #e6ecf0;
+            }
+            body.light-mode .discussion-card,
+            body.light-mode .reply-item {
                 background: #ffffff;
                 border-color: #e6ecf0;
             }
@@ -690,6 +843,7 @@
                     <a href="/welcome">Explore</a>
                     <a href="/feed">Feed</a>
                     <a href="/shop">Shop</a>
+                    <a href="/discussions">Discussions</a>
                     <a href="/profile">Profile</a>
                     <a href="/upload">Upload Sword</a>
                 </nav>
@@ -923,6 +1077,15 @@
                     @endif
                 </div>
             </section>
+
+            <footer class="site-footer" aria-label="Site footer">
+                <span>© {{ date('Y') }} Sword Showcase Hub</span>
+                <span>
+                    <a href="/privacy">Privacy</a>
+                    ·
+                    <a href="/terms">Terms</a>
+                </span>
+            </footer>
         </div>
         @if ($isOwnProfile)
             <div class="modal-backdrop" id="profile-modal">
