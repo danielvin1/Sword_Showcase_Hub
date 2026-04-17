@@ -11,6 +11,7 @@ use App\Models\Like;
 use App\Models\Sword;
 use App\Models\SwordOrder;
 use App\Models\User;
+use App\Models\Post;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Hash;
 
@@ -280,6 +281,19 @@ Route::get('/feed', function () use ($resolveSessionUser) {
         : [];
 
     return view('feed', compact('swords', 'currentUser', 'followingIds'));
+});
+
+Route::get('/discussions', function () {
+    $posts = Post::with('user')
+        ->withCount('comments')
+        ->latest()
+        ->get();
+
+    return view('discussions', compact('posts'));
+});
+
+Route::get('/posts/{post}', function (Post $post) {
+    return view('discussion-single', compact('post'));
 });
 
 Route::post('/users/{user}/follow', [FollowController::class, 'toggle']);
