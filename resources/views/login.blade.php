@@ -107,6 +107,17 @@
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" placeholder="Password" required>
                 <button type="submit">Login</button>
+                <a href="/auth/google/redirect" style="
+                    display: block;
+                    margin-top: 12px;
+                    padding: 12px;
+                    background: #4285f4;
+                    color: white;
+                    text-align: center;
+                    text-decoration: none;
+                    border-radius: 20px;
+                    font-weight: 700;
+                ">Continue with Google</a>
                 <p style="margin-top: 14px; text-align:center;">
 
                <a href="/register" style="

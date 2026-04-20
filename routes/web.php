@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\SwordOrderController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -120,6 +121,9 @@ Route::get('/storage/{path}', [StorageController::class, 'show'])->where('path',
 Route::get('/login', function () {
     return view('login');
 });
+
+Route::get('/auth/google/redirect', [SocialAuthController::class, 'redirectToGoogle']);
+Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
 Route::get('/register', function () {
     return view('register');

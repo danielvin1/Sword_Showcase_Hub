@@ -9,10 +9,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropIndex(['provider_name']);
-            $table->dropIndex(['provider_id']);
-            $table->dropUnique(['provider_name', 'provider_id']);
-            $table->dropColumn(['provider_name', 'provider_id']);
+            if (Schema::hasColumn('users', 'provider_name')) {
+                $table->dropIndex(['provider_name']);
+            }
+            if (Schema::hasColumn('users', 'provider_id')) {
+                $table->dropIndex(['provider_id']);
+            }
+            if (Schema::hasColumn('users', 'provider_name') && Schema::hasColumn('users', 'provider_id')) {
+                $table->dropUnique(['provider_name', 'provider_id']);
+            }
+            if (Schema::hasColumn('users', 'provider_name')) {
+                $table->dropColumn(['provider_name']);
+            }
+            if (Schema::hasColumn('users', 'provider_id')) {
+                $table->dropColumn(['provider_id']);
+            }
         });
     }
 

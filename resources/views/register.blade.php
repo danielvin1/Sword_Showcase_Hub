@@ -115,6 +115,17 @@
         <button type="submit">Register</button>
     </form>
 
+    <a href="/auth/google/redirect" style="
+        display: block;
+        margin-top: 14px;
+        padding: 12px;
+        border-radius: 20px;
+        background: #4285f4;
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+    ">Register with Google</a>
+
     <div class="login-link">
         Already have an account? <a href="/login">Login</a>
     </div>
