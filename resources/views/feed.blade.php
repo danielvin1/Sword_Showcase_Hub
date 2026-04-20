@@ -27,22 +27,6 @@
             padding: 36px 22px 80px;
         }
         .shell { max-width: 1240px; margin: 0 auto; }
-        .topbar {
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 20px; margin-bottom: 22px; padding: 14px 18px;
-            border: 1px solid #e2e2df; border-radius: 14px;
-            background: rgba(255,255,255,0.75); backdrop-filter: blur(6px);
-            flex-wrap: wrap;
-        }
-        .brand { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px; }
-        .menu { display: flex; gap: 18px; font-size: 14px; flex-wrap: wrap; row-gap: 8px; }
-        .menu {
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            max-width: 100%;
-            white-space: nowrap;
-            padding-bottom: 2px;
-        }
         .menu a { color: inherit; text-decoration: none; opacity: 0.8; }
         .feed-header {
             display: flex;
@@ -302,8 +286,6 @@
 
         @media (max-width: 600px) {
             .shell { max-width: 100%; }
-            .topbar { padding: 12px; }
-            .menu { gap: 12px; font-size: 13px; }
             .feed-title h1 { font-size: 24px; }
             .feed-title p { font-size: 13px; }
             .feed-actions { gap: 8px; }
@@ -384,17 +366,7 @@
 </head>
 <body>
 <div class="shell">
-    <div class="topbar">
-        <div class="brand">Sword Showcase Hub</div>
-        <nav class="menu">
-            <a href="/welcome">Explore</a>
-            <a href="/feed">Feed</a>
-            <a href="/shop">Shop</a>
-            <a href="/discussions">Discussions</a>
-            <a href="/profile">Profile</a>
-            <a href="/upload">Upload Sword</a>
-        </nav>
-    </div>
+    @include('partials.navbar')
 
     <div class="feed-header">
         <div class="feed-title">
