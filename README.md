@@ -1,4 +1,4 @@
-# Sword Showcase Hub — CA2 Server-Side Development (Laravel MVC Application)
+# Sword Showcase Hub
 
 A Laravel-based web application for uploading, browsing, and discussing swords.  
 Users can showcase swords, interact with other users, and participate in a discussion system similar to a forum-style feed.
