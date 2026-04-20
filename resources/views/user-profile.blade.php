@@ -29,24 +29,6 @@
                 padding: 36px 22px 90px;
             }
             .shell { max-width: 1080px; margin: 0 auto; }
-            .topbar {
-                display: flex; align-items: center; justify-content: space-between;
-                gap: 20px; margin-bottom: 22px; padding: 14px 18px;
-                border: 1px solid #e2e2df; border-radius: 14px;
-                background: rgba(255,255,255,0.75); backdrop-filter: blur(6px);
-            }
-            .brand { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px; color: #2c2218; }
-            .menu {
-                display: flex;
-                gap: 18px;
-                font-size: 14px;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                max-width: 100%;
-                white-space: nowrap;
-                padding-bottom: 2px;
-            }
-            .menu a { color: inherit; text-decoration: none; opacity: 0.8; font-weight: 600; }
 
             .profile-wrap {
                 background: #ffffff; border-radius: 18px; overflow: hidden;
@@ -322,17 +304,7 @@
 </head>
     <body>
         <div class="shell">
-            <div class="topbar">
-                <div class="brand">Sword Showcase Hub</div>
-                <nav class="menu" aria-label="Top navigation">
-                    <a href="/welcome">Explore</a>
-                    <a href="/feed">Feed</a>
-                    <a href="/shop">Shop</a>
-                    <a href="/discussions">Discussions</a>
-                    <a href="/profile">Profile</a>
-                    <a href="/upload">Upload Sword</a>
-                </nav>
-            </div>
+            @include('partials.navbar')
 
             <section class="profile-wrap">
                 @php
