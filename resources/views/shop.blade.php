@@ -88,6 +88,14 @@
         .hamburger.open span:nth-child(3) {
             transform: rotate(45deg) translate(-4px, -4px);
         }
+        body.theme-dark .topbar {
+            color: #e9e2d6;
+            background: rgba(27, 25, 22, 0.85);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+        body.theme-dark .hamburger span {
+            background: #e9e2d6;
+        }
         @media (max-width: 768px) {
             .menu {
                 display: none;
@@ -114,6 +122,10 @@
                 right: 18px;
                 top: 50%;
                 transform: translateY(-50%);
+            }
+            body.theme-dark .menu {
+                background: rgba(27, 25, 22, 0.98);
+                border-color: rgba(255, 255, 255, 0.12);
             }
         }
         .cart-trigger {

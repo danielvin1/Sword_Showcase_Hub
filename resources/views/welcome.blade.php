@@ -371,93 +371,28 @@
                 cursor: pointer;
                 padding: 8px;
                 border-radius: 50%;
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(6px);
-                transition: background 0.2s ease;
+                background: rgba(217, 167, 103, 0.3);
+                border: 1px solid rgba(217, 167, 103, 0.6);
+                transition: background 0.2s ease, border-color 0.2s ease;
             }
             .theme-toggle:hover {
-                background: rgba(255, 255, 255, 0.2);
+                background: rgba(217, 167, 103, 0.5);
+                border-color: rgba(217, 167, 103, 0.8);
             }
             .theme-toggle svg {
                 width: 20px;
                 height: 20px;
-                fill: #111111;
-            }
-            .theme-switch {
-                position: relative;
-                display: inline-block;
-                width: 60px;
-                height: 34px;
-                cursor: pointer;
-                border-radius: 999px;
-                overflow: hidden;
-            }
-            .theme-switch input {
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
-            .slider {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: #ccc;
-                transition: .4s;
-                border-radius: 34px;
-            }
-            .slider:before {
-                position: absolute;
-                content: "";
-                height: 26px;
-                width: 26px;
-                left: 4px;
-                bottom: 4px;
-                background-color: white;
-                transition: .4s;
-                border-radius: 50%;
-            }
-            input:checked + .slider {
-                background-color: #2196F3;
-            }
-            input:checked + .slider:before {
-                transform: translateX(26px);
-            }
-            .slider-text {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                font-size: 12px;
-                font-weight: bold;
-                color: #1b1b1b;
-                pointer-events: none;
-                transition: opacity 0.4s;
-            }
-            .slider-text.light {
-                right: 8px;
-                opacity: 0;
-            }
-            .slider-text.dark {
-                left: 8px;
-                opacity: 1;
-            }
-            input:checked + .slider .slider-text.light {
-                opacity: 1;
-            }
-            input:checked + .slider .slider-text.dark {
-                opacity: 0;
+                fill: #d9a867;
             }
         </style>
         <script src='/js/theme-mode.js'></script>
         <link rel='stylesheet' href='/css/theme.css'>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                const themeToggle = document.getElementById('theme-toggle');
-                const currentTheme = localStorage.getItem('profileTheme') || 'dark';
-                themeToggle.checked = currentTheme === 'light';
-                themeToggle.addEventListener('change', function() {
-                    const newTheme = themeToggle.checked ? 'light' : 'dark';
+                const themeToggle = document.querySelector('.theme-toggle');
+                themeToggle.addEventListener('click', function() {
+                    const currentTheme = localStorage.getItem('profileTheme') || 'dark';
+                    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
                     localStorage.setItem('profileTheme', newTheme);
                     document.body.classList.toggle('light-mode', newTheme === 'light');
                     document.body.classList.toggle('theme-dark', newTheme === 'dark');
@@ -467,7 +402,23 @@
 </head>
     <body>
         <main class="page">
-            @include('partials.navbar')
+            <div class="topbar">
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/>
+                    </svg>
+                </button>
+                <div class="brand">Sword Showcase Hub</div>
+                <nav class="menu" aria-label="Top navigation">
+                    <a href="/welcome">Explore</a>
+                    <a href="/feed">Feed</a>
+                    <a href="/shop">Shop</a>
+                    <a href="/discussions">Discussions</a>
+                    <a href="/profile">Profile</a>
+                    <a href="/upload">Upload Sword</a>
+                    <a href="/login">Login</a>
+                </nav>
+            </div>
 
             <section class="hero">
                 <div class="hero-copy">
@@ -481,13 +432,6 @@
                     <div class="hero-actions">
                         <a class="btn primary" href="/feed">Explore Blades</a>
                         <a class="btn" href="/login">Login</a>
-                        <label class="theme-switch">
-                            <input type="checkbox" id="theme-toggle">
-                            <span class="slider">
-                                <span class="slider-text light">Light</span>
-                                <span class="slider-text dark">Dark</span>
-                            </span>
-                        </label>
                     </div>
                 </div>
                 <div class="hero-media" aria-hidden="true">
