@@ -86,7 +86,7 @@
 
         hamburger.addEventListener('click', function() {
             hamburger.classList.toggle('open');
-            menu.classList.toggle('open');
-        });
+            menu.classList.toggle('openve('open');
+   
     });
-</script>
+</script>   });
