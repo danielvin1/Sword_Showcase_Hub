@@ -122,8 +122,10 @@ Route::get('/login', function () {
     return view('login');
 });
 
-Route::get('/auth/google/redirect', [SocialAuthController::class, 'redirectToGoogle']);
-Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
+Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect'])
+    ->whereIn('provider', ['google', 'github']);
+Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback'])
+    ->whereIn('provider', ['google', 'github']);
 
 Route::get('/register', function () {
     return view('register');

@@ -51,41 +51,10 @@
                 padding: 30px 22px 90px;
             }
             .topbar {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 20px;
                 margin-bottom: 26px;
-                padding: 12px 20px;
-                border-radius: 12px;
-                border: 1px solid rgba(255, 255, 255, 0.12);
-                background: linear-gradient(180deg, rgba(42, 41, 39, 0.95), rgba(20, 19, 18, 0.95));
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-            }
-            .brand {
-                font-family: 'Cinzel', serif;
-                font-weight: 600;
-                letter-spacing: 0.2em;
-                text-transform: uppercase;
-                font-size: 12px;
                 color: var(--text);
+                font-family: "Poppins", "Trebuchet MS", sans-serif;
             }
-            .menu {
-                display: flex;
-                gap: 18px;
-                font-size: 14px;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                max-width: 100%;
-                white-space: nowrap;
-                padding-bottom: 2px;
-            }
-            .menu a {
-                text-decoration: none;
-                color: var(--text);
-                opacity: 0.85;
-            }
-            .menu a:hover { opacity: 1; }
             .site-footer {
                 margin-top: 22px;
                 padding-top: 14px;
@@ -837,17 +806,7 @@
     </head>
     <body>
         <div class="shell">
-            <div class="topbar">
-                <div class="brand">Sword Showcase Hub</div>
-                <nav class="menu" aria-label="Top navigation">
-                    <a href="/welcome">Explore</a>
-                    <a href="/feed">Feed</a>
-                    <a href="/shop">Shop</a>
-                    <a href="/discussions">Discussions</a>
-                    <a href="/profile">Profile</a>
-                    <a href="/upload">Upload Sword</a>
-                </nav>
-            </div>
+            @include('partials.navbar')
 
             <section class="profile-wrap">
                 @php
@@ -1629,5 +1588,3 @@
         </script>
     </body>
 </html>
-
-

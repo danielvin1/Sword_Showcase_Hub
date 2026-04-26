@@ -11,58 +11,82 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
 {
-    public function redirectToGoogle()
+    private const SUPPORTED_PROVIDERS = [
+        'google' => [
+            'label' => 'Google',
+            'client_id_config' => 'services.google.client_id',
+            'client_secret_config' => 'services.google.client_secret',
+        ],
+        'github' => [
+            'label' => 'GitHub',
+            'client_id_config' => 'services.github.client_id',
+            'client_secret_config' => 'services.github.client_secret',
+        ],
+    ];
+
+    public function redirect(string $provider)
     {
-        if (! config('services.google.client_id') || ! config('services.google.client_secret')) {
-            return redirect('/login')->with('error', 'Google OAuth is not configured. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in your .env file.');
+        $providerConfig = $this->providerConfig($provider);
+
+        if (! config($providerConfig['client_id_config']) || ! config($providerConfig['client_secret_config'])) {
+            return redirect('/login')->with(
+                'error',
+                sprintf(
+                    '%s OAuth is not configured. Set the %s credentials in your .env file.',
+                    $providerConfig['label'],
+                    strtoupper($provider)
+                )
+            );
         }
 
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
-    public function handleGoogleCallback(Request $request)
+    public function callback(Request $request, string $provider)
     {
+        $providerConfig = $this->providerConfig($provider);
+
         try {
-            $googleUser = Socialite::driver('google')->user();
+            $socialUser = Socialite::driver($provider)->user();
         } catch (\Throwable $exception) {
-            Log::error('Google OAuth callback failed', ['error' => $exception->getMessage()]);
-            return redirect('/login')->with('error', 'Google sign-in failed. Please try again.');
+            Log::error(sprintf('%s OAuth callback failed', $providerConfig['label']), ['error' => $exception->getMessage()]);
+            return redirect('/login')->with('error', sprintf('%s sign-in failed. Please try again.', $providerConfig['label']));
         }
 
-        $email = $googleUser->getEmail();
+        $email = $socialUser->getEmail();
 
         if (! $email) {
-            return redirect('/login')->with('error', 'Google did not return an email address.');
+            return redirect('/login')->with('error', sprintf('%s did not return an email address.', $providerConfig['label']));
         }
 
-        $user = User::where(function ($query) use ($googleUser, $email) {
-            $query->where('provider_name', 'google')
-                ->where('provider_id', $googleUser->getId());
+        $user = User::where(function ($query) use ($provider, $socialUser) {
+            $query->where('provider_name', $provider)
+                ->where('provider_id', $socialUser->getId());
         })->orWhere('email', $email)->first();
 
         if (! $user) {
             $user = User::create([
-                'name' => $googleUser->getName() ?: $googleUser->getNickname() ?: 'Google User',
+                'name' => $socialUser->getName() ?: $socialUser->getNickname() ?: $providerConfig['label'] . ' User',
                 'email' => $email,
-                'provider_name' => 'google',
-                'provider_id' => $googleUser->getId(),
-                'profile_photo' => $googleUser->getAvatar(),
+                'provider_name' => $provider,
+                'provider_id' => $socialUser->getId(),
+                'profile_photo' => $socialUser->getAvatar(),
                 'password' => Hash::make(Str::random(16)),
             ]);
         } else {
             $updates = [];
 
             if (! $user->provider_name || ! $user->provider_id) {
-                $updates['provider_name'] = 'google';
-                $updates['provider_id'] = $googleUser->getId();
+                $updates['provider_name'] = $provider;
+                $updates['provider_id'] = $socialUser->getId();
             }
 
-            if (! $user->profile_photo && $googleUser->getAvatar()) {
-                $updates['profile_photo'] = $googleUser->getAvatar();
+            if (! $user->profile_photo && $socialUser->getAvatar()) {
+                $updates['profile_photo'] = $socialUser->getAvatar();
             }
 
-            if ((! $user->name || $user->name === 'Google User') && $googleUser->getName()) {
-                $updates['name'] = $googleUser->getName();
+            if ((! $user->name || str_ends_with($user->name, ' User')) && $socialUser->getName()) {
+                $updates['name'] = $socialUser->getName();
             }
 
             if ($updates) {
@@ -79,5 +103,12 @@ class SocialAuthController extends Controller
         ]);
 
         return redirect('/feed');
+    }
+
+    private function providerConfig(string $provider): array
+    {
+        abort_unless(array_key_exists($provider, self::SUPPORTED_PROVIDERS), 404);
+
+        return self::SUPPORTED_PROVIDERS[$provider];
     }
 }

@@ -33,95 +33,9 @@
                 padding: 32px 24px 90px;
             }
             .topbar {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 20px;
                 margin-bottom: 28px;
-                padding: 14px 18px;
-                border: 1px solid #e2e2df;
-                border-radius: 14px;
-                background: rgba(255, 255, 255, 0.75);
-                backdrop-filter: blur(6px);
-            }
-            .brand {
-                font-weight: 700;
-                letter-spacing: 0.08em;
-                text-transform: uppercase;
-                font-size: 12px;
-            }
-            .menu {
-                display: flex;
-                gap: 18px;
-                font-size: 14px;
-                flex-wrap: wrap;
-                row-gap: 8px;
-                overflow-x: auto;
-                max-width: 100%;
-                white-space: nowrap;
-                padding-bottom: 2px;
-            }
-            .menu a {
-                color: inherit;
-                text-decoration: none;
-                opacity: 0.8;
-                transition: opacity 0.2s ease, color 0.2s ease;
-            }
-            .menu a:hover { opacity: 1; }
-            .hamburger {
-                display: none;
-                flex-direction: column;
-                background: none;
-                border: none;
-                cursor: pointer;
-                padding: 0;
-                width: 20px;
-                height: 20px;
-                position: absolute;
-                right: 18px;
-                top: 50%;
-                transform: translateY(-50%);
-            }
-            .hamburger span {
-                display: block;
-                width: 100%;
-                height: 2px;
-                background: #111111;
-                margin: 2px 0;
-                transition: 0.3s;
-            }
-            .hamburger.open span:nth-child(1) {
-                transform: rotate(-45deg) translate(-4px, 4px);
-            }
-            .hamburger.open span:nth-child(2) {
-                opacity: 0;
-            }
-            .hamburger.open span:nth-child(3) {
-                transform: rotate(45deg) translate(-4px, -4px);
-            }
-            @media (max-width: 768px) {
-                .menu {
-                    display: none;
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    right: 0;
-                    background: rgba(255, 255, 255, 0.95);
-                    backdrop-filter: blur(6px);
-                    border: 1px solid #e2e2df;
-                    border-top: none;
-                    border-radius: 0 0 14px 14px;
-                    flex-direction: column;
-                    padding: 18px;
-                    gap: 12px;
-                    z-index: 99;
-                }
-                .menu.open {
-                    display: flex;
-                }
-                .hamburger {
-                    display: flex;
-                }
+                color: #111111;
+                font-family: "Poppins", "Trebuchet MS", sans-serif;
             }
             .hero {
                 display: grid;
@@ -238,11 +152,13 @@
             }
             .cards {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                grid-template-columns: 1fr;
                 gap: 20px;
             }
             .card {
                 position: relative;
+                display: grid;
+                grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
                 background: #ffffff;
                 border-radius: 20px;
                 border: 1px solid #e0e0e0;
@@ -257,15 +173,19 @@
             }
             .card img {
                 width: 100%;
-                height: 240px;
+                height: 100%;
+                min-height: 240px;
                 object-fit: cover;
             }
             .card-body {
-                padding: 18px;
+                padding: 22px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
             }
             .card-body h3 {
                 margin: 0 0 8px;
-                font-size: 19px;
+                font-size: 21px;
                 font-weight: 700;
                 color: #111111;
             }
@@ -286,6 +206,7 @@
                 background: #f3e6d5;
                 border-radius: 999px;
                 padding: 6px 12px;
+                width: fit-content;
             }
             .featured-badge {
                 position: absolute;
@@ -329,16 +250,14 @@
                     order: -1;
                 }
             }
+            @media (max-width: 900px) {
+                .cards {
+                    grid-template-columns: 1fr;
+                }
+            }
             @media (max-width: 640px) {
                 .page {
                     padding: 20px 16px 70px;
-                }
-                .topbar {
-                    align-items: flex-start;
-                }
-                .menu {
-                    gap: 12px;
-                    row-gap: 8px;
                 }
                 .hero {
                     padding: 18px;
@@ -354,71 +273,20 @@
                     margin-top: 34px;
                     font-size: 17px;
                 }
-                .cards {
+                .card {
                     grid-template-columns: 1fr;
-                    gap: 16px;
                 }
                 .card img {
-                    height: 200px;
+                    min-height: 200px;
                 }
-            }
-            .theme-toggle {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: none;
-                border: none;
-                cursor: pointer;
-                padding: 8px;
-                border-radius: 50%;
-                background: rgba(217, 167, 103, 0.3);
-                border: 1px solid rgba(217, 167, 103, 0.6);
-                transition: background 0.2s ease, border-color 0.2s ease;
-            }
-            .theme-toggle:hover {
-                background: rgba(217, 167, 103, 0.5);
-                border-color: rgba(217, 167, 103, 0.8);
-            }
-            .theme-toggle svg {
-                width: 20px;
-                height: 20px;
-                fill: #d9a867;
             }
         </style>
         <script src='/js/theme-mode.js'></script>
         <link rel='stylesheet' href='/css/theme.css'>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const themeToggle = document.querySelector('.theme-toggle');
-                themeToggle.addEventListener('click', function() {
-                    const currentTheme = localStorage.getItem('profileTheme') || 'dark';
-                    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                    localStorage.setItem('profileTheme', newTheme);
-                    document.body.classList.toggle('light-mode', newTheme === 'light');
-                    document.body.classList.toggle('theme-dark', newTheme === 'dark');
-                });
-            });
-        </script>
 </head>
     <body>
         <main class="page">
-            <div class="topbar">
-                <button class="theme-toggle" aria-label="Toggle theme">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/>
-                    </svg>
-                </button>
-                <div class="brand">Sword Showcase Hub</div>
-                <nav class="menu" aria-label="Top navigation">
-                    <a href="/welcome">Explore</a>
-                    <a href="/feed">Feed</a>
-                    <a href="/shop">Shop</a>
-                    <a href="/discussions">Discussions</a>
-                    <a href="/profile">Profile</a>
-                    <a href="/upload">Upload Sword</a>
-                    <a href="/login">Login</a>
-                </nav>
-            </div>
+            @include('partials.navbar')
 
             <section class="hero">
                 <div class="hero-copy">
@@ -431,7 +299,14 @@
                     </div>
                     <div class="hero-actions">
                         <a class="btn primary" href="/feed">Explore Blades</a>
-                        <a class="btn" href="/login">Login</a>
+                        @if (session('logged_in'))
+                            <form method="post" action="/logout" style="margin: 0;">
+                                @csrf
+                                <button class="btn" type="submit">Logout</button>
+                            </form>
+                        @else
+                            <a class="btn" href="/login">Login</a>
+                        @endif
                     </div>
                 </div>
                 <div class="hero-media" aria-hidden="true">
@@ -471,22 +346,13 @@
             </section>
 
             <footer class="site-footer" aria-label="Site footer">
-                <span>© {{ date('Y') }} Sword Showcase Hub</span>
+                <span>&copy; {{ date('Y') }} Sword Showcase Hub</span>
                 <span>
                     <a href="/privacy">Privacy</a>
-                    ·
+                    &middot;
                     <a href="/terms">Terms</a>
                 </span>
             </footer>
         </main>
     </body>
 </html>
-
-
-
-
-
-
-
-
-

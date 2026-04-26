@@ -17,83 +17,7 @@
             padding: 26px 16px 50px;
         }
         .shell { max-width: 920px; margin: 0 auto; }
-        .topbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 14px;
-            padding: 12px 14px;
-            border: 1px solid #ded8ce;
-            border-radius: 14px;
-            background: rgba(255,255,255,0.72);
-            backdrop-filter: blur(6px);
-            margin-bottom: 18px;
-        }
-        .brand { font-weight: 700; font-size: 12px; letter-spacing: 0.09em; text-transform: uppercase; }
-        .menu {
-            display: flex;
-            gap: 14px;
-            font-size: 14px;
-            overflow-x: auto;
-            white-space: nowrap;
-            max-width: 100%;
-            padding-bottom: 2px;
-        }
-        .menu a { color: inherit; text-decoration: none; opacity: 0.82; }
-        .menu a:hover { opacity: 1; }
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            width: 20px;
-            height: 20px;
-            position: absolute;
-            right: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .hamburger span {
-            display: block;
-            width: 100%;
-            height: 2px;
-            background: #111111;
-            margin: 2px 0;
-            transition: 0.3s;
-        }
-        .hamburger.open span:nth-child(1) {
-            transform: rotate(-45deg) translate(-4px, 4px);
-        }
-        .hamburger.open span:nth-child(2) {
-            opacity: 0;
-        }
-        .hamburger.open span:nth-child(3) {
-            transform: rotate(45deg) translate(-4px, -4px);
-        }
-        @media (max-width: 768px) {
-            .menu {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(6px);
-                border: 1px solid #ded8ce;
-                border-top: none;
-                border-radius: 0 0 14px 14px;
-                flex-direction: column;
-                padding: 18px;
-                gap: 12px;                z-index: 99;            }
-            .menu.open {
-                display: flex;
-            }
-            .hamburger {
-                display: flex;
-            }
-        }
+        .topbar { margin-bottom: 18px; color: #141414; }
         .panel {
             border: 1px solid #e5dfd4;
             border-radius: 20px;
@@ -118,40 +42,10 @@
         }
         .footer a { color: inherit; text-decoration: none; }
     </style>
-    <style>
-        .topbar { position: relative; }
-        .menu { display: flex; gap: 18px; font-size: 14px; flex-wrap: nowrap; overflow-x: auto; max-width: 100%; white-space: nowrap; padding-bottom: 2px; }
-        .menu a { color: inherit; text-decoration: none; opacity: 0.8; }
-        .menu a:hover { opacity: 1; }
-        .hamburger { display: none; flex-direction: column; background: none; border: none; cursor: pointer; padding: 0; width: 20px; height: 20px; position: absolute; right: 18px; top: 50%; transform: translateY(-50%); }
-        .hamburger span { display: block; width: 100%; height: 2px; background: #111111; margin: 2px 0; transition: 0.3s; }
-        .hamburger.open span:nth-child(1) { transform: rotate(-45deg) translate(-4px, 4px); }
-        .hamburger.open span:nth-child(2) { opacity: 0; }
-        .hamburger.open span:nth-child(3) { transform: rotate(45deg) translate(-4px, -4px); }
-        @media (max-width: 768px) {
-            .menu { display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(6px); border: 1px solid #e2e2df; border-top: none; border-radius: 0 0 14px 14px; flex-direction: column; padding: 18px; gap: 12px; z-index: 99; }
-            .menu.open { display: flex; }
-            .hamburger { display: flex; }
-        }
-    </style>
 </head>
 <body>
 <div class="shell">
-    <div class="topbar">
-        <div class="brand">Sword Showcase Hub</div>
-        <nav class="menu" aria-label="Top navigation">
-            <a href="/welcome">Explore</a>
-            <a href="/feed">Feed</a>
-            <a href="/shop">Shop</a>
-            <a href="/discussions">Discussions</a>
-            <a href="/profile">Profile</a>
-        </nav>
-        <button class="hamburger" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </div>
+    @include('partials.navbar')
 
     <section class="panel">
         <h1>Privacy Policy</h1>
@@ -186,16 +80,5 @@
         </div>
     </section>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const hamburger = document.querySelector('.hamburger');
-        const menu = document.querySelector('.menu');
-
-        hamburger.addEventListener('click', function() {
-            hamburger.classList.toggle('open');
-            menu.classList.toggle('open');
-        });
-    });
-</script>
 </body>
 </html>
