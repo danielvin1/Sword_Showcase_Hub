@@ -11,9 +11,9 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6'
+            'name' => 'required|string|max:60',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6'
         ]);
 
         User::create([
@@ -22,6 +22,6 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect('/login');
+        return redirect('/login')->with('success', 'Account created successfully. Please log in.');
     }
 }
