@@ -17,11 +17,6 @@ class SocialAuthController extends Controller
             'client_id_config' => 'services.google.client_id',
             'client_secret_config' => 'services.google.client_secret',
         ],
-        'github' => [
-            'label' => 'GitHub',
-            'client_id_config' => 'services.github.client_id',
-            'client_secret_config' => 'services.github.client_secret',
-        ],
     ];
 
     public function redirect(string $provider)

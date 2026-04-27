@@ -127,10 +127,6 @@
             background: #ffffff;
             color: #1f1f1f;
         }
-        .social-github {
-            background: #1f2328;
-            color: #ffffff;
-        }
         .login-link {
             margin-top: 18px;
             color: var(--text-muted);
@@ -153,6 +149,11 @@
         .site-footer a {
             text-decoration: none;
             color: inherit;
+        }
+
+        body.theme-dark .login-link a {
+            color: #f1d8a8 !important;
+            text-decoration: underline;
         }
     </style>
     <script src="/js/theme-mode.js"></script>
@@ -185,7 +186,6 @@
 
             <div class="social-stack">
                 <a class="social-btn social-google" href="/auth/google/redirect">Register with Google</a>
-                <a class="social-btn social-github" href="/auth/github/redirect">Register with GitHub</a>
             </div>
 
             <p class="login-link text-center">Already have an account? <a href="/login">Login</a></p>

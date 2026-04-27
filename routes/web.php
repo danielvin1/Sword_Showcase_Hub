@@ -123,9 +123,9 @@ Route::get('/login', function () {
 });
 
 Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect'])
-    ->whereIn('provider', ['google', 'github']);
+    ->whereIn('provider', ['google']);
 Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback'])
-    ->whereIn('provider', ['google', 'github']);
+    ->whereIn('provider', ['google']);
 
 Route::get('/register', function () {
     return view('register');

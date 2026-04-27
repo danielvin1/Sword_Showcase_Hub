@@ -132,10 +132,6 @@
             background: #ffffff;
             color: #1f1f1f;
         }
-        .social-github {
-            background: #1f2328;
-            color: #ffffff;
-        }
         .register-link {
             margin-top: 18px;
             color: var(--text-muted);
@@ -158,6 +154,45 @@
         .site-footer a {
             text-decoration: none;
             color: inherit;
+        }
+
+        body.theme-dark {
+            color: #111111 !important;
+            background-color: #f2f2f0 !important;
+            background-image:
+                radial-gradient(circle at 15% 12%, rgba(120, 120, 120, 0.08), transparent 38%),
+                radial-gradient(circle at 85% 18%, rgba(0, 0, 0, 0.06), transparent 34%),
+                repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0 1px, transparent 1px 16px),
+                linear-gradient(180deg, #f6f6f4 0%, #efefec 45%, #f2f2f0 100%) !important;
+        }
+
+        body.theme-dark .panel {
+            background: var(--surface) !important;
+            border: 1px solid var(--panel-border) !important;
+            box-shadow: 0 24px 50px rgba(0, 0, 0, 0.12) !important;
+            color: #111111 !important;
+        }
+
+        body.theme-dark .subtext,
+        body.theme-dark .register-link,
+        body.theme-dark .site-footer,
+        body.theme-dark .divider {
+            color: var(--text-muted) !important;
+        }
+
+        body.theme-dark .form-control {
+            background: #ffffff !important;
+            color: #111111 !important;
+            border: 1px solid rgba(17, 17, 17, 0.12) !important;
+        }
+
+        body.theme-dark .register-link a {
+            color: #111111 !important;
+        }
+
+        body.theme-dark .divider::before,
+        body.theme-dark .divider::after {
+            background: rgba(17, 17, 17, 0.1) !important;
         }
     </style>
     <script src="/js/theme-mode.js"></script>
@@ -189,7 +224,6 @@
 
             <div class="social-stack">
                 <a class="social-btn social-google" href="/auth/google/redirect">Continue with Google</a>
-                <a class="social-btn social-github" href="/auth/github/redirect">Continue with GitHub</a>
             </div>
 
             <p class="register-link text-center">New here? <a href="/register">Create your account</a></p>

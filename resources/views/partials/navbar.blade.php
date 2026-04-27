@@ -49,6 +49,10 @@
         font-weight: 700;
         box-shadow: 0 10px 24px rgba(184, 116, 36, 0.28);
     }
+    .navbar-menu a.nav-login-btn:visited,
+    .navbar-menu a.nav-login-btn:hover {
+        color: #ffffff;
+    }
     .nav-utility {
         display: inline-flex;
         align-items: center;
@@ -135,6 +139,13 @@
     }
     body.theme-dark .navbar-theme-toggle {
         background: rgba(217, 167, 103, 0.18);
+    }
+    body.theme-dark .navbar-menu a.nav-login-btn {
+        background: linear-gradient(180deg, #db8c37 0%, #9d5e18 100%) !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 210, 154, 0.38);
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.36), 0 0 0 1px rgba(255, 210, 154, 0.14) inset;
+        opacity: 1;
     }
     @media (max-width: 768px) {
         .topbar {
