@@ -305,7 +305,7 @@
                                 <button class="btn" type="submit">Logout</button>
                             </form>
                         @else
-                            <a class="btn" href="/login">Get Started</a>
+                            <a class="btn" href="/register">Get Started</a>
                         @endif
                     </div>
                 </div>
