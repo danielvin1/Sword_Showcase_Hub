@@ -58,6 +58,8 @@ npm run build
 - Deploy to Azure App Service using PHP 8.2.
 - Set `APP_KEY`, `APP_URL`, database settings, and Google OAuth variables in App Service configuration.
 - Run migrations after deployment.
+- If Azure shows `403 Forbidden` from nginx, set the App Service Startup Command to `bash /home/site/wwwroot/startup.sh` so nginx serves `public/` instead of the app root.
+- If you use the placeholder file fix, rename `hostingstart.html` out of the way first.
 - Add the public site URL to this README before submission.
 
 ## Live Site
