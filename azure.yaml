@@ -1,0 +1,30 @@
+name: sword-showcase-hub
+metadata:
+  template: sword-showcase-hub@0.0.1
+  description: Laravel Sword Showcase Hub deployed to Azure App Service with MySQL and Blob Storage
+  author: Your Name
+services:
+  api:
+    project: ./
+    language: php
+    host: appservice
+    docker:
+      path: ./Dockerfile
+
+infra:
+  path: ./infra
+  module: main
+
+env:
+  locationName: westeurope
+  environmentName: prod
+  projectName: sword-showcase
+
+provision:
+  activeSteps:
+    - infrastructure
+    - inferSecrets
+
+deploy:
+  activeSteps:
+    - deploy
