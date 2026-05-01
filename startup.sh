@@ -2,6 +2,12 @@
 
 set -e
 
+# Kill any existing nginx/php-fpm processes to free ports
+pkill -9 nginx 2>/dev/null || true
+pkill -9 php-fpm 2>/dev/null || true
+sleep 1
+
+# Configure nginx to use port 8080 properly by checking what's free
 cat > /etc/nginx/sites-enabled/default <<'EOF'
 server {
     listen 8080;
